@@ -1,0 +1,715 @@
+{
+ "skills": {
+  "backtest-expert": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "breadth-chart-analyst": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "breakout-trade-planner": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "canslim-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "contrarian-setup-gate": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "cot-contrarian-detector": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "crypto-regime-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "data-quality-checker": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "dividend-growth-pullback-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "downtrend-duration-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "drawdown-circuit-breaker": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "dual-axis-skill-reviewer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "earnings-calendar": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "earnings-trade-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "economic-calendar-fetcher": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "fxmacrodata-calendar": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "edge-candidate-agent": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "edge-concept-synthesizer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "edge-hint-extractor": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "edge-pipeline-orchestrator": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "edge-signal-aggregator": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "edge-strategy-designer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "edge-strategy-reviewer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "exposure-coach": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "finviz-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "ftd-detector": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "futures-position-sizer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "ibd-distribution-day-monitor": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "institutional-flow-tracker": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "kanchi-dividend-review-monitor": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "kanchi-dividend-sop": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "kanchi-dividend-us-tax-accounting": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "macro-regime-detector": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "manifoldbt-backtester": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "market-breadth-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "market-environment-analysis": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "market-news-analyst": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "market-top-detector": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "mt5-robot-tester": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "news-reaction-failure-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "options-strategy-advisor": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "pair-trade-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "parabolic-short-trade-planner": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "pead-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "portfolio-manager": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "position-sizer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "pre-trade-discipline-gate": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "residual-edge-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "scenario-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "sector-analyst": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "signal-postmortem": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "skill-designer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "skill-idea-miner": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "skill-integration-tester": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "stanley-druckenmiller-investment": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "stockbee-20pct-study": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "stockbee-episodic-pivot-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "stockbee-exhaustion-hammer-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "stockbee-momentum-burst-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "stockbee-setup-fluency-trainer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "strategy-pivot-designer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "technical-analyst": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "theme-detector": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "trade-hypothesis-ideator": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "trade-performance-coach": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "trader-memory-core": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "trading-skills-navigator": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "uptrend-analyzer": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "us-market-bubble-detector": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "us-stock-analysis": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "value-dividend-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "vcp-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "weekly-performance-digest": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  },
+  "us-undervalued-growth-screener": {
+   "title": null,
+   "summary": null,
+   "when_to_use": null,
+   "how_to_start": null,
+   "cautions": null
+  }
+ },
+ "workflows": {
+  "core-portfolio-weekly": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null
+   },
+   "manual_review": null
+  },
+  "earnings-weekly": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null,
+    "7": null
+   },
+   "manual_review": null
+  },
+  "kanchi-dividend-weekly": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null
+   },
+   "manual_review": null
+  },
+  "market-regime-daily": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "manual_review": null
+  },
+  "monthly-performance-review": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null
+   },
+   "manual_review": null
+  },
+  "multi-asset-opportunity-daily": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null
+   },
+   "manual_review": null
+  },
+  "portfolio-holdings-review": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null
+   },
+   "manual_review": null
+  },
+  "shapiro-contrarian": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null
+   },
+   "manual_review": null
+  },
+  "stockbee-20pct-study-daily": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null
+   },
+   "manual_review": null
+  },
+  "stockbee-ep-daily": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null,
+    "7": null,
+    "8": null,
+    "9": null
+   },
+   "manual_review": null
+  },
+  "stockbee-fluency-loop": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "manual_review": null
+  },
+  "strategy-research-pipeline": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null
+   },
+   "manual_review": null
+  },
+  "swing-opportunity-daily": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null,
+    "6": null,
+    "7": null,
+    "8": null,
+    "9": null,
+    "10": null,
+    "11": null
+   },
+   "manual_review": null
+  },
+  "trade-memory-loop": {
+   "name": null,
+   "when_to_run": null,
+   "when_not_to_run": null,
+   "steps": {
+    "1": null,
+    "2": null,
+    "3": null,
+    "4": null,
+    "5": null
+   },
+   "manual_review": null
+  }
+ }
+}

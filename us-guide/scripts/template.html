@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>美股 Skill 閱讀指南看板</title>
+<style>
+:root{
+  --bg:#f7f6f2;--card:#ffffff;--ink:#1d2330;--mute:#5d6577;--line:#e2e0d8;
+  --accent:#1f5eff;--accent-ink:#ffffff;
+  --a:#1b7f4b;--b:#0f6e8c;--c:#a85b00;--d:#7a3fb0;
+  --a-bg:#e3f4ea;--b-bg:#e1f1f6;--c-bg:#fbeedb;--d-bg:#efe6f8;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#14171d;--card:#1c2029;--ink:#e8eaf0;--mute:#9aa3b5;--line:#2c3240;
+  --accent:#6b94ff;--accent-ink:#0d1220;
+  --a:#5fd196;--b:#6cc4de;--c:#f0b25f;--d:#c39bf0;
+  --a-bg:#16301f;--b-bg:#12303a;--c-bg:#3a2a12;--d-bg:#2b1d3d;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif}
+header{padding:28px 20px 8px;max-width:1080px;margin:0 auto}
+h1{margin:0 0 4px;font-size:24px}
+.sub{color:var(--mute);margin:0}
+.warn{margin:14px 0 0;padding:10px 14px;border:1px solid var(--line);border-left:4px solid var(--c);background:var(--card);border-radius:8px;font-size:13.5px;color:var(--mute)}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-top:16px}
+nav .in{max-width:1080px;margin:0 auto;padding:0 12px;display:flex;gap:4px;overflow-x:auto}
+nav button{background:none;border:0;color:var(--mute);padding:12px 14px;font:inherit;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+main{max-width:1080px;margin:0 auto;padding:20px}
+section[hidden]{display:none}
+h2{font-size:19px;margin:6px 0 12px}
+h3{font-size:16px;margin:0 0 6px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card.click{cursor:pointer}
+.card.click:hover{border-color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;border:1px solid var(--line);color:var(--mute);background:var(--bg)}
+.t-A{background:var(--a-bg);color:var(--a);border-color:transparent}
+.t-B{background:var(--b-bg);color:var(--b);border-color:transparent}
+.t-C{background:var(--c-bg);color:var(--c);border-color:transparent}
+.t-D{background:var(--d-bg);color:var(--d);border-color:transparent}
+.muted{color:var(--mute)}
+.small{font-size:13px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+input,select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+input[type=search]{min-width:220px;flex:1}
+label.chk{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--mute)}
+a{color:var(--accent)}
+.steps{list-style:none;padding:0;margin:8px 0 0;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:6px 0 6px 34px;border-top:1px dashed var(--line)}
+.steps li::before{content:counter(s);position:absolute;left:0;top:8px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:12px;text-align:center;line-height:22px}
+.steps li.opt::before{background:var(--mute)}
+.gate{color:var(--c);font-weight:600;font-size:12.5px}
+.detail{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.detail dt{font-weight:600;margin-top:8px}
+.detail dd{margin:2px 0 0;color:var(--mute)}
+table{border-collapse:collapse;width:100%;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--bg);color:var(--mute);font-weight:600}
+td:first-child{white-space:nowrap}
+.count{font-size:26px;font-weight:700}
+.legend{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-bottom:16px}
+code{background:var(--bg);border:1px solid var(--line);padding:0 5px;border-radius:5px;font-size:13px}
+footer{max-width:1080px;margin:0 auto;padding:6px 20px 40px;color:var(--mute);font-size:12.5px}
+</style>
+</head>
+<body>
+<header>
+  <h1>美股 Skill 閱讀指南看板</h1>
+  <p class="sub" id="sub"></p>
+  <p class="warn">僅供教育與流程參考，不是投資建議。原作者將多數 skill 的驗證欄位標為「未驗證」，規則與分數請當參考，不要直接依賴。此頁面不執行任何 skill，也不需要任何金鑰。</p>
+</header>
+<nav><div class="in" role="tablist" id="tabs"></div></nav>
+<main>
+  <section id="tab-start"></section>
+  <section id="tab-skills" hidden></section>
+  <section id="tab-flows" hidden></section>
+  <section id="tab-exec" hidden></section>
+  <section id="tab-keys" hidden></section>
+</main>
+<footer id="foot"></footer>
+<script>
+const D = /*__GUIDE_DATA__*/null;
+const $ = (s, r=document) => r.querySelector(s);
+function h(tag, attrs, ...kids){
+  const e = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs||{})){
+    if (k==='class') e.className=v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v!==false && v!=null) e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()){ if (k==null||k===false) continue; e.append(k.nodeType?k:document.createTextNode(k)); }
+  return e;
+}
+const byId = Object.fromEntries(D.skills.map(s=>[s.id,s]));
+const zh = id => (D.zh.skills[id]||{});
+const zw = id => (D.zh.workflows[id]||{});
+const sTitle = s => zh(s.id).title || s.name;
+const sSummary = s => zh(s.id).summary || s.summary;
+const tierBadge = t => h('span',{class:'badge t-'+t, title:D.tierLabels[t]}, '層級 '+t+'・'+D.tierLabels[t].split('（')[0]);
+const CAT = {'market-regime':'大盤判斷','core-portfolio':'核心持股','dividend-income':'股息收入','swing-opportunity':'波段選股','trade-planning':'交易規劃與風控','trade-memory':'交易記憶與檢討','strategy-research':'策略研究','advanced-satellite':'進階衛星策略','meta':'輔助工具'};
+const DIFF = {beginner:'入門',intermediate:'中階',advanced:'進階'};
+const CADENCE = {daily:'每日',weekly:'每週',monthly:'每月',ad_hoc:'不定期'};
+const REQ = {required:'必要',recommended:'建議',optional:'選用',not_required:'不需要'};
+
+/* ---- tabs ---- */
+const TABS=[['start','從這裡開始'],['skills','全部 Skill'],['flows','工作流程'],['exec','網頁執行規劃'],['keys','金鑰與費用']];
+function show(id){
+  TABS.forEach(([k])=>{ $('#tab-'+k).hidden = k!==id; $('#btn-'+k).setAttribute('aria-selected', k===id); });
+  if (history.replaceState) history.replaceState(null,'','#'+id);
+}
+const tabs=$('#tabs');
+TABS.forEach(([k,t])=>tabs.append(h('button',{id:'btn-'+k,role:'tab',onclick:()=>show(k)},t)));
+
+/* ---- header ---- */
+const trader = D.skills.filter(s=>s.audience==='trader');
+const translated = D.skills.filter(s=>zh(s.id).summary).length;
+const wName = w => zw(w.id).name || w.name;
+$('#sub').textContent = `共 ${D.skills.length} 個 skill、${D.workflows.length} 條工作流程。繁中說明進度 ${translated}/${D.skills.length}（未翻譯處顯示英文原文）。`;
+$('#foot').append('來源：', h('a',{href:D.repo},'siegfydj/claude-trading-skills'), '（fork 自上游專案，MIT 授權）。本頁由 us-guide/scripts/build_guide.py 自動產生，請勿手改 data/ 與 index.html。');
+
+/* ---- start ---- */
+function flowCard(w){
+  return h('div',{class:'card click',onclick:()=>{show('flows');openFlow(w.id);}},
+    h('h3',{},wName(w)),
+    h('div',{class:'row small muted'}, (CADENCE[w.cadence]||w.cadence||'')+(w.minutes?`・約 ${w.minutes} 分鐘`:''), '・', DIFF[w.difficulty]||w.difficulty||''),
+    h('p',{class:'small'}, (zw(w.id).when_to_run||w.when_to_run).slice(0,150)+(w.when_to_run.length>150?'…':'')));
+}
+const GOALS=[
+ ['每天花 15 分鐘看大盤，決定今天能不能開新倉','market-regime-daily'],
+ ['每週檢視長期持股與股息','core-portfolio-weekly'],
+ ['只在風險允許時找波段候選','swing-opportunity-daily'],
+ ['記錄每筆交易並從中學習','trade-memory-loop'],
+ ['每月檢討績效並調整規則','monthly-performance-review'],
+ ['研究與驗證自己的策略點子','strategy-research-pipeline'],
+];
+(function(){
+  const el=$('#tab-start');
+  el.append(h('h2',{},'你想做什麼？'));
+  const g=h('div',{class:'grid'});
+  GOALS.forEach(([t,id])=>{ const w=D.workflows.find(x=>x.id===id); if(!w) return;
+    g.append(h('div',{class:'card click',onclick:()=>{show('flows');openFlow(id);}}, h('h3',{},t), h('div',{class:'small muted'},'→ '+wName(w)+'（'+w.steps.length+' 步）')));
+  });
+  el.append(g);
+  el.append(h('h2',{style:'margin-top:26px'},'最快上手：免付費金鑰的 5 個 skill'));
+  const five=['market-breadth-analyzer','uptrend-analyzer','position-sizer','trader-memory-core','signal-postmortem'];
+  const g2=h('div',{class:'grid'});
+  five.forEach(id=>{const s=byId[id]; if(!s) return;
+    g2.append(h('div',{class:'card click',onclick:()=>{show('skills');$('#q').value=id;renderSkills();}}, h('h3',{},sTitle(s)), h('div',{class:'row'},tierBadge(s.tier)), h('p',{class:'small muted'},sSummary(s))));});
+  el.append(g2);
+  el.append(h('h2',{style:'margin-top:26px'},'怎麼讀這份指南'));
+  el.append(h('ol',{}, h('li',{},'先看「工作流程」，決定你要走哪一條路線。'), h('li',{},'再到「全部 Skill」查每個 skill 的用途、輸入輸出與需要的資料來源。'), h('li',{},'用「層級」判斷要不要金鑰：A 純計算、B 公開資料、C 需付費金鑰、D 需 LLM。'), h('li',{},'「金鑰與費用」頁說明各服務的免費額度與申請方式。')));
+})();
+
+/* ---- skills ---- */
+(function(){
+  const el=$('#tab-skills');
+  const cats=[...new Set(D.skills.map(s=>s.category))];
+  el.append(h('div',{class:'tools'},
+    h('input',{type:'search',id:'q',placeholder:'搜尋名稱、用途、輸入輸出…',oninput:()=>renderSkills()}),
+    h('select',{id:'fc',onchange:()=>renderSkills()}, h('option',{value:''},'所有類別'), cats.map(c=>h('option',{value:c},CAT[c]||c))),
+    h('select',{id:'ft',onchange:()=>renderSkills()}, h('option',{value:''},'所有層級'), ['A','B','C','D'].map(t=>h('option',{value:t},t+'：'+D.tierLabels[t]))),
+    h('label',{class:'chk'},h('input',{type:'checkbox',id:'fe',checked:'checked',onchange:()=>renderSkills()}),'只看美股股票'),
+    h('label',{class:'chk'},h('input',{type:'checkbox',id:'fm',onchange:()=>renderSkills()}),'含維護者工具')));
+  el.append(h('div',{id:'cnt',class:'small muted',style:'margin-bottom:8px'}), h('div',{class:'grid',id:'sk'}));
+})();
+function renderSkills(){
+  const q=$('#q').value.trim().toLowerCase(), fc=$('#fc').value, ft=$('#ft').value, fe=$('#fe').checked, fm=$('#fm').checked;
+  const list=D.skills.filter(s=>{
+    if (fc && s.category!==fc) return false;
+    if (ft && s.tier!==ft) return false;
+    if (fe && !s.us_equity && s.audience==='trader') return false;
+    if (!fm && s.audience==='maintainer') return false;
+    if (q){ const hay=(s.id+' '+s.name+' '+sTitle(s)+' '+sSummary(s)+' '+s.inputs.join(' ')+' '+s.outputs.join(' ')).toLowerCase(); if(!hay.includes(q)) return false; }
+    return true;
+  });
+  $('#cnt').textContent=`顯示 ${list.length} / ${D.skills.length}`;
+  const box=$('#sk'); box.replaceChildren(...list.map(skillCard));
+}
+function skillCard(s){
+  const z=zh(s.id), v=s.verified;
+  const d=h('div',{class:'detail',hidden:'hidden'});
+  const dl=h('dl',{});
+  const add=(t,x)=>{ if(x&&(!Array.isArray(x)||x.length)) dl.append(h('dt',{},t),h('dd',{},Array.isArray(x)?x.join('、'):x)); };
+  add('何時使用', z.when_to_use); add('怎麼開始', z.how_to_start); add('注意事項', z.cautions);
+  add('輸入', s.inputs); add('輸出', s.outputs);
+  add('所屬流程', s.workflows);
+  add('腳本', s.scripts.length? s.scripts : '無腳本（由 Claude 依 SKILL.md 說明執行）');
+  dl.append(h('dt',{},'資料來源與金鑰'));
+  s.integrations.forEach(i=>dl.append(h('dd',{},`${i.id}（${REQ[i.requirement]||i.requirement}）${i.note?'：'+i.note:''}`)));
+  d.append(dl, h('div',{class:'row small',style:'margin-top:8px'}, h('a',{href:s.links.skill_md,target:'_blank',rel:'noopener'},'SKILL.md'), h('a',{href:s.links.doc_en,target:'_blank',rel:'noopener'},'英文說明頁')));
+  const c=h('div',{class:'card click',onclick:e=>{ if(e.target.tagName==='A') return; d.hidden=!d.hidden; }},
+    h('h3',{},sTitle(s)),
+    z.title? h('div',{class:'small muted'},s.name+'・'+s.id) : h('div',{class:'small muted'},s.id),
+    h('div',{class:'row',style:'margin:6px 0'}, tierBadge(s.tier), h('span',{class:'badge'},CAT[s.category]||s.category), h('span',{class:'badge'},DIFF[s.difficulty]||s.difficulty||'—'), h('span',{class:'badge',title:'原作者驗證欄位'},`驗證 ${v.passed}/${v.applicable}`), s.optional_keys.length? h('span',{class:'badge',title:'沒有金鑰也能跑，但功能或速度會受限'},'金鑰選用：'+s.optional_keys.join('／')):''),
+    h('p',{class:'small'},sSummary(s)), d);
+  return c;
+}
+
+/* ---- flows ---- */
+(function(){
+  const el=$('#tab-flows');
+  el.append(h('h2',{},'工作流程（原作者定義的標準路線）'), h('p',{class:'muted small'},'每條流程列出依序要跑的 skill、哪一步是「決策關卡」（需要你判斷再往下）、以及可略過的選用步驟。'));
+  el.append(h('div',{class:'grid',id:'fl'}));
+  D.workflows.forEach(w=>{
+    const ol=h('ol',{class:'steps'});
+    w.steps.forEach(st=>{
+      const s=byId[st.skill];
+      ol.append(h('li',{class:st.optional?'opt':''}, h('strong',{},(zw(w.id).steps||{})[st.step]||st.name||''), st.optional?h('span',{class:'badge',style:'margin-left:6px'},'選用'):'', st.decision_gate?h('span',{class:'gate',style:'margin-left:6px'},'◆ 決策關卡'):'',
+        h('div',{class:'small muted'}, s? sTitle(s):st.skill, s? ' ':'', s? tierBadge(s.tier):''), st.question?h('div',{class:'small'},'要問自己：'+st.question):''));
+    });
+    const mr=w.manual_review.length? h('div',{class:'small',style:'margin-top:8px'},h('strong',{},'人工檢查：'), h('ul',{},(zw(w.id).manual_review||w.manual_review).map(x=>h('li',{},x)))):'';
+    el.querySelector('#fl').append(h('div',{class:'card',id:'w-'+w.id}, h('h3',{},wName(w)),
+      h('div',{class:'row small muted'}, (CADENCE[w.cadence]||w.cadence||'')+(w.minutes?`・約 ${w.minutes} 分鐘`:''),'・',DIFF[w.difficulty]||w.difficulty||'','・API：'+(w.api_profile||'—')),
+      h('p',{class:'small'},h('strong',{},'何時跑：'),zw(w.id).when_to_run||w.when_to_run), w.when_not_to_run?h('p',{class:'small'},h('strong',{},'何時不要：'),zw(w.id).when_not_to_run||w.when_not_to_run):'', ol, mr));
+  });
+})();
+function openFlow(id){ const e=document.getElementById('w-'+id); if(e){ e.scrollIntoView({behavior:'smooth',block:'start'}); e.style.borderColor='var(--accent)'; } }
+
+/* ---- exec plan ---- */
+(function(){
+  const el=$('#tab-exec');
+  const cnt={A:0,B:0,C:0,D:0}; trader.forEach(s=>cnt[s.tier]++);
+  el.append(h('h2',{},'「在網頁上執行 skill」可行性分級'), h('p',{class:'muted small'},'目前這個看板只負責閱讀。若要在網頁上真的執行，每一層需要的後端能力不同（完整規劃在作者的私有庫）。以下只統計交易用 skill。'));
+  const lg=h('div',{class:'legend'});
+  const need={A:'後端執行 Python 腳本；少數可改寫成瀏覽器內計算。無金鑰風險。',B:'後端排程抓公開資料再執行；注意對方網站條款與穩定度。',C:'必須由後端保管金鑰，金鑰不可出現在瀏覽器；要處理額度、費用與速率限制。',D:'需要 LLM（付費 API）才能完成判讀，成本與品質控管最高。'};
+  ['A','B','C','D'].forEach(t=>lg.append(h('div',{class:'card'}, h('div',{class:'count'},cnt[t]), tierBadge(t), h('p',{class:'small muted'},need[t]))));
+  el.append(lg);
+  el.append(h('table',{}, h('thead',{},h('tr',{},h('th',{},'層級'),h('th',{},'skill'))),
+    h('tbody',{}, ['A','B','C','D'].map(t=>h('tr',{},h('td',{},tierBadge(t)),h('td',{class:'small'},trader.filter(s=>s.tier===t).map(s=>s.id).join('、')))))));
+})();
+
+/* ---- keys ---- */
+(function(){
+  const el=$('#tab-keys');
+  const use={fmp:[],finviz:[],alpaca:[]};
+  trader.forEach(s=>s.integrations.forEach(i=>{ if(use[i.id]) use[i.id].push([s.id,i.requirement]); }));
+  const row=(name,free,paid,url,k)=>h('tr',{},h('td',{},h('strong',{},name)),h('td',{class:'small'},free),h('td',{class:'small'},paid),
+    h('td',{class:'small'},`必要 ${use[k].filter(x=>x[1]==='required').length}・選用／建議 ${use[k].filter(x=>x[1]!=='required').length}`),
+    h('td',{class:'small'},h('a',{href:url,target:'_blank',rel:'noopener'},'申請')));
+  el.append(h('h2',{},'金鑰與費用'), h('p',{class:'muted small'},'費用與額度取自上游專案文件，可能已調整，請以各服務官網為準。金鑰一律放環境變數，不要寫進程式、文件或這個網頁。'));
+  el.append(h('table',{}, h('thead',{},h('tr',{},['服務','免費額度','付費','影響的 skill','連結'].map(x=>h('th',{},x)))),
+    h('tbody',{},
+      row('FMP（Financial Modeling Prep）','每天 250 次呼叫','見官網方案','https://site.financialmodelingprep.com/developer/docs','fmp'),
+      row('FINVIZ Elite','無（部分功能有公開版）','約 $39.50/月（上游文件）','https://elite.finviz.com/','finviz'),
+      row('Alpaca','模擬交易免費','即時交易帳戶免佣金（以官網為準）','https://alpaca.markets/','alpaca'))));
+  el.append(h('p',{class:'small muted',style:'margin-top:12px'},'環境變數名稱：FMP_API_KEY、FINVIZ_API_KEY、ALPACA_API_KEY、ALPACA_SECRET_KEY。'));
+})();
+
+renderSkills();
+const start=(location.hash||'#start').slice(1);
+show(TABS.some(t=>t[0]===start)?start:'start');
+</script>
+</body>
+</html>

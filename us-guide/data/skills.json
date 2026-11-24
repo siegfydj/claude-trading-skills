@@ -1,0 +1,3588 @@
+[
+ {
+  "id": "backtest-expert",
+  "name": "Backtest Expert",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Expert guidance for systematic backtesting of trading strategies.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "strategy_parameters",
+   "historical_ohlcv"
+  ],
+  "outputs": [
+   "backtest_report",
+   "performance_metrics"
+  ],
+  "workflows": [
+   "monthly-performance-review",
+   "stockbee-20pct-study-daily",
+   "stockbee-fluency-loop",
+   "trade-memory-loop",
+   "strategy-research-pipeline"
+  ],
+  "integrations": [
+   {
+    "id": "user_input",
+    "type": "local_file",
+    "requirement": "required",
+    "note": "User provides strategy parameters"
+   }
+  ],
+  "scripts": [
+   "evaluate_backtest.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/backtest-expert/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/backtest-expert.md"
+  }
+ },
+ {
+  "id": "breadth-chart-analyst",
+  "name": "Breadth Chart Analyst",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "This skill should be used when analyzing market breadth charts, specifically the S&P 500 Breadth Index (200-Day MA based) and the US Stock Market Uptrend Stock Ratio charts.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "breadth_chart_image"
+  ],
+  "outputs": [
+   "breadth_assessment_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "chart_image",
+    "type": "image",
+    "requirement": "required",
+    "note": "Chart screenshot input"
+   }
+  ],
+  "scripts": [
+   "detect_breadth_values.py",
+   "detect_uptrend_ratio.py",
+   "extract_chart_right_edge.py",
+   "fetch_breadth_csv.py"
+  ],
+  "tier": "D",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/breadth-chart-analyst/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/breadth-chart-analyst.md"
+  }
+ },
+ {
+  "id": "breakout-trade-planner",
+  "name": "Breakout Trade Planner",
+  "category": "swing-opportunity",
+  "status": "production",
+  "summary": "Generate Minervini-style breakout trade plans from VCP screener output with worst-case risk calculation, portfolio heat management, and Alpaca-compatible order templates (stop-limit bracket for pre-placement, limit bracket for post-confi...",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "vcp_candidates",
+   "account_size"
+  ],
+  "outputs": [
+   "entry_plan",
+   "alpaca_order_template"
+  ],
+  "workflows": [
+   "stockbee-ep-daily",
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Consumes VCP screener output; pure calculation + Alpaca order templates"
+   }
+  ],
+  "scripts": [
+   "order_builder.py",
+   "plan_breakout_trades.py",
+   "risk_calculator.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/breakout-trade-planner/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/breakout-trade-planner.md"
+  }
+ },
+ {
+  "id": "canslim-screener",
+  "name": "CANSLIM Screener",
+  "category": "swing-opportunity",
+  "status": "production",
+  "summary": "Screen US stocks using William O'Neil's CANSLIM growth stock methodology.",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "screener_universe",
+   "fundamentals_data"
+  ],
+  "outputs": [
+   "canslim_candidates",
+   "composite_scores"
+  ],
+  "workflows": [
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "US stock fundamentals via FMP"
+   }
+  ],
+  "scripts": [
+   "check_institutional_endpoint.py",
+   "finviz_stock_client.py",
+   "fmp_client.py",
+   "report_generator.py",
+   "scorer.py",
+   "screen_canslim.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/canslim-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/canslim-screener.md"
+  }
+ },
+ {
+  "id": "contrarian-setup-gate",
+  "name": "Contrarian Setup Gate",
+  "category": "trade-planning",
+  "status": "production",
+  "summary": "Offline synthesis gate that combines COT crowding, news-reaction failure, and weekly price-action confirmation into one actionable setup_status via a fail-closed precedence state machine, implementing the decision center of Jason Shapiro's contrarian methodology.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "cot_crowding_report",
+   "news_failure_verdict",
+   "price_action_confirmation_report"
+  ],
+  "outputs": [
+   "contrarian_setup_gate_report"
+  ],
+  "workflows": [
+   "shapiro-contrarian"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Reads the three upstream contrarian-pipeline report JSONs; works offline"
+   }
+  ],
+  "scripts": [
+   "gate_logic.py",
+   "run_contrarian_setup_gate.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/contrarian-setup-gate/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/contrarian-setup-gate.md"
+  }
+ },
+ {
+  "id": "cot-contrarian-detector",
+  "name": "COT Contrarian Detector",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Detects crowded speculative (large-speculator) positioning in CFTC futures markets using Commitment of Traders data, implementing step 1 of Jason Shapiro's contrarian methodology.",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "cot_report_data"
+  ],
+  "outputs": [
+   "cot_crowding_report"
+  ],
+  "workflows": [
+   "shapiro-contrarian"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "CFTC COT data via FMP; requires Premium+ plan"
+   }
+  ],
+  "scripts": [
+   "cot_index.py",
+   "fmp_client.py",
+   "screen_cot_crowding.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/cot-contrarian-detector/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/cot-contrarian-detector.md"
+  }
+ },
+ {
+  "id": "crypto-regime-analyzer",
+  "name": "Crypto Regime Analyzer",
+  "category": "market-regime",
+  "status": "beta",
+  "summary": "Quantifies crypto market regime health (0-100 composite, 100 = risk-on) from six components using free keyless public data.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "coingecko_public_api",
+   "funding_rates",
+   "snapshot_json"
+  ],
+  "outputs": [
+   "crypto_regime_composite_score",
+   "component_breakdown",
+   "posture_recommendation"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "coingecko",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Free public API, no key; universe, price history, BTC dominance"
+   },
+   {
+    "id": "binance_funding",
+    "type": "market_data",
+    "requirement": "recommended",
+    "note": "Public futures endpoint for perp funding; component skipped if unreachable"
+   },
+   {
+    "id": "prices_json",
+    "type": "local_file",
+    "requirement": "optional",
+    "note": "Offline snapshot path (--input-json); schema in references"
+   }
+  ],
+  "scripts": [
+   "crypto_regime_analyzer.py",
+   "data_client.py",
+   "numeric_utils.py",
+   "report_generator.py",
+   "scorer.py"
+  ],
+  "tier": "B",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/crypto-regime-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/crypto-regime-analyzer.md"
+  }
+ },
+ {
+  "id": "data-quality-checker",
+  "name": "Data Quality Checker",
+  "category": "meta",
+  "status": "production",
+  "summary": "Validate data quality in market analysis documents and blog articles before publication.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "markdown_document"
+  ],
+  "outputs": [
+   "quality_report",
+   "issue_list"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Local markdown validation; works offline"
+   }
+  ],
+  "scripts": [
+   "check_data_quality.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 5
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/data-quality-checker/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/data-quality-checker.md"
+  }
+ },
+ {
+  "id": "dividend-growth-pullback-screener",
+  "name": "Dividend Growth Pullback Screener",
+  "category": "dividend-income",
+  "status": "production",
+  "summary": "Use this skill to find high-quality dividend growth stocks (12%+ annual dividend growth, 1.5%+ yield) that are experiencing temporary pullbacks, identified by RSI oversold conditions (RSI ≤40).",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "dividend_universe",
+   "rsi_thresholds"
+  ],
+  "outputs": [
+   "pullback_candidates",
+   "yield_growth_metrics"
+  ],
+  "workflows": [
+   "kanchi-dividend-weekly"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   },
+   {
+    "id": "finviz",
+    "type": "screener",
+    "requirement": "recommended",
+    "note": "FINVIZ Elite API"
+   }
+  ],
+  "scripts": [
+   "dividend_history.py",
+   "fmp_client.py",
+   "screen_dividend_growth_rsi.py"
+  ],
+  "tier": "C",
+  "optional_keys": [
+   "finviz"
+  ],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/dividend-growth-pullback-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/dividend-growth-pullback-screener.md"
+  }
+ },
+ {
+  "id": "downtrend-duration-analyzer",
+  "name": "Downtrend Duration Analyzer",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Analyze historical downtrend durations and generate interactive HTML histograms showing typical correction lengths by sector and market cap.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "historical_correction_data"
+  ],
+  "outputs": [
+   "duration_histogram_html",
+   "sector_breakdown"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "FMP stock universe and historical prices; an API key is required"
+   }
+  ],
+  "scripts": [
+   "analyze_downtrends.py",
+   "downtrend_fmp_client.py",
+   "evaluation_coverage.py",
+   "fmp_client.py",
+   "generate_histogram_html.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/downtrend-duration-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/downtrend-duration-analyzer.md"
+  }
+ },
+ {
+  "id": "drawdown-circuit-breaker",
+  "name": "Drawdown Circuit Breaker",
+  "category": "trade-planning",
+  "status": "production",
+  "summary": "Account-level circuit breaker that reads trader-memory-core state and decides whether new trade risk is allowed today using daily loss limits, losing-streak cooldowns, and weekly/monthly drawdown halts.",
+  "timeframe": "daily",
+  "difficulty": "beginner",
+  "inputs": [
+   "thesis_record",
+   "account_size"
+  ],
+  "outputs": [
+   "circuit_breaker_decision"
+  ],
+  "workflows": [
+   "earnings-weekly",
+   "stockbee-ep-daily",
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Reads trader-memory-core thesis YAML files; pure calculation, works offline"
+   }
+  ],
+  "scripts": [
+   "check_circuit_breaker.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/drawdown-circuit-breaker/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/drawdown-circuit-breaker.md"
+  }
+ },
+ {
+  "id": "dual-axis-skill-reviewer",
+  "name": "Dual Axis Skill Reviewer",
+  "category": "meta",
+  "status": "production",
+  "summary": "Review skills in any project using a dual-axis method: (1) deterministic code-based checks (structure, scripts, tests, execution safety) and (2) LLM deep review findings.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "skill_source_tree"
+  ],
+  "outputs": [
+   "dual_axis_score_report"
+  ],
+  "workflows": [
+   "monthly-performance-review"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Deterministic scoring + optional LLM review"
+   }
+  ],
+  "scripts": [
+   "run_dual_axis_review.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 5
+  },
+  "audience": "maintainer",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/dual-axis-skill-reviewer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/dual-axis-skill-reviewer.md"
+  }
+ },
+ {
+  "id": "earnings-calendar",
+  "name": "Earnings Calendar",
+  "category": "meta",
+  "status": "production",
+  "summary": "This skill retrieves upcoming earnings announcements for US stocks using the Financial Modeling Prep (FMP) API.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "date_range",
+   "market_cap_filter"
+  ],
+  "outputs": [
+   "earnings_calendar_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "fetch_earnings_fmp.py",
+   "fmp_client.py",
+   "generate_report.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 5
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/earnings-calendar/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/earnings-calendar.md"
+  }
+ },
+ {
+  "id": "earnings-trade-analyzer",
+  "name": "Earnings Trade Analyzer",
+  "category": "advanced-satellite",
+  "status": "production",
+  "summary": "Analyze recent post-earnings stocks using a 5-factor scoring system (Gap Size, Pre-Earnings Trend, Volume Trend, MA200 Position, MA50 Position).",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "recent_earnings_universe"
+  ],
+  "outputs": [
+   "scored_candidates",
+   "five_factor_grades"
+  ],
+  "workflows": [
+   "earnings-weekly",
+   "stockbee-ep-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "analyze_earnings_trades.py",
+   "fmp_client.py",
+   "report_generator.py",
+   "scorer.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 2,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/earnings-trade-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/earnings-trade-analyzer.md"
+  }
+ },
+ {
+  "id": "economic-calendar-fetcher",
+  "name": "Economic Calendar Fetcher",
+  "category": "meta",
+  "status": "production",
+  "summary": "Fetch upcoming economic events and data releases using FMP API.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "date_range"
+  ],
+  "outputs": [
+   "economic_events_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "get_economic_calendar.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 5
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/economic-calendar-fetcher/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/economic-calendar-fetcher.md"
+  }
+ },
+ {
+  "id": "fxmacrodata-calendar",
+  "name": "FXMacroData Calendar",
+  "category": "meta",
+  "status": "beta",
+  "summary": "Fetch official-source macro release-calendar events using FXMacroData for trade planning and event-risk filters.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "currency",
+   "market_tier_filter"
+  ],
+  "outputs": [
+   "macro_release_calendar"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fxmacrodata",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "FXMacroData REST API; public USD calendar rows work without a key"
+   }
+  ],
+  "scripts": [
+   "fetch_calendar.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/fxmacrodata-calendar/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/fxmacrodata-calendar.md"
+  }
+ },
+ {
+  "id": "edge-candidate-agent",
+  "name": "Edge Candidate Agent",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Generate and prioritize US equity long-side edge research tickets from EOD observations, then export pipeline-ready candidate specs for trade-strategy-pipeline Phase I.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "eod_observations"
+  ],
+  "outputs": [
+   "market_summary_json",
+   "anomalies_json",
+   "tickets_dir"
+  ],
+  "workflows": [
+   "stockbee-20pct-study-daily",
+   "strategy-research-pipeline"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Optional OHLCV via FMP for edge ticket export"
+   }
+  ],
+  "scripts": [
+   "auto_detect_candidates.py",
+   "candidate_contract.py",
+   "export_candidate.py",
+   "validate_candidate.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 2,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/edge-candidate-agent/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/edge-candidate-agent.md"
+  }
+ },
+ {
+  "id": "edge-concept-synthesizer",
+  "name": "Edge Concept Synthesizer",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Abstract detector tickets and hints into reusable edge concepts with thesis, invalidation signals, and strategy playbooks before strategy design/export.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "tickets_dir",
+   "hints_yaml"
+  ],
+  "outputs": [
+   "edge_concepts_yaml"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Synthesizes detector tickets and hints into edge concepts"
+   }
+  ],
+  "scripts": [
+   "synthesize_edge_concepts.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/edge-concept-synthesizer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/edge-concept-synthesizer.md"
+  }
+ },
+ {
+  "id": "edge-hint-extractor",
+  "name": "Edge Hint Extractor",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Extract edge hints from daily market observations and news reactions, with optional LLM ideation, and output canonical hints.yaml for downstream concept synthesis and auto detection.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "market_summary_json",
+   "anomalies_json"
+  ],
+  "outputs": [
+   "hints_yaml"
+  ],
+  "workflows": [
+   "stockbee-20pct-study-daily",
+   "strategy-research-pipeline"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Extracts hints from observations/news; pure calculation"
+   }
+  ],
+  "scripts": [
+   "build_hints.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/edge-hint-extractor/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/edge-hint-extractor.md"
+  }
+ },
+ {
+  "id": "edge-pipeline-orchestrator",
+  "name": "Edge Pipeline Orchestrator",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Orchestrate the full edge research pipeline from candidate detection through strategy design, review, revision, and export.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "tickets_dir",
+   "market_summary",
+   "anomalies"
+  ],
+  "outputs": [
+   "pipeline_report",
+   "exported_strategies"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Orchestrates edge pipeline subskills via subprocess"
+   }
+  ],
+  "scripts": [
+   "orchestrate_edge_pipeline.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/edge-pipeline-orchestrator/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/edge-pipeline-orchestrator.md"
+  }
+ },
+ {
+  "id": "edge-signal-aggregator",
+  "name": "Edge Signal Aggregator",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Aggregate and rank signals from multiple edge-finding skills (edge-candidate-agent, theme-detector, sector-analyst, institutional-flow-tracker) into a prioritized conviction dashboard with weighted scoring, deduplication, and contradicti...",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "edge_candidate_outputs",
+   "theme_outputs",
+   "sector_outputs"
+  ],
+  "outputs": [
+   "conviction_dashboard"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Aggregates signals from edge-finding skills"
+   }
+  ],
+  "scripts": [
+   "aggregate_signals.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/edge-signal-aggregator/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/edge-signal-aggregator.md"
+  }
+ },
+ {
+  "id": "edge-strategy-designer",
+  "name": "Edge Strategy Designer",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Convert abstract edge concepts into strategy draft variants and optional exportable ticket YAMLs for edge-candidate-agent export/validation.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "edge_concepts_yaml"
+  ],
+  "outputs": [
+   "strategy_drafts_yaml"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Converts edge concepts into strategy drafts"
+   }
+  ],
+  "scripts": [
+   "design_strategy_drafts.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/edge-strategy-designer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/edge-strategy-designer.md"
+  }
+ },
+ {
+  "id": "edge-strategy-reviewer",
+  "name": "Edge Strategy Reviewer",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Critically review strategy drafts from edge-strategy-designer for edge plausibility, overfitting risk, sample size adequacy, and execution realism.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "strategy_drafts_yaml"
+  ],
+  "outputs": [
+   "review_yaml",
+   "verdict_list"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Deterministic scoring on local YAML drafts"
+   }
+  ],
+  "scripts": [
+   "review_strategy_drafts.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/edge-strategy-reviewer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/edge-strategy-reviewer.md"
+  }
+ },
+ {
+  "id": "exposure-coach",
+  "name": "Exposure Coach",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Generate a one-page Market Posture summary with net exposure ceiling, growth-vs-value bias, participation breadth, and new-entry-allowed vs cash-priority recommendation by integrating signals from breadth, regime, and flow analysis skills.",
+  "timeframe": "daily",
+  "difficulty": "beginner",
+  "inputs": [
+   "market_breadth_report",
+   "uptrend_report",
+   "top_risk_report"
+  ],
+  "outputs": [
+   "exposure_decision"
+  ],
+  "workflows": [
+   "market-regime-daily"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Synthesizes signals from other skills; pure calculation"
+   }
+  ],
+  "scripts": [
+   "calculate_exposure.py",
+   "evaluation_coverage.py",
+   "provenance_contract.py",
+   "sector_contract.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/exposure-coach/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/exposure-coach.md"
+  }
+ },
+ {
+  "id": "finviz-screener",
+  "name": "Finviz Screener",
+  "category": "swing-opportunity",
+  "status": "production",
+  "summary": "Build and open FinViz screener URLs from natural language requests.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "natural_language_query"
+  ],
+  "outputs": [
+   "finviz_url",
+   "filter_codes"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "finviz",
+    "type": "screener",
+    "requirement": "optional",
+    "note": "FINVIZ Elite API"
+   }
+  ],
+  "scripts": [
+   "open_finviz_screener.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "finviz"
+  ],
+  "verified": {
+   "passed": 1,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/finviz-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/finviz-screener.md"
+  }
+ },
+ {
+  "id": "ftd-detector",
+  "name": "FTD Detector",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Detects Follow-Through Day (FTD) signals for market bottom confirmation using William O'Neil's methodology.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "sp500_ohlcv",
+   "nasdaq_ohlcv"
+  ],
+  "outputs": [
+   "ftd_signal_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Daily QQQ/SPY OHLCV via FMP"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "ftd_detector.py",
+   "ftd_lifecycle.py",
+   "post_ftd_monitor.py",
+   "rally_tracker.py",
+   "report_generator.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/ftd-detector/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/ftd-detector.md"
+  }
+ },
+ {
+  "id": "futures-position-sizer",
+  "name": "Futures Position Sizer",
+  "category": "trade-planning",
+  "status": "production",
+  "summary": "Calculate contract-based futures position sizes from a direction, entry, and stop-loss, using a verified 23-market contract-spec table (multiplier, tick size, tick value), implementing step 4 of Jason Shapiro's contrarian pipeline.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "entry_price",
+   "stop_price",
+   "account_size",
+   "risk_pct",
+   "contrarian_setup_gate_report"
+  ],
+  "outputs": [
+   "futures_position_size"
+  ],
+  "workflows": [
+   "shapiro-contrarian"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Pure calculation; consumes contrarian-setup-gate's READY_FOR_PLAN report or explicit direction/entry/stop flags; works offline"
+   }
+  ],
+  "scripts": [
+   "futures_position_sizer.py",
+   "futures_sizing.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/futures-position-sizer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/futures-position-sizer.md"
+  }
+ },
+ {
+  "id": "ibd-distribution-day-monitor",
+  "name": "IBD Distribution Day Monitor",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Detect IBD-style Distribution Days for QQQ/SPY (close down at least 0.2% on higher volume), track 25-session expiration and 5% invalidation, count d5/d15/d25 clusters, classify market risk (NORMAL/CAUTION/HIGH/SEVERE), and emit TQQQ/QQQ...",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "qqq_ohlcv",
+   "spy_ohlcv"
+  ],
+  "outputs": [
+   "distribution_day_count_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "data_loader.py",
+   "distribution_day_tracker.py",
+   "exposure_policy.py",
+   "fmp_client.py",
+   "history_utils.py",
+   "ibd_monitor.py",
+   "math_utils.py",
+   "models.py",
+   "report_generator.py",
+   "risk_classifier.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/ibd-distribution-day-monitor/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/ibd-distribution-day-monitor.md"
+  }
+ },
+ {
+  "id": "institutional-flow-tracker",
+  "name": "Institutional Flow Tracker",
+  "category": "advanced-satellite",
+  "status": "production",
+  "summary": "Use this skill to track institutional investor ownership changes and portfolio flows using 13F filings data.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "13f_filings",
+   "fund_universe"
+  ],
+  "outputs": [
+   "flow_analysis_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "analyze_single_stock.py",
+   "data_quality.py",
+   "fmp_client.py",
+   "track_institution_portfolio.py",
+   "track_institutional_flow.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/institutional-flow-tracker/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/institutional-flow-tracker.md"
+  }
+ },
+ {
+  "id": "kanchi-dividend-review-monitor",
+  "name": "Kanchi Dividend Review Monitor",
+  "category": "dividend-income",
+  "status": "production",
+  "summary": "Monitor dividend portfolios with Kanchi-style forced-review triggers (T1-T5) and convert anomalies into OK/WARN/REVIEW states without auto-selling.",
+  "timeframe": "weekly",
+  "difficulty": "beginner",
+  "inputs": [
+   "holdings_snapshot"
+  ],
+  "outputs": [
+   "t1_t5_anomaly_findings",
+   "review_queue"
+  ],
+  "workflows": [
+   "core-portfolio-weekly",
+   "kanchi-dividend-weekly"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "recommended",
+    "note": "Dividend / price monitoring via FMP"
+   }
+  ],
+  "scripts": [
+   "build_review_queue.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/kanchi-dividend-review-monitor/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/kanchi-dividend-review-monitor.md"
+  }
+ },
+ {
+  "id": "kanchi-dividend-sop",
+  "name": "Kanchi Dividend SOP",
+  "category": "dividend-income",
+  "status": "production",
+  "summary": "Convert Kanchi-style dividend investing into a repeatable US-stock operating procedure.",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "screener_universe",
+   "sector_filter"
+  ],
+  "outputs": [
+   "kanchi_candidates",
+   "stock_memo"
+  ],
+  "workflows": [
+   "kanchi-dividend-weekly"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "recommended",
+    "note": "US dividend stock data via FMP"
+   }
+  ],
+  "scripts": [
+   "build_entry_signals.py",
+   "build_sop_plan.py",
+   "dividend_basis.py",
+   "event_scanner.py",
+   "fmp_client.py",
+   "payout_safety.py",
+   "regular_yield_history.py",
+   "sourced_financials.py",
+   "thresholds.py",
+   "verdict.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/kanchi-dividend-sop/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/kanchi-dividend-sop.md"
+  }
+ },
+ {
+  "id": "kanchi-dividend-us-tax-accounting",
+  "name": "Kanchi Dividend US Tax Accounting",
+  "category": "dividend-income",
+  "status": "production",
+  "summary": "Provide US dividend tax and account-location workflow for Kanchi-style income portfolios.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "dividend_distributions",
+   "1099_div"
+  ],
+  "outputs": [
+   "qualified_ordinary_classification",
+   "account_location_advice"
+  ],
+  "workflows": [
+   "core-portfolio-weekly",
+   "kanchi-dividend-weekly"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "US tax workflow guidance; pure calculation"
+   }
+  ],
+  "scripts": [
+   "build_tax_planning_sheet.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/kanchi-dividend-us-tax-accounting/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/kanchi-dividend-us-tax-accounting.md"
+  }
+ },
+ {
+  "id": "macro-regime-detector",
+  "name": "Macro Regime Detector",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Detect structural macro regime transitions (1-2 year horizon) using cross-asset ratio analysis.",
+  "timeframe": "weekly",
+  "difficulty": "advanced",
+  "inputs": [
+   "cross_asset_ratios",
+   "yield_curve_data"
+  ],
+  "outputs": [
+   "regime_transition_report"
+  ],
+  "workflows": [
+   "market-regime-daily",
+   "multi-asset-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "yfinance",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Keyless cross-asset ETF history; declared in the skill-local requirements file"
+   },
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Optional FMP market and Treasury data; unavailable ETF history falls back to yfinance"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "macro_regime_detector.py",
+   "report_generator.py",
+   "scorer.py"
+  ],
+  "tier": "B",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 4,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/macro-regime-detector/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/macro-regime-detector.md"
+  }
+ },
+ {
+  "id": "manifoldbt-backtester",
+  "name": "manifoldbt Backtester",
+  "category": "strategy-research",
+  "status": "beta",
+  "summary": "Runs a declarative strategy spec over OHLCV bars with the manifoldbt Rust engine and emits the eight inputs backtest-expert scores.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "strategy_spec",
+   "ohlcv_bars"
+  ],
+  "outputs": [
+   "round_trip_statistics",
+   "backtest_expert_inputs"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "manifoldbt",
+    "type": "calculation",
+    "requirement": "required",
+    "note": "pip install manifoldbt; free tier covers this skill, no API key"
+   },
+   {
+    "id": "ohlcv_file",
+    "type": "local_file",
+    "requirement": "required",
+    "note": "CSV or Parquet with timestamp, open, high, low, close, volume"
+   }
+  ],
+  "scripts": [
+   "bridge.py",
+   "round_trips.py",
+   "run_backtest.py",
+   "spec.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/manifoldbt-backtester/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/manifoldbt-backtester.md"
+  }
+ },
+ {
+  "id": "market-breadth-analyzer",
+  "name": "Market Breadth Analyzer",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Quantifies market breadth health using TraderMonty's public CSV data.",
+  "timeframe": "daily",
+  "difficulty": "beginner",
+  "inputs": [
+   "public_breadth_csv"
+  ],
+  "outputs": [
+   "breadth_composite_score",
+   "component_breakdown"
+  ],
+  "workflows": [
+   "market-regime-daily"
+  ],
+  "integrations": [
+   {
+    "id": "public_csv",
+    "type": "web",
+    "requirement": "required",
+    "note": "TraderMonty public CSV; no API key required"
+   }
+  ],
+  "scripts": [
+   "csv_client.py",
+   "history_tracker.py",
+   "market_breadth_analyzer.py",
+   "provenance_contract.py",
+   "report_generator.py",
+   "scorer.py"
+  ],
+  "tier": "B",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/market-breadth-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/market-breadth-analyzer.md"
+  }
+ },
+ {
+  "id": "market-environment-analysis",
+  "name": "Market Environment Analysis",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Comprehensive market environment analysis and reporting tool.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "global_market_data",
+   "chart_image"
+  ],
+  "outputs": [
+   "market_environment_report"
+  ],
+  "workflows": [
+   "multi-asset-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "websearch",
+    "type": "web",
+    "requirement": "required",
+    "note": "Global market data via WebSearch / WebFetch"
+   },
+   {
+    "id": "chart_image",
+    "type": "image",
+    "requirement": "optional",
+    "note": "Optional chart image inputs for technical interpretation"
+   }
+  ],
+  "scripts": [
+   "market_utils.py"
+  ],
+  "tier": "D",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/market-environment-analysis/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/market-environment-analysis.md"
+  }
+ },
+ {
+  "id": "market-news-analyst",
+  "name": "Market News Analyst",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "This skill should be used when analyzing recent market-moving news events and their impact on equity markets and commodities.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "news_search_query",
+   "date_range"
+  ],
+  "outputs": [
+   "news_impact_report"
+  ],
+  "workflows": [
+   "multi-asset-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "websearch",
+    "type": "web",
+    "requirement": "required",
+    "note": "Web search / fetch"
+   }
+  ],
+  "scripts": [],
+  "tier": "D",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 7
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/market-news-analyst/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/market-news-analyst.md"
+  }
+ },
+ {
+  "id": "market-top-detector",
+  "name": "Market Top Detector",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Assesses heuristic market top risk using O'Neil Distribution Days, Minervini Leading Stock Deterioration, and Monty Defensive Sector Rotation.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "public_market_data_csv"
+  ],
+  "outputs": [
+   "market_top_composite_score"
+  ],
+  "workflows": [
+   "market-regime-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "FMP index, ETF and stock data; an API key is required"
+   },
+   {
+    "id": "public_csv",
+    "type": "web",
+    "requirement": "optional",
+    "note": "Public TraderMonty breadth CSV supplement; FMP credentials remain required"
+   }
+  ],
+  "scripts": [
+   "breadth_csv_client.py",
+   "fmp_client.py",
+   "historical_comparator.py",
+   "market_top_detector.py",
+   "price_bar_utils.py",
+   "report_generator.py",
+   "scenario_engine.py",
+   "scorer.py",
+   "utils.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/market-top-detector/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/market-top-detector.md"
+  }
+ },
+ {
+  "id": "mt5-robot-tester",
+  "name": "MT5 Robot Tester",
+  "category": "strategy-research",
+  "status": "beta",
+  "summary": "Batch-test MetaTrader 5 Expert Advisors through a resumable three-round local pipeline, rank results, and retain deterministic parameter and symbol learnings.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "mt5_ea_binaries",
+   "mt5_pipeline_config",
+   "broker_tick_data"
+  ],
+  "outputs": [
+   "mt5_backtest_reports",
+   "robot_leaderboard",
+   "learning_store"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "mt5_local_files",
+    "type": "local_file",
+    "requirement": "required",
+    "note": "Local Windows MT5 terminal, EA and set files, and broker tick data; no API key"
+   },
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Offline report parsing, gates, metrics, checkpoints, and learning aggregation"
+   }
+  ],
+  "scripts": [
+   "dashboard.py",
+   "mt5_batch_tester.py",
+   "mt5_common.py",
+   "mt5_learnings.py",
+   "parse_mt5_optimization.py",
+   "parse_mt5_report.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/mt5-robot-tester/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/mt5-robot-tester.md"
+  }
+ },
+ {
+  "id": "news-reaction-failure-analyzer",
+  "name": "News Reaction Failure Analyzer",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Judges whether a market failed to react to news favorable to a crowded speculative position, implementing step 2 of Jason Shapiro's contrarian methodology with a Monte-Carlo-verified drift-significance verdict test.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "cot_crowding_report",
+   "curated_events_json"
+  ],
+  "outputs": [
+   "news_failure_verdict"
+  ],
+  "workflows": [
+   "shapiro-contrarian"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Historical EOD price data; per-symbol coverage varies (ETF proxy fallback documented)"
+   },
+   {
+    "id": "websearch",
+    "type": "web",
+    "requirement": "required",
+    "note": "Events curation (Claude searches news to build the events JSON; no FMP news endpoint exists for futures)"
+   }
+  ],
+  "scripts": [
+   "analyze_news_reaction.py",
+   "fmp_client.py",
+   "reaction_math.py"
+  ],
+  "tier": "D",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/news-reaction-failure-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/news-reaction-failure-analyzer.md"
+  }
+ },
+ {
+  "id": "options-strategy-advisor",
+  "name": "Options Strategy Advisor",
+  "category": "advanced-satellite",
+  "status": "production",
+  "summary": "Options trading strategy analysis and simulation tool.",
+  "timeframe": "event-driven",
+  "difficulty": "advanced",
+  "inputs": [
+   "ticker",
+   "strategy_type",
+   "stock_data"
+  ],
+  "outputs": [
+   "greeks",
+   "pnl_simulation",
+   "strategy_comparison"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "black_scholes.py",
+   "fmp_client.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/options-strategy-advisor/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/options-strategy-advisor.md"
+  }
+ },
+ {
+  "id": "pair-trade-screener",
+  "name": "Pair Trade Screener",
+  "category": "advanced-satellite",
+  "status": "production",
+  "summary": "Statistical arbitrage tool for identifying and analyzing pair trading opportunities.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "sector_universe",
+   "lookback_period"
+  ],
+  "outputs": [
+   "cointegrated_pairs",
+   "zscore_signals"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "analyze_spread.py",
+   "find_pairs.py",
+   "fmp_client.py",
+   "pair_fmp_client.py",
+   "statsmodels_support.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/pair-trade-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/pair-trade-screener.md"
+  }
+ },
+ {
+  "id": "parabolic-short-trade-planner",
+  "name": "Parabolic Short Trade Planner",
+  "category": "advanced-satellite",
+  "status": "production",
+  "summary": "Screen US equities for parabolic exhaustion patterns and generate conditional pre-market short plans, then evaluate intraday trigger fires from live 5-min bars.",
+  "timeframe": "event-driven",
+  "difficulty": "advanced",
+  "inputs": [
+   "screener_universe",
+   "alpaca_inventory"
+  ],
+  "outputs": [
+   "pre_market_plan",
+   "intraday_trigger_state"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   },
+   {
+    "id": "alpaca",
+    "type": "broker",
+    "requirement": "optional",
+    "note": "Alpaca brokerage MCP/API"
+   }
+  ],
+  "scripts": [
+   "bar_normalizer.py",
+   "broker_short_inventory_adapter.py",
+   "check_live_apis.py",
+   "fmp_client.py",
+   "generate_pre_market_plan.py",
+   "intraday_size_resolver.py",
+   "intraday_state_machine.py",
+   "intraday_state_store.py",
+   "invalidation_rules.py",
+   "manual_reasons.py",
+   "market_clock.py",
+   "math_helpers.py",
+   "monitor_intraday_trigger.py",
+   "parabolic_report_generator.py",
+   "parabolic_scorer.py",
+   "screen_parabolic.py",
+   "size_recipe_builder.py",
+   "ssr_state_tracker.py",
+   "state_caps.py",
+   "vwap.py"
+  ],
+  "tier": "C",
+  "optional_keys": [
+   "alpaca"
+  ],
+  "verified": {
+   "passed": 1,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/parabolic-short-trade-planner/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/parabolic-short-trade-planner.md"
+  }
+ },
+ {
+  "id": "pead-screener",
+  "name": "PEAD Screener",
+  "category": "advanced-satellite",
+  "status": "production",
+  "summary": "Screen post-earnings gap-up stocks for PEAD (Post-Earnings Announcement Drift) patterns.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "earnings_candidates",
+   "weekly_ohlcv"
+  ],
+  "outputs": [
+   "pead_signal_list",
+   "breakout_triggers"
+  ],
+  "workflows": [
+   "earnings-weekly",
+   "stockbee-ep-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "price_bar_utils.py",
+   "report_generator.py",
+   "scorer.py",
+   "screen_pead.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 2,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/pead-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/pead-screener.md"
+  }
+ },
+ {
+  "id": "portfolio-manager",
+  "name": "Portfolio Manager",
+  "category": "core-portfolio",
+  "status": "production",
+  "summary": "Comprehensive portfolio analysis using Alpaca MCP Server integration to fetch holdings and positions, then analyze asset allocation, risk metrics, individual stock positions, diversification, and generate rebalancing recommendations.",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "alpaca_holdings",
+   "local_holdings_snapshot"
+  ],
+  "outputs": [
+   "allocation_report",
+   "holdings_allocation_report",
+   "rebalance_actions"
+  ],
+  "workflows": [
+   "core-portfolio-weekly",
+   "portfolio-holdings-review"
+  ],
+  "integrations": [
+   {
+    "id": "alpaca",
+    "type": "broker",
+    "requirement": "optional",
+    "note": "Required for full brokerage analysis; local CSV/saved-position allocation review needs no credentials"
+   }
+  ],
+  "scripts": [
+   "check_alpaca_connection.py",
+   "normalize_alpaca_positions.py",
+   "reconcile_positions.py",
+   "review_csv.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "alpaca"
+  ],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/portfolio-manager/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/portfolio-manager.md"
+  }
+ },
+ {
+  "id": "position-sizer",
+  "name": "Position Sizer",
+  "category": "trade-planning",
+  "status": "production",
+  "summary": "Calculate risk-based position sizes for long stock trades.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "entry_price",
+   "stop_price",
+   "account_size"
+  ],
+  "outputs": [
+   "share_count",
+   "risk_amount"
+  ],
+  "workflows": [
+   "earnings-weekly",
+   "multi-asset-opportunity-daily",
+   "stockbee-ep-daily",
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Pure calculation; works offline"
+   }
+  ],
+  "scripts": [
+   "position_sizer.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 3,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/position-sizer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/position-sizer.md"
+  }
+ },
+ {
+  "id": "pre-trade-discipline-gate",
+  "name": "Pre-Trade Discipline Gate",
+  "category": "trade-planning",
+  "status": "production",
+  "summary": "Offline manual-execution checklist gate that blocks planless, oversized, revenge-risk, market-regime-blocked, or circuit-breaker-blocked entries and journals the result.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "pre_trade_checklist",
+   "exposure_decision",
+   "circuit_breaker_decision",
+   "thesis_record"
+  ],
+  "outputs": [
+   "pre_trade_discipline_decision"
+  ],
+  "workflows": [
+   "earnings-weekly",
+   "stockbee-ep-daily",
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Reads local checklist, workflow artifacts, and trader-memory-core state; works offline"
+   }
+  ],
+  "scripts": [
+   "approved_rules.py",
+   "check_pre_trade_discipline.py",
+   "manage_approved_rules.py",
+   "review_rule_adherence.py",
+   "review_rule_experiment.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/pre-trade-discipline-gate/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/pre-trade-discipline-gate.md"
+  }
+ },
+ {
+  "id": "residual-edge-analyzer",
+  "name": "Residual Edge Analyzer",
+  "category": "strategy-research",
+  "status": "beta",
+  "summary": "Separate strategy return performance into declared baseline exposure and residual edge using HAC regression, rolling stability, baseline sensitivity, and regime diagnostics.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "strategy_return_series",
+   "baseline_return_series",
+   "residual_attribution_config"
+  ],
+  "outputs": [
+   "residual_edge_report",
+   "attribution_diagnostics"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Analyzes aligned local CSV and JSON inputs; works offline"
+   }
+  ],
+  "scripts": [
+   "analyze_residual_edge.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/residual-edge-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/residual-edge-analyzer.md"
+  }
+ },
+ {
+  "id": "scenario-analyzer",
+  "name": "Scenario Analyzer",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Analyze 18-month scenarios from news headlines via scenario-analyst agent with strategy-reviewer second opinion; outputs primary/secondary/tertiary impact analysis and stock picks.",
+  "timeframe": "event-driven",
+  "difficulty": "advanced",
+  "inputs": [
+   "news_headline"
+  ],
+  "outputs": [
+   "scenario_report",
+   "stock_picks",
+   "review_yaml"
+  ],
+  "workflows": [
+   "multi-asset-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "websearch",
+    "type": "web",
+    "requirement": "required",
+    "note": "Headline / news search via WebSearch"
+   }
+  ],
+  "scripts": [],
+  "tier": "D",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 7
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/scenario-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/scenario-analyzer.md"
+  }
+ },
+ {
+  "id": "sector-analyst",
+  "name": "Sector Analyst",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "This skill should be used when analyzing sector rotation patterns and market cycle positioning.",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "sector_uptrend_csv",
+   "chart_image"
+  ],
+  "outputs": [
+   "rotation_assessment_report"
+  ],
+  "workflows": [
+   "multi-asset-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "chart_image",
+    "type": "image",
+    "requirement": "required",
+    "note": "Chart screenshot input"
+   }
+  ],
+  "scripts": [
+   "analyze_sector_rotation.py"
+  ],
+  "tier": "D",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/sector-analyst/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/sector-analyst.md"
+  }
+ },
+ {
+  "id": "signal-postmortem",
+  "name": "Signal Postmortem",
+  "category": "trade-memory",
+  "status": "production",
+  "summary": "Record and analyze post-trade outcomes for signals generated by edge pipeline and other skills.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "closed_thesis_record"
+  ],
+  "outputs": [
+   "postmortem_findings"
+  ],
+  "workflows": [
+   "monthly-performance-review",
+   "stockbee-fluency-loop",
+   "trade-memory-loop"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Manual postmortem recording works offline"
+   },
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Optional FMP price enrichment; manual recording works without a key"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "postmortem_analyzer.py",
+   "postmortem_fmp_client.py",
+   "postmortem_recorder.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/signal-postmortem/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/signal-postmortem.md"
+  }
+ },
+ {
+  "id": "skill-designer",
+  "name": "Skill Designer",
+  "category": "meta",
+  "status": "production",
+  "summary": "Design new Claude skills from structured idea specifications.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "idea_specification"
+  ],
+  "outputs": [
+   "skill_scaffolding"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Generates skill scaffolding from idea specs"
+   }
+  ],
+  "scripts": [
+   "build_design_prompt.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 5
+  },
+  "audience": "maintainer",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/skill-designer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/skill-designer.md"
+  }
+ },
+ {
+  "id": "skill-idea-miner",
+  "name": "Skill Idea Miner",
+  "category": "meta",
+  "status": "production",
+  "summary": "Mine Claude Code session logs for skill idea candidates.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "session_logs"
+  ],
+  "outputs": [
+   "skill_idea_backlog_yaml"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Mines session logs for skill ideas"
+   }
+  ],
+  "scripts": [
+   "mine_session_logs.py",
+   "score_ideas.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 5
+  },
+  "audience": "maintainer",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/skill-idea-miner/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/skill-idea-miner.md"
+  }
+ },
+ {
+  "id": "skill-integration-tester",
+  "name": "Skill Integration Tester",
+  "category": "meta",
+  "status": "production",
+  "summary": "Validate multi-skill workflows defined in CLAUDE.md by checking skill existence, inter-skill data contracts (JSON schema compatibility), file naming conventions, and handoff integrity.",
+  "timeframe": "research",
+  "difficulty": "intermediate",
+  "inputs": [
+   "claude_md",
+   "skill_outputs"
+  ],
+  "outputs": [
+   "workflow_validation_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Validates multi-skill workflow contracts"
+   }
+  ],
+  "scripts": [
+   "validate_workflows.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 5
+  },
+  "audience": "maintainer",
+  "us_equity": false,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/skill-integration-tester/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/skill-integration-tester.md"
+  }
+ },
+ {
+  "id": "stanley-druckenmiller-investment",
+  "name": "Stanley Druckenmiller Investment",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Druckenmiller Strategy Synthesizer - Integrates 8 upstream skill outputs (Market Breadth, Uptrend Analysis, Market Top, Macro Regime, FTD Detector, VCP Screener, Theme Detector, CANSLIM Screener) into a unified conviction score (0-100),...",
+  "timeframe": "weekly",
+  "difficulty": "advanced",
+  "inputs": [
+   "upstream_skill_outputs",
+   "exposure_decision"
+  ],
+  "outputs": [
+   "druckenmiller_synthesis_report"
+  ],
+  "workflows": [
+   "multi-asset-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Synthesizes outputs from upstream skills; pure calculation"
+   }
+  ],
+  "scripts": [
+   "allocation_engine.py",
+   "report_generator.py",
+   "report_loader.py",
+   "scorer.py",
+   "strategy_synthesizer.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/stanley-druckenmiller-investment/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/stanley-druckenmiller-investment.md"
+  }
+ },
+ {
+  "id": "stockbee-20pct-study",
+  "name": "Stockbee 20% Study",
+  "category": "strategy-research",
+  "status": "beta",
+  "summary": "Build a daily Stockbee-style +20%/-20% mover event study, classify catalysts and setup context, update forward outcomes, and export evidence-backed edge hints without treating movers as buy/sell signals.",
+  "timeframe": "daily",
+  "difficulty": "advanced",
+  "inputs": [
+   "daily_ohlcv_universe",
+   "optional_news_events",
+   "market_regime_report",
+   "twenty_pct_study_db"
+  ],
+  "outputs": [
+   "twenty_pct_mover_events",
+   "classified_event_study",
+   "matured_event_outcomes",
+   "twenty_pct_cohort_summary",
+   "edge_hints_yaml"
+  ],
+  "workflows": [
+   "stockbee-20pct-study-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Live US universe, daily OHLCV, symbol profile, and optional historical backfill data"
+   },
+   {
+    "id": "prices_json",
+    "type": "local_file",
+    "requirement": "optional",
+    "note": "Offline OHLCV JSON fallback for no-API backfills and tests"
+   },
+   {
+    "id": "news_events_json",
+    "type": "local_file",
+    "requirement": "optional",
+    "note": "Optional catalyst/event records for higher-quality classification"
+   },
+   {
+    "id": "websearch",
+    "type": "web",
+    "requirement": "optional",
+    "note": "Optional manual catalyst enrichment when structured event data is unavailable"
+   },
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Event detection, outcome updates, cohort statistics, and report generation"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "run_20pct_study.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/stockbee-20pct-study/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/stockbee-20pct-study.md"
+  }
+ },
+ {
+  "id": "stockbee-episodic-pivot-analyzer",
+  "name": "Stockbee Episodic Pivot Analyzer",
+  "category": "advanced-satellite",
+  "status": "beta",
+  "summary": "Analyze Stockbee-style Day 1 Episodic Pivot candidates from earnings, guidance, M&A, FDA, analyst, contract, product, short-squeeze, and story/theme catalysts using catalyst quality, gap/range expansion, volume shock, neglect/revaluation context, liquidity, and EP-day-low risk.",
+  "timeframe": "event-driven",
+  "difficulty": "advanced",
+  "inputs": [
+   "catalyst_events",
+   "earnings_trade_candidates",
+   "momentum_burst_candidates",
+   "daily_ohlcv"
+  ],
+  "outputs": [
+   "episodic_pivot_candidates",
+   "catalyst_quality_scores",
+   "delayed_ep_watchlist",
+   "pead_handoff_candidates"
+  ],
+  "workflows": [
+   "stockbee-20pct-study-daily",
+   "stockbee-ep-daily"
+  ],
+  "integrations": [
+   {
+    "id": "catalyst_events_json",
+    "type": "local_file",
+    "requirement": "required",
+    "note": "User-provided or upstream-generated catalyst/event records; the skill does not discover news by itself"
+   },
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Optional OHLCV enrichment via Financial Modeling Prep"
+   },
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Catalyst classification, EP scoring, handoff flags, and report generation"
+   }
+  ],
+  "scripts": [
+   "analyze_ep.py",
+   "fmp_client.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/stockbee-episodic-pivot-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/stockbee-episodic-pivot-analyzer.md"
+  }
+ },
+ {
+  "id": "stockbee-exhaustion-hammer-screener",
+  "name": "Stockbee Exhaustion Hammer Screener",
+  "category": "swing-opportunity",
+  "status": "beta",
+  "summary": "Screen US stocks for Stockbee-style selling-exhaustion hammer candidates using quality/liquidity gates, prior momentum, pullback depth, undercut/reclaim, hammer geometry, volume confirmation, market gate, and risk-distance filters.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "daily_ohlcv_universe",
+   "quality_profiles",
+   "market_regime_report",
+   "risk_policy"
+  ],
+  "outputs": [
+   "exhaustion_hammer_candidates",
+   "setup_quality_scores",
+   "trade_plan_inputs"
+  ],
+  "workflows": [
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Live US universe, daily OHLCV, and optional quote-derived near-close bar via Financial Modeling Prep"
+   },
+   {
+    "id": "prices_json",
+    "type": "local_file",
+    "requirement": "optional",
+    "note": "Offline or near-close provisional OHLCV JSON fallback for no-API screening and tests"
+   },
+   {
+    "id": "profiles_json",
+    "type": "local_file",
+    "requirement": "optional",
+    "note": "Optional quality metadata keyed by symbol, such as marketCap and holder counts"
+   },
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Pullback context, hammer geometry, risk-distance scoring, and report generation"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "screen_exhaustion_hammer.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/stockbee-exhaustion-hammer-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/stockbee-exhaustion-hammer-screener.md"
+  }
+ },
+ {
+  "id": "stockbee-momentum-burst-screener",
+  "name": "Stockbee Momentum Burst Screener",
+  "category": "swing-opportunity",
+  "status": "beta",
+  "summary": "Screen US stocks for Stockbee-style 3-5 day momentum burst candidates using 4% breakout, dollar breakout, range expansion, volume expansion, setup quality, and risk-distance filters.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "daily_ohlcv_universe",
+   "market_regime_report",
+   "risk_policy"
+  ],
+  "outputs": [
+   "momentum_burst_candidates",
+   "setup_quality_scores",
+   "trade_plan_inputs"
+  ],
+  "workflows": [
+   "stockbee-ep-daily",
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Live US universe and daily OHLCV via Financial Modeling Prep"
+   },
+   {
+    "id": "prices_json",
+    "type": "local_file",
+    "requirement": "optional",
+    "note": "Offline OHLCV JSON fallback for no-API screening and tests"
+   },
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Trigger detection, setup scoring, risk-distance checks, and report generation"
+   }
+  ],
+  "scripts": [
+   "evaluation_coverage.py",
+   "fmp_client.py",
+   "screen_momentum_burst.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/stockbee-momentum-burst-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/stockbee-momentum-burst-screener.md"
+  }
+ },
+ {
+  "id": "stockbee-setup-fluency-trainer",
+  "name": "Stockbee Setup Fluency Trainer",
+  "category": "trade-memory",
+  "status": "beta",
+  "summary": "Build a Stockbee-style setup model book from momentum-burst screener candidates, then update 3-day and 5-day forward outcomes with MFE/MAE, stop-hit status, outcome tags, and cohort statistics.",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "momentum_burst_candidates",
+   "daily_ohlcv_by_symbol",
+   "model_book_jsonl"
+  ],
+  "outputs": [
+   "stockbee_model_book",
+   "matured_setup_outcomes",
+   "setup_fluency_summary",
+   "rule_candidates"
+  ],
+  "workflows": [
+   "stockbee-fluency-loop"
+  ],
+  "integrations": [
+   {
+    "id": "prices_json",
+    "type": "local_file",
+    "requirement": "optional",
+    "note": "Offline OHLCV JSON for no-API 3/5-day outcome updates"
+   },
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Financial Modeling Prep daily OHLCV for automatic outcome updates when local prices are unavailable"
+   },
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "JSONL model-book upsert, MFE/MAE calculation, outcome tagging, and cohort statistics"
+   }
+  ],
+  "scripts": [
+   "build_model_book.py",
+   "decision_replay.py",
+   "fmp_client.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/stockbee-setup-fluency-trainer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/stockbee-setup-fluency-trainer.md"
+  }
+ },
+ {
+  "id": "strategy-pivot-designer",
+  "name": "Strategy Pivot Designer",
+  "category": "strategy-research",
+  "status": "production",
+  "summary": "Detect backtest iteration stagnation and generate structurally different strategy pivot proposals when parameter tuning reaches a local optimum.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "backtest_iteration_history"
+  ],
+  "outputs": [
+   "pivot_proposals"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Pivot proposal generator; pure calculation"
+   }
+  ],
+  "scripts": [
+   "detect_stagnation.py",
+   "generate_pivots.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/strategy-pivot-designer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/strategy-pivot-designer.md"
+  }
+ },
+ {
+  "id": "technical-analyst",
+  "name": "Technical Analyst",
+  "category": "trade-planning",
+  "status": "production",
+  "summary": "This skill should be used when analyzing weekly price charts for stocks, stock indices, cryptocurrencies, or forex pairs.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "weekly_chart_image"
+  ],
+  "outputs": [
+   "technical_assessment_report",
+   "price_action_confirmation_report"
+  ],
+  "workflows": [
+   "earnings-weekly",
+   "shapiro-contrarian",
+   "stockbee-ep-daily",
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "chart_image",
+    "type": "image",
+    "requirement": "required",
+    "note": "Chart screenshot input"
+   },
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Optional weekly OHLCV fallback for contrarian confirmation (Shapiro step 3)"
+   }
+  ],
+  "scripts": [
+   "check_weekly_price_action.py",
+   "fmp_client.py",
+   "weekly_price_action.py"
+  ],
+  "tier": "D",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 2,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/technical-analyst/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/technical-analyst.md"
+  }
+ },
+ {
+  "id": "theme-detector",
+  "name": "Theme Detector",
+  "category": "swing-opportunity",
+  "status": "production",
+  "summary": "Detect and analyze trending market themes across sectors.",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "theme_universe",
+   "sector_data"
+  ],
+  "outputs": [
+   "theme_heat_scores",
+   "trending_themes"
+  ],
+  "workflows": [
+   "multi-asset-opportunity-daily",
+   "stockbee-20pct-study-daily",
+   "stockbee-ep-daily",
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Financial Modeling Prep API"
+   },
+   {
+    "id": "finviz",
+    "type": "screener",
+    "requirement": "recommended",
+    "note": "FINVIZ Elite API"
+   }
+  ],
+  "scripts": [
+   "config_loader.py",
+   "default_theme_config.py",
+   "etf_scanner.py",
+   "finviz_performance_client.py",
+   "fmp_adapter.py",
+   "fmp_client.py",
+   "leadership.py",
+   "report_generator.py",
+   "representative_stock_selector.py",
+   "scorer.py",
+   "theme_detector.py",
+   "theme_history.py",
+   "theme_matcher.py",
+   "uptrend_client.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "finviz",
+   "fmp"
+  ],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/theme-detector/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/theme-detector.md"
+  }
+ },
+ {
+  "id": "trade-hypothesis-ideator",
+  "name": "Trade Hypothesis Ideator",
+  "category": "trade-memory",
+  "status": "production",
+  "summary": "Generate falsifiable trade strategy hypotheses from market data, trade logs, and journal snippets with ranked hypothesis cards and optional strategy.yaml export.",
+  "timeframe": "research",
+  "difficulty": "advanced",
+  "inputs": [
+   "market_data_bundle",
+   "journal_snippets"
+  ],
+  "outputs": [
+   "hypothesis_cards",
+   "strategy_yaml"
+  ],
+  "workflows": [
+   "multi-asset-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Hypothesis generation from journal/data inputs; pure calculation"
+   }
+  ],
+  "scripts": [
+   "run_hypothesis_ideator.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 2,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/trade-hypothesis-ideator/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/trade-hypothesis-ideator.md"
+  }
+ },
+ {
+  "id": "trade-performance-coach",
+  "name": "Trade Performance Coach",
+  "category": "trade-memory",
+  "status": "beta",
+  "summary": "Review closed trades, partial exits, and monthly aggregates for process adherence, risk discipline, execution quality, and evidence-based trading behavior patterns, then produce next-session operating rules.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "closed_thesis_record",
+   "postmortem_findings",
+   "trade_journal_entries",
+   "risk_plan"
+  ],
+  "outputs": [
+   "performance_coach_report",
+   "behavioral_pattern_tags",
+   "risk_manager_notes",
+   "next_session_operating_rules"
+  ],
+  "workflows": [
+   "monthly-performance-review",
+   "trade-memory-loop"
+  ],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Works from local trader-memory / postmortem / journal records; no network or paid API required"
+   }
+  ],
+  "scripts": [
+   "review_trade_performance.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 0
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/trade-performance-coach/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/trade-performance-coach.md"
+  }
+ },
+ {
+  "id": "trader-memory-core",
+  "name": "Trader Memory Core",
+  "category": "trade-memory",
+  "status": "production",
+  "summary": "Track investment theses across their lifecycle — from screening idea to closed position with postmortem.",
+  "timeframe": "event-driven",
+  "difficulty": "beginner",
+  "inputs": [
+   "screener_report",
+   "trade_actions",
+   "futures_position_size"
+  ],
+  "outputs": [
+   "thesis_record",
+   "journal_entry"
+  ],
+  "workflows": [
+   "core-portfolio-weekly",
+   "earnings-weekly",
+   "kanchi-dividend-weekly",
+   "monthly-performance-review",
+   "multi-asset-opportunity-daily",
+   "shapiro-contrarian",
+   "stockbee-20pct-study-daily",
+   "stockbee-ep-daily",
+   "stockbee-fluency-loop",
+   "swing-opportunity-daily",
+   "trade-memory-loop"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Financial Modeling Prep API"
+   }
+  ],
+  "scripts": [
+   "fmp_client.py",
+   "fmp_price_adapter.py",
+   "thesis_ingest.py",
+   "thesis_review.py",
+   "thesis_store.py",
+   "trader_memory_cli.py"
+  ],
+  "tier": "A",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 3,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/trader-memory-core/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/trader-memory-core.md"
+  }
+ },
+ {
+  "id": "trading-skills-navigator",
+  "name": "Trading Skills Navigator",
+  "category": "meta",
+  "status": "production",
+  "summary": "Recommend the right workflow, skillset, API profile, and setup path from a natural-language trading goal.",
+  "timeframe": "research",
+  "difficulty": "beginner",
+  "inputs": [
+   "user_goal",
+   "optional_constraints"
+  ],
+  "outputs": [
+   "workflow_recommendation",
+   "skillset_recommendation",
+   "setup_path"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Reads local skills-index.yaml + workflows/*.yaml (or bundled snapshot); no network"
+   }
+  ],
+  "scripts": [
+   "build_snapshot.py",
+   "intent_benchmark.py",
+   "recommend.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 5
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/trading-skills-navigator/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/trading-skills-navigator.md"
+  }
+ },
+ {
+  "id": "uptrend-analyzer",
+  "name": "Uptrend Analyzer",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Analyzes market breadth using Monty's Uptrend Ratio Dashboard data to diagnose the current market environment.",
+  "timeframe": "daily",
+  "difficulty": "beginner",
+  "inputs": [
+   "uptrend_ratio_csv"
+  ],
+  "outputs": [
+   "uptrend_composite_score"
+  ],
+  "workflows": [
+   "market-regime-daily"
+  ],
+  "integrations": [
+   {
+    "id": "public_csv",
+    "type": "web",
+    "requirement": "required",
+    "note": "Monty Uptrend Ratio Dashboard CSV; no API key required"
+   }
+  ],
+  "scripts": [
+   "data_fetcher.py",
+   "provenance_contract.py",
+   "report_generator.py",
+   "scorer.py",
+   "uptrend_analyzer.py"
+  ],
+  "tier": "B",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/uptrend-analyzer/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/uptrend-analyzer.md"
+  }
+ },
+ {
+  "id": "us-market-bubble-detector",
+  "name": "US Market Bubble Detector",
+  "category": "market-regime",
+  "status": "production",
+  "summary": "Evaluates market bubble risk through quantitative data-driven analysis using the revised Minsky/Kindleberger framework v2.1.",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "bubble_indicators_data"
+  ],
+  "outputs": [
+   "bubble_risk_score"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "user_input",
+    "type": "local_file",
+    "requirement": "required",
+    "note": "User provides indicators"
+   }
+  ],
+  "scripts": [
+   "bubble_scorer.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/us-market-bubble-detector/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/us-market-bubble-detector.md"
+  }
+ },
+ {
+  "id": "us-stock-analysis",
+  "name": "US Stock Analysis",
+  "category": "trade-planning",
+  "status": "production",
+  "summary": "Comprehensive US stock analysis including fundamental analysis (financial metrics, business quality, valuation), technical analysis (indicators, chart patterns, support/resistance), stock comparisons, and investment report generation.",
+  "timeframe": "event-driven",
+  "difficulty": "intermediate",
+  "inputs": [
+   "ticker",
+   "fundamentals_data",
+   "chart_image"
+  ],
+  "outputs": [
+   "stock_analysis_report"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "user_input",
+    "type": "local_file",
+    "requirement": "required",
+    "note": "User provides the ticker or question, optionally own data"
+   },
+   {
+    "id": "websearch",
+    "type": "web",
+    "requirement": "required",
+    "note": "Current market data via web search"
+   }
+  ],
+  "scripts": [],
+  "tier": "D",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 5
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/us-stock-analysis/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/us-stock-analysis.md"
+  }
+ },
+ {
+  "id": "value-dividend-screener",
+  "name": "Value Dividend Screener",
+  "category": "dividend-income",
+  "status": "production",
+  "summary": "Screen US stocks for high-quality dividend opportunities combining value characteristics (P/E ratio under 20, P/B ratio under 2), attractive yields (3% or higher), and consistent growth (dividend/revenue/EPS trending up over 3 years).",
+  "timeframe": "weekly",
+  "difficulty": "intermediate",
+  "inputs": [
+   "dividend_universe",
+   "value_filters"
+  ],
+  "outputs": [
+   "high_yield_candidates"
+  ],
+  "workflows": [
+   "core-portfolio-weekly",
+   "kanchi-dividend-weekly"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "Financial Modeling Prep API"
+   },
+   {
+    "id": "finviz",
+    "type": "screener",
+    "requirement": "recommended",
+    "note": "FINVIZ Elite API"
+   }
+  ],
+  "scripts": [
+   "dividend_history.py",
+   "fmp_client.py",
+   "screen_dividend_stocks.py"
+  ],
+  "tier": "C",
+  "optional_keys": [
+   "finviz"
+  ],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/value-dividend-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/value-dividend-screener.md"
+  }
+ },
+ {
+  "id": "vcp-screener",
+  "name": "VCP Screener",
+  "category": "swing-opportunity",
+  "status": "production",
+  "summary": "Screen S&P 500 stocks for Mark Minervini's Volatility Contraction Pattern (VCP).",
+  "timeframe": "daily",
+  "difficulty": "intermediate",
+  "inputs": [
+   "sp500_ohlcv"
+  ],
+  "outputs": [
+   "vcp_candidates",
+   "pivot_points"
+  ],
+  "workflows": [
+   "swing-opportunity-daily"
+  ],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "required",
+    "note": "S&P 500 OHLCV via FMP"
+   }
+  ],
+  "scripts": [
+   "coverage_client.py",
+   "evaluation_coverage.py",
+   "fmp_client.py",
+   "historical_report.py",
+   "historical_scanner.py",
+   "price_bar_utils.py",
+   "report_generator.py",
+   "scorer.py",
+   "screen_vcp.py"
+  ],
+  "tier": "C",
+  "optional_keys": [],
+  "verified": {
+   "passed": 1,
+   "applicable": 8
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/vcp-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/vcp-screener.md"
+  }
+ },
+ {
+  "id": "weekly-performance-digest",
+  "name": "Weekly Performance Digest",
+  "category": "trade-memory",
+  "status": "production",
+  "summary": "Generate a weekly performance summary from closed trades with win rate, expectancy, and pattern analysis.",
+  "timeframe": "weekly",
+  "difficulty": "beginner",
+  "inputs": [
+   "closed_thesis_record"
+  ],
+  "outputs": [
+   "weekly_performance_digest",
+   "performance_pattern_analysis"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Pure calculation; works offline"
+   }
+  ],
+  "scripts": [
+   "generate_weekly_digest.py"
+  ],
+  "tier": "A",
+  "optional_keys": [],
+  "verified": {
+   "passed": 0,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/weekly-performance-digest/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/weekly-performance-digest.md"
+  }
+ },
+ {
+  "id": "us-undervalued-growth-screener",
+  "name": "US Undervalued Growth Screener",
+  "category": "core-portfolio",
+  "status": "beta",
+  "summary": "Screen and rank US-listed small- and mid-cap undervalued-growth stocks with a generated stable-first FMP client, persistent SQLite cache, adaptive listing enumeration, FY1 estimate normalization, verified 20-day liquidity, deterministic four-lane discovery, forward same-basis valuation, standard and SBC-adjusted FCF, dilution, peer, cycle and LOE controls, strict final evaluation, prepublication audit, and a self-contained evidence bundle.",
+  "timeframe": "weekly",
+  "difficulty": "advanced",
+  "inputs": [
+   "minimal_screening_request",
+   "fmp_api_key_or_equivalent_market_data",
+   "current_sec_ir_and_macro_sources"
+  ],
+  "outputs": [
+   "compact_discovery_summary",
+   "listing_universe_audit",
+   "bounded_candidate_pool_and_enrichment_audit",
+   "selected_candidate_evidence_packets",
+   "checkpointed_run_state",
+   "undervalued_growth_candidates",
+   "forward_valuation_and_stress_scenarios",
+   "conditional_and_review_required_queue",
+   "screened_out_and_exclusion_logs",
+   "final_research_report_json_and_markdown",
+   "self_contained_audit_bundle"
+  ],
+  "workflows": [],
+  "integrations": [
+   {
+    "id": "fmp",
+    "type": "market_data",
+    "requirement": "recommended",
+    "note": "Claude Code-native direct REST path using FMP_API_KEY. Bulk responses are cached and written to local artifacts; only compact screening results are returned to the model. Plan-gated bulk endpoints use bounded per-symbol fallbacks."
+   },
+   {
+    "id": "alternate_market_data",
+    "type": "market_data",
+    "requirement": "optional",
+    "note": "Reputable alternative screener or estimates source for bounded discovery."
+   },
+   {
+    "id": "sec_edgar",
+    "type": "web",
+    "requirement": "required",
+    "note": "Primary filings for statements, shares, SBC, debt, cash flow, and corporate actions."
+   },
+   {
+    "id": "company_ir",
+    "type": "web",
+    "requirement": "required",
+    "note": "Earnings, guidance, presentations, prepared remarks, lifecycle/LOE, and Investor Day evidence."
+   },
+   {
+    "id": "official_macro",
+    "type": "web",
+    "requirement": "required",
+    "note": "Current rates, Treasury yields, GDP, inflation, and market context."
+   },
+   {
+    "id": "local_calculation",
+    "type": "calculation",
+    "requirement": "not_required",
+    "note": "Python scripts collect and cache FMP data, normalize discovery inputs, build audits, validate schema-3/contract-3.5 evidence, calculate scenarios, checkpoint runs, render reports, and create the audit bundle."
+   }
+  ],
+  "scripts": [
+   "build_discovery_pool.py",
+   "build_provider_prefilter_pool.py",
+   "bundle_run_artifacts.py",
+   "coverage_semantics.py",
+   "estimate_snapshot.py",
+   "evaluate_candidates.py",
+   "evaluation_candidate.py",
+   "evaluation_common.py",
+   "evaluation_financials.py",
+   "evaluation_ranking.py",
+   "evaluation_report.py",
+   "evaluation_valuation.py",
+   "fmp_client.py",
+   "manage_run_state.py",
+   "normalize_estimates.py",
+   "pipeline_common.py",
+   "pipeline_discover.py",
+   "pipeline_enrichment.py",
+   "pipeline_snapshot.py",
+   "pipeline_universe.py",
+   "prepublish_audit.py",
+   "research_contract.py",
+   "run_pipeline.py",
+   "screen_universe.py",
+   "screening_semantics.py",
+   "skill_version.py"
+  ],
+  "tier": "D",
+  "optional_keys": [
+   "fmp"
+  ],
+  "verified": {
+   "passed": 4,
+   "applicable": 6
+  },
+  "audience": "trader",
+  "us_equity": true,
+  "links": {
+   "skill_md": "https://github.com/siegfydj/claude-trading-skills/blob/main/skills/us-undervalued-growth-screener/SKILL.md",
+   "doc_en": "https://github.com/siegfydj/claude-trading-skills/blob/main/docs/en/skills/us-undervalued-growth-screener.md"
+  }
+ }
+]
