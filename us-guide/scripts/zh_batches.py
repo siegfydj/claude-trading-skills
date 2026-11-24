@@ -41,9 +41,10 @@ N_SKILL_BATCHES = 8
 N_WORKFLOW_BATCHES = 2
 
 # Heuristic only: common simplified-only characters. A hit means "look again".
+# 准 is deliberately absent: it is valid Traditional in 核准／批准／准許.
 SIMPLIFIED_HINTS = set(
     "这个们为产务经对时应开发关业东车长门问间题专书买卖亏损涨线图总结级实验员价额风险"
-    "们还让说话认识设计试达远运选择记录属报结构类别组织标准规则样户币资债财务压势"
+    "们还让说话认识设计试达远运选择记录属报结构类别组织标规则样户币资债财务压势"
 )
 
 

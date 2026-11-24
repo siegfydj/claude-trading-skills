@@ -1,0 +1,154 @@
+{
+  "workflows": {
+    "shapiro-contrarian": {
+      "name": "Shapiro 反向期貨研究",
+      "when_to_run": "每週於 CFTC COT 報告公布後執行（美東週五約15:30公布週二部位）。掃描約65個期貨市場的投機部位極端值，僅在消息反應失敗與週線價格反轉均確認後，產出按合約口數計算的反向計畫。",
+      "when_not_to_run": "不可盤中執行或頻率高於每週；COT 每週更新，交易優勢源於部位而非盤中波動。不可單憑擁擠極端值行動，須擁擠、消息反應失敗及價格行為全數 CONFIRMED，關卡達 READY_FOR_PLAN 才能計算部位。不適用股票，COT 僅涵蓋 CFTC 期貨市場。",
+      "steps": {
+        "1": "篩選 COT 擁擠極端市場；僅極端值進入下一步（cot-contrarian-detector）",
+        "2": "檢查消息反應失敗；僅 CONFIRMED 通過（news-reaction-failure-analyzer）",
+        "3": "確認週線反轉與波段停損；資料不足即拒絕（technical-analyst）",
+        "4": "整合反向型態關卡；僅 READY_FOR_PLAN 通過（contrarian-setup-gate）",
+        "5": "計算期貨部位口數（futures-position-sizer）",
+        "6": "登錄反向假設、附加部位及證據；成交前不轉 ACTIVE（trader-memory-core）"
+      },
+      "manual_review": [
+        "COT 資料落後3天（週二快照、週五公布），應視為週二收盤部位，非即時資料。",
+        "擁擠是先決條件而非交易訊號，計算部位前須同時確認消息反應失敗及價格行為。",
+        "消息反應失敗事件須來自第一手或通訊社來源，具真實網址，不可捏造；INSUFFICIENT_EVIDENCE 不得進入下一步。",
+        "計算部位前確認 setup_status 為 READY_FOR_PLAN；計算器會拒絕未就緒關卡，若拒絕須查核原因。",
+        "第5步除 contrarian_setup_gate_report 外，--entry、--account-size、--risk-pct 均須由操作者提供，即使關卡交接模式亦同。關卡及計算器皆不推導這些值，先蒐集再執行 futures-position-sizer。",
+        "下單前查核合約口數及每口風險，確認整體部位風險在預算內。",
+        "期貨保證金依券商及時間而異，本流程不計算；交易前向券商確認原始及維持保證金。",
+        "所有訂單均由人工在券商下單，不自動執行；contrarian-position-monitor 上線前，COT 正常化、停損與假設失效均須人工監控。",
+        "關卡 entry_trigger 或計畫進場並非實際成交。保留 SIZED 報告（含計畫進場）；人工登錄來源也保留 origin.raw_provenance.entry_price。真實成交前不得寫入 entry.actual_price。",
+        "券商實際成交前不可用 open-position 轉為 ACTIVE；第6步只到 IDEA／ENTRY_READY 並附加期貨部位，絕不自動下單。"
+      ]
+    },
+    "stockbee-20pct-study-daily": {
+      "name": "Stockbee 每日20%漲跌研究",
+      "when_to_run": "於美股收盤後或歷史研究回補時執行，辨識正負20%波動事件、分類事件背景、更新已到期結果，累積劇烈波動案例庫。",
+      "when_not_to_run": "不得作為買賣訊號流程或自動執行系統。不可從小樣本、僅含目前標的的股票池，或未說明倖存者偏誤及資料品質的事件提升新規則。",
+      "steps": {
+        "1": "掃描每日正20%及負20%波動事件（stockbee-20pct-study）",
+        "2": "分類催化因素、圖表背景、主題聚集及風險標記（stockbee-20pct-study）",
+        "3": "更新既有20%研究紀錄已到期的後續結果（stockbee-20pct-study）",
+        "4": "彙整群組並匯出優勢提示；判定研究或僅記錄（stockbee-20pct-study）",
+        "5": "記錄接受、拒絕或待更多案例的研究發現（trader-memory-core）"
+      },
+      "manual_review": [
+        "接受任何型態前，檢視代表性成功與失敗圖表。",
+        "區分觀察、研究假設及可執行交易計畫。",
+        "若回補僅含現有標的而未納入下市標的，須標記倖存者偏誤。",
+        "提升群組規則前，須具明確樣本數門檻。",
+        "將接受的經驗納入 monthly-performance-review，不隨意更改規則。"
+      ]
+    },
+    "stockbee-ep-daily": {
+      "name": "Stockbee 每日 EP 事件轉折",
+      "when_to_run": "在財報或新聞密集日、且市場狀態流程已允許新增風險後執行，或出現重大催化事件時臨時執行。分類第一天 EP 候選，判定當日可執行、延後 EP 觀察或 PEAD 交接。",
+      "when_not_to_run": "不得在無催化因素輸入時盲目篩選股票。不可繞過市場狀態關卡、圖表驗證、部位計算及人工催化因素查核。",
+      "steps": {
+        "1": "檢查帳戶熔斷關卡；是否為 TRADING_ALLOWED？（drawdown-circuit-breaker）",
+        "2": "選用財報候選掃描（earnings-trade-analyzer）",
+        "3": "選用動能確認掃描（stockbee-momentum-burst-screener）",
+        "4": "分析第一天 EP 候選；確認重大催化及價量（stockbee-episodic-pivot-analyzer）",
+        "5": "驗證 EP 圖表品質及當日低點風險（technical-analyst）",
+        "6": "計算 EP 部位大小（position-sizer）",
+        "7": "建立選用 EP 交易計畫（breakout-trade-planner）",
+        "8": "登錄 EP 假設、延後觀察或略過（trader-memory-core）",
+        "9": "人工下單前執行 EP 交易紀律關卡（pre-trade-discipline-gate）"
+      },
+      "manual_review": [
+        "確認 market-regime-daily 允許新增風險後才行動。",
+        "分析新 EP 交易風險前，確認 circuit_breaker_decision 為 TRADING_ALLOWED。",
+        "人工驗證催化因素；本流程不自行發掘新聞或驗證其真實性。",
+        "僅分析師觀點或僅市場故事的 EP 品質較低，除非價量確認格外強勁。",
+        "僅當停損距離可合理配置部位時，才以 EP 當日低點為預設停損參考。",
+        "將漲幅過度延伸的財報或展望 EP 交給 PEAD 監控，不追逐第一天行情。",
+        "人工下單前確認 pre_trade_discipline_decision 為 GO；觀察及 PEAD 交接候選不可視為下單核准。",
+        "所有訂單均由人工在券商下單，不自動執行。"
+      ]
+    },
+    "stockbee-fluency-loop": {
+      "name": "Stockbee 型態訓練循環",
+      "when_to_run": "stockbee-momentum-burst-screener 產出候選報告後執行，並於3日及5個交易日觀察窗到期後再執行。建立動能爆發案例庫，以改善交易者的型態辨識。",
+      "when_not_to_run": "不得用於交易執行或訊號服務。不可由極小樣本改變交易規則；提升或篩除型態標籤前，須有足夠到期案例及人工圖表檢視。",
+      "steps": {
+        "1": "匯入最新 Stockbee 動能爆發候選（stockbee-setup-fluency-trainer）",
+        "2": "更新已到期3日及5日結果（stockbee-setup-fluency-trainer）",
+        "3": "彙整型態群組及規則候選；人工檢視代表圖表（stockbee-setup-fluency-trainer）",
+        "4": "記錄接受的經驗或待驗證觀察（trader-memory-core）"
+      },
+      "manual_review": [
+        "接受規則變更前，檢視代表性成功及失敗圖表。",
+        "區分證據與執行決策；本流程記錄型態行為，非實際損益。",
+        "明列樣本數門檻，尤其在市場狀態改變時。",
+        "將接受的經驗納入 monthly-performance-review，不每日隨意新增規則。"
+      ]
+    },
+    "strategy-research-pipeline": {
+      "name": "離線策略研究管線",
+      "when_to_run": "使用具日期的本地 EOD OHLCV Parquet 進行離線研究，偵測研究提案、擷取提示，並以相同檔案與基準日期再次偵測。只有獨立回測已產出對應確切策略及資料期間的可追溯指標後，才評估最終提案。",
+      "when_not_to_run": "不可使用無日期或未驗證的歷史資料、缺少回測指標，或取用其他提案的指標。本流程不執行回測、不匯出至外部管線、不核准策略，也不下單。",
+      "steps": {
+        "1": "以本地 OHLCV 偵測初始候選（edge-candidate-agent）",
+        "2": "擷取具日期的確定性交易優勢提示（edge-hint-extractor）",
+        "3": "以同檔案、同日期及提示重跑；無值得測試提案即停止（edge-candidate-agent）",
+        "4": "評估獨立回測指標；缺失或不符即 HOLD（backtest-expert）"
+      },
+      "manual_review": [
+        "兩次偵測須用相同本地 --ohlcv Parquet 及 --as-of 日期；edge-hint-extractor 亦用同 --as-of，確認 hints.yaml 記錄。各次寫入獨立目錄，第二次以 --hints 帶第2步 hints.yaml。不可帶 --export-strategies-dir 或 --pipeline-root。",
+        "隨結果保留最終提案 ID、股票池、資料期間、成本假設及獨立回測指標來源。",
+        "向 backtest-expert 提供 total-trades、win-rate、avg-win-pct、avg-loss-pct、max-drawdown-pct、years-tested、num-parameters；僅實際模擬交易摩擦才用 --slippage-tested。缺失或無法連結的指標在評估前即 HOLD。",
+        "獨立檢查前視、倖存者偏誤及樣本外證據；評分 CLI 不驗證這些項目。未知即 HOLD。",
+        "研究提案與評估保留於本地，不會自動匯出外部管線、寫入即時 API、下券商訂單或作真實資金決策。"
+      ]
+    },
+    "swing-opportunity-daily": {
+      "name": "每日波段交易機會研究",
+      "when_to_run": "僅在 market-regime-daily 產出非限制性曝險判定後執行，辨識波段交易候選並建立進場計畫。",
+      "when_not_to_run": "若最新 market-regime-daily 的 exposure_decision 為現金優先或限制性，不得執行。不可在無市場狀態關卡時當作獨立篩選器。",
+      "steps": {
+        "1": "檢查帳戶熔斷關卡；是否為 TRADING_ALLOWED？（drawdown-circuit-breaker）",
+        "2": "執行 VCP 篩選（vcp-screener）",
+        "3": "執行 Stockbee 動能爆發篩選（stockbee-momentum-burst-screener）",
+        "4": "執行 Stockbee 賣壓耗竭錘形篩選（stockbee-exhaustion-hammer-screener）",
+        "5": "執行 CANSLIM 篩選（canslim-screener）",
+        "6": "交叉檢查市場主題（theme-detector）",
+        "7": "人工驗證週線型態、回檔背景及風險距離（technical-analyst）",
+        "8": "計算部位大小（position-sizer）",
+        "9": "建立進場計畫（breakout-trade-planner）",
+        "10": "登錄交易假設；確認單筆及整體風險（trader-memory-core）",
+        "11": "人工下單前執行交易紀律關卡（pre-trade-discipline-gate）"
+      },
+      "manual_review": [
+        "確認 market-regime-daily 的 exposure_decision 允許新增風險後才行動。",
+        "篩選或計算新候選部位前，確認 circuit_breaker_decision 為 TRADING_ALLOWED。",
+        "週線型態不清楚即拒絕，即使篩選器已通過。",
+        "Stockbee 動能爆發輸出僅用於產生候選，須驗證圖表及風險距離。",
+        "Stockbee 賣壓耗竭錘形輸出僅用於產生候選，須確認回檔不是由破壞假設的消息所致，並查核至當日低點的風險。",
+        "任何下單前，確認整體部位風險在預算內。",
+        "人工券商下單前，確認 pre_trade_discipline_decision 為 GO。",
+        "所有訂單均由人工在券商下單，不自動執行。"
+      ]
+    },
+    "trade-memory-loop": {
+      "name": "交易記憶檢討循環",
+      "when_to_run": "每次部位平倉時（全部或部分出場）執行，記錄結果、產出事後檢討，選用流程、風險、執行與行為教練檢視，亦可選用回測重新驗證原始假設。",
+      "when_not_to_run": "部位尚未平倉前不得執行，應直接用 trader-memory-core 更新未平倉假設。即使獲利，平倉後也不可跳過本循環。",
+      "steps": {
+        "1": "記錄已平倉交易結果（trader-memory-core）",
+        "2": "產出事後檢討；分類並記錄結果根因（signal-postmortem）",
+        "3": "檢視流程、風險及行為模式；決定下次規則（trade-performance-coach）",
+        "4": "透過回測重新驗證假設（backtest-expert）",
+        "5": "將經驗附加至日誌（trader-memory-core）"
+      },
+      "manual_review": [
+        "如實判斷獲利源於交易假設或運氣。",
+        "如實判斷虧損源於假設缺陷或執行不佳。",
+        "不要把隨機性合理化為技能或失敗。"
+      ]
+    }
+  }
+}
