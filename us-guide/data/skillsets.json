@@ -1,0 +1,124 @@
+[
+ {
+  "id": "core-portfolio",
+  "name": "Core Portfolio",
+  "difficulty": "beginner",
+  "api_profile": "mixed",
+  "when_to_use": "The long-term core sleeve: review holdings, dividend health, and overall allocation once a week. Use to keep the buy-and-hold / dividend book healthy and decide deliberate rebalance actions. Operationalized weekly by the core-portfolio-weekly workflow.",
+  "required": [
+   "portfolio-manager",
+   "trader-memory-core"
+  ],
+  "recommended": [
+   "kanchi-dividend-review-monitor",
+   "value-dividend-screener",
+   "kanchi-dividend-us-tax-accounting"
+  ],
+  "optional": [
+   "dividend-growth-pullback-screener",
+   "kanchi-dividend-sop"
+  ]
+ },
+ {
+  "id": "dividend-income",
+  "name": "Dividend Income",
+  "difficulty": "intermediate",
+  "api_profile": "mixed",
+  "when_to_use": "Source and underwrite new US-listed dividend candidates once a week with Kanchi's 5-step method: screen for yield and quality, deep-dive the strongest names, and register a fully documented candidate thesis before any entry. Operationalized by the kanchi-dividend-weekly workflow (v1 covers US-listed dividend stocks only).",
+  "required": [
+   "kanchi-dividend-sop",
+   "trader-memory-core"
+  ],
+  "recommended": [
+   "value-dividend-screener",
+   "dividend-growth-pullback-screener"
+  ],
+  "optional": [
+   "kanchi-dividend-us-tax-accounting",
+   "kanchi-dividend-review-monitor"
+  ]
+ },
+ {
+  "id": "market-regime",
+  "name": "Market Regime",
+  "difficulty": "beginner",
+  "api_profile": "mixed",
+  "when_to_use": "The shared risk layer for every trading day. Use before considering new swing-trade risk to decide today's exposure posture (allow / restrict / cash-priority) from breadth, uptrend participation, and top-risk signals. Operationalized daily by the market-regime-daily workflow.",
+  "required": [
+   "market-breadth-analyzer",
+   "uptrend-analyzer",
+   "exposure-coach"
+  ],
+  "recommended": [
+   "market-top-detector",
+   "macro-regime-detector"
+  ],
+  "optional": [
+   "breadth-chart-analyst",
+   "sector-analyst",
+   "market-environment-analysis",
+   "market-news-analyst",
+   "downtrend-duration-analyzer",
+   "us-market-bubble-detector"
+  ]
+ },
+ {
+  "id": "strategy-research",
+  "name": "Strategy Research",
+  "difficulty": "advanced",
+  "api_profile": "no-api-basic",
+  "when_to_use": "Research a long-side US equity idea from local historical observations: detect candidate tickets, refine them with hints, and evaluate separately measured backtest results. The strategy-research-pipeline workflow is an offline research path, not an end-to-end backtest runner.",
+  "required": [
+   "edge-candidate-agent",
+   "edge-hint-extractor",
+   "backtest-expert"
+  ],
+  "recommended": [],
+  "optional": [
+   "strategy-pivot-designer"
+  ]
+ },
+ {
+  "id": "swing-opportunity",
+  "name": "Swing Opportunity",
+  "difficulty": "intermediate",
+  "api_profile": "fmp-required",
+  "when_to_use": "The satellite swing sleeve: generate and validate swing-trade candidates and build risk-sized entry plans. Use only on days the market-regime sleeve has allowed new risk. Operationalized by the swing-opportunity-daily workflow (prerequisite: market-regime-daily exposure decision).",
+  "required": [
+   "vcp-screener",
+   "drawdown-circuit-breaker",
+   "technical-analyst",
+   "position-sizer",
+   "trader-memory-core",
+   "pre-trade-discipline-gate"
+  ],
+  "recommended": [
+   "canslim-screener",
+   "breakout-trade-planner",
+   "theme-detector"
+  ],
+  "optional": [
+   "stockbee-momentum-burst-screener",
+   "stockbee-exhaustion-hammer-screener",
+   "finviz-screener"
+  ]
+ },
+ {
+  "id": "trade-memory",
+  "name": "Trade Memory",
+  "difficulty": "beginner",
+  "api_profile": "no-api-basic",
+  "when_to_use": "The shared learning loop: record closed-trade outcomes, run postmortems, and feed lessons back into the process. Use after every closed position and for the monthly performance retrospective. Operationalized by the trade-memory-loop (per closed trade) and monthly-performance-review (monthly) workflows.",
+  "required": [
+   "trader-memory-core",
+   "signal-postmortem"
+  ],
+  "recommended": [
+   "backtest-expert",
+   "trade-performance-coach"
+  ],
+  "optional": [
+   "trade-hypothesis-ideator"
+  ]
+ }
+]

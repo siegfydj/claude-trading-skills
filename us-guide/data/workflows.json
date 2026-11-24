@@ -1,0 +1,1054 @@
+[
+ {
+  "id": "core-portfolio-weekly",
+  "name": "Core Portfolio Weekly",
+  "cadence": "weekly",
+  "minutes": 60,
+  "difficulty": "beginner",
+  "api_profile": "alpaca-required",
+  "when_to_run": "Once per week, typically on Saturday or Sunday before next week's market open. Reviews long-term holdings, dividend positions, and overall allocation.",
+  "when_not_to_run": "Do not run as a daily routine. Daily portfolio churn defeats the long-term framing of this workflow.",
+  "required_skills": [
+   "portfolio-manager",
+   "trader-memory-core"
+  ],
+  "optional_skills": [
+   "kanchi-dividend-review-monitor",
+   "value-dividend-screener",
+   "kanchi-dividend-us-tax-accounting"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Fetch holdings snapshot",
+    "skill": "portfolio-manager",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Review allocation and concentration",
+    "skill": "portfolio-manager",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Before allocation review, run portfolio-manager/scripts/reconcile_positions.py on complete, same-account broker and ACTIVE / PARTIALLY_CLOSED memory snapshots per portfolio-manager/references/position-reconciliation.md. Retain the JSON and Markdown reconciliation_report. Stop here if can_continue is false or completeness, account attribution or freshness is unresolved. After a verified match, are sector and single-name concentrations within target bands? If not, what specific reallocation does the trader propose?"
+   },
+   {
+    "step": 3,
+    "name": "Check dividend health (T1-T5 anomaly check)",
+    "skill": "kanchi-dividend-review-monitor",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 4,
+    "name": "Decide rebalance actions",
+    "skill": "portfolio-manager",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which rebalance actions (if any) will be executed next week? Confirm explicit buy / sell / hold list with sizing."
+   },
+   {
+    "step": 5,
+    "name": "Journal the weekly review",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   }
+  ],
+  "manual_review": [
+   "Require a verified reconciliation_report before allocation or rebalance review; resolve discrepancies manually and rerun the comparison.",
+   "Reconciliation is currently a manual gate; historical replay fixtures do not execute or enforce it.",
+   "Confirm holdings snapshot reflects the actual brokerage state (Alpaca or CSV).",
+   "Confirm rebalance actions are entered manually at the broker, not auto-executed.",
+   "If dividend_review_findings flags T1-T5 issues, defer additional buys until resolved."
+  ]
+ },
+ {
+  "id": "earnings-weekly",
+  "name": "Earnings Momentum Weekly",
+  "cadence": "weekly",
+  "minutes": 60,
+  "difficulty": "intermediate",
+  "api_profile": "fmp-required",
+  "when_to_run": "Weekly during earnings season, after market-regime-daily has produced a non-restrictive exposure decision. Score recent US earnings reactions across the PEAD watch window of about five weeks, screen the strongest names for post-earnings-drift (PEAD) weekly-candle setups, confirm the chart by hand, size the position, and journal the candidate before any manual order.",
+  "when_not_to_run": "Do not run when the latest market-regime-daily exposure_decision is cash-priority or restrictive, or when the account circuit breaker is not clear. Do not use it to chase a Day 1 earnings gap; that is stockbee-ep-daily's job. It is not a standalone screener: a score or stage is never a buy signal, and no order is placed automatically.",
+  "required_skills": [
+   "earnings-trade-analyzer",
+   "pead-screener",
+   "drawdown-circuit-breaker",
+   "technical-analyst",
+   "position-sizer",
+   "trader-memory-core",
+   "pre-trade-discipline-gate"
+  ],
+  "optional_skills": [],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Check account circuit breaker",
+    "skill": "drawdown-circuit-breaker",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Is the account circuit breaker clear (TRADING_ALLOWED) for new earnings-momentum risk this week?"
+   },
+   {
+    "step": 2,
+    "name": "Score recent earnings reactions",
+    "skill": "earnings-trade-analyzer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Screen graded candidates for PEAD weekly setups",
+    "skill": "pead-screener",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which graded names are in a BREAKOUT or SIGNAL_READY stage worth a chart review, and which MONITORING or EXPIRED names stay on the watchlist or are dropped? Was the screener run in Mode B on step 2's JSON with a minimum grade chosen on purpose?"
+   },
+   {
+    "step": 4,
+    "name": "Confirm the weekly chart by hand",
+    "skill": "technical-analyst",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Does the weekly chart confirm a clean post-earnings drift with the red candle low as a sensible stop, acceptable liquidity, and no thesis-breaking news? Reject any setup where the chart is unclear even if the stage and score look good."
+   },
+   {
+    "step": 5,
+    "name": "Calculate position size",
+    "skill": "position-sizer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 6,
+    "name": "Register the earnings-drift thesis",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which validated names deserve a registered earnings-drift thesis with the written entry, stop, and size, and which stay on the watchlist? A registered thesis is IDEA only; it is not an order approval."
+   },
+   {
+    "step": 7,
+    "name": "Run manual execution discipline gate",
+    "skill": "pre-trade-discipline-gate",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Before placing any manual broker order, does each actionable candidate pass the written-plan, predefined-stop, position-size, recent-loss, market-regime, and circuit-breaker discipline checks? Treat watchlist names as no-action journal entries, not order approvals."
+   }
+  ],
+  "manual_review": [
+   "Confirm market-regime-daily exposure_decision allows new risk before acting.",
+   "Confirm circuit_breaker_decision is TRADING_ALLOWED before scoring or sizing new candidates.",
+   "Verify each earnings result and any guidance by hand; this workflow does not discover or validate the news itself.",
+   "Run earnings-trade-analyzer with a lookback long enough to cover the PEAD watch window (about 28 to 35 days); a one-week lookback only finds names too young to show a red candle. Set --max-api-calls explicitly, and consider --min-market-cap: the analyzer's default budget is 200 calls, its client spends one request per calendar day of the window plus one per reporting symbol before the market-cap filter, and PEAD spends one per candidate, so a long window can exhaust the default and exit with ZERO_RESULT_REASON=profiles_budget_exhausted. The call volume a live run needs, and whether your FMP plan quota covers it, are unmeasured here; check your plan.",
+   "Run pead-screener in Mode B on step 2's JSON. Mode A can spend the API budget on non-US listings and is not part of this routine.",
+   "Treat MONITORING and EXPIRED stages as watchlist or drop; only BREAKOUT and SIGNAL_READY names reach chart review.",
+   "Reject any candidate where the weekly chart is unclear, even if the earnings grade and PEAD stage passed.",
+   "Use the red candle low as the stop only when the distance is realistically sizeable; verify total portfolio heat before any order.",
+   "Confirm pre_trade_discipline_decision is GO before placing any manual broker order.",
+   "All orders are placed manually at the broker; no auto-execution."
+  ]
+ },
+ {
+  "id": "kanchi-dividend-weekly",
+  "name": "Kanchi Dividend Weekly",
+  "cadence": "weekly",
+  "minutes": 60,
+  "difficulty": "intermediate",
+  "api_profile": "mixed",
+  "when_to_run": "Weekly, to source and underwrite new US-listed dividend candidates using Kanchi's 5-step method: screen for yield/quality, deep-dive the strongest names, and register a fully-documented candidate thesis before any entry. v1 covers US-listed dividend stocks only.",
+  "when_not_to_run": "Not for Japanese or other non-US-listed dividend stocks -- this workflow neither covers nor implies support for them in v1. Not a claim that Kanchi-style screening is a profitable strategy; it is a disciplined candidate-sourcing routine, not a signal to buy. Not for maintaining an existing holding -- that is core-portfolio-weekly's job (this workflow is for finding and underwriting NEW candidates). No order is ever placed automatically; every buy is entered manually at the broker.",
+  "required_skills": [
+   "kanchi-dividend-sop",
+   "trader-memory-core"
+  ],
+  "optional_skills": [
+   "value-dividend-screener",
+   "dividend-growth-pullback-screener",
+   "kanchi-dividend-us-tax-accounting",
+   "kanchi-dividend-review-monitor"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Screen for high-yield candidates",
+    "skill": "value-dividend-screener",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Screen for dividend-growth pullbacks",
+    "skill": "dividend-growth-pullback-screener",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Run the Kanchi 5-step underwriting",
+    "skill": "kanchi-dividend-sop",
+    "optional": false,
+    "decision_gate": true,
+    "question": "For each candidate, does the Kanchi verdict reach an actionable tier (CLEAN-PASS / PASS-CAUTION / CONDITIONAL-PASS)? A HOLD-REVIEW, STEP1-RECHECK, or FAIL verdict is fail-closed -- it stops here, not forward to sizing or registration. Candidates may come from step 1/2 screeners (use if available) or a manually supplied ticker list -- neither screener is required to run this step."
+   },
+   {
+    "step": 4,
+    "name": "Check US tax and account-location treatment",
+    "skill": "kanchi-dividend-us-tax-accounting",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 5,
+    "name": "Check existing-holding review triggers",
+    "skill": "kanchi-dividend-review-monitor",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 6,
+    "name": "Register the candidate thesis",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": true,
+    "question": "For each actionable candidate, ingest the kanchi_candidates verdict as an IDEA thesis, then link the saved stock_memo file (and, if available, tax/account-location advice and any review-monitor flags) to it with thesis_store.link_report() so the fully-documented Kanchi memo is part of the auditable record, not just referenced in prose. Confirm no unresolved blockers, sizing, sector concentration, and tranche plan before entering an order. Never transition the thesis to ACTIVE until a real broker fill happens -- this step only reaches IDEA / ENTRY_READY."
+   }
+  ],
+  "manual_review": [
+   "A HOLD-REVIEW, STEP1-RECHECK, or FAIL Kanchi verdict is fail-closed -- it never advances to sizing or thesis registration.",
+   "The step-3 stock memo (`references/stock-note-template.md` in kanchi-dividend-sop, a hand-written one-pager) is not embedded in the kanchi_candidates JSON -- save it to a file, then after the IDEA thesis is registered, call `thesis_store.link_report(state_dir, thesis_id, \"kanchi-dividend-sop\", <memo_path>, date)` to attach it. Without this call the thesis has no documented memo in its `linked_reports`, even though one was written.",
+   "No order is ever placed automatically, and the thesis never auto-transitions to ACTIVE; every fill is entered manually at the broker, then recorded with open-position.",
+   "Screeners (steps 1-2) are optional -- a manually supplied ticker list is an equally valid path into step 3.",
+   "Tax and account-location advice (step 4) is advisory, not authoritative -- verify with a tax professional or the actual broker/custodian statements before acting on it.",
+   "Step 4 requires `tax_holdings_input` matching the linked schema; do not pass raw screener rows directly as tax holdings.",
+   "If review-monitor (step 5) flags an existing holding WARN or REVIEW, that only pauses additional buys in that name -- it never triggers an automatic sell.",
+   "Step 5 requires `review_monitor_input` matching its richer linked schema; a ticker-only candidate is insufficient and the optional step must be skipped rather than manufacturing missing evidence.",
+   "Screener outputs land under each skill's own `logs/` directory, not a shared `reports/` path; treat artifact ids as logical references, not literal filenames, when wiring steps together.",
+   "Command examples for dividend-growth-pullback-screener must use `screen_dividend_growth_rsi.py` -- `screen_dividend_growth.py` does not exist in this repository."
+  ]
+ },
+ {
+  "id": "market-regime-daily",
+  "name": "Market Regime Daily",
+  "cadence": "daily",
+  "minutes": 15,
+  "difficulty": "beginner",
+  "api_profile": "mixed",
+  "when_to_run": "Before considering new swing-trade risk for the day. Run before market open or in the first 30 minutes after.",
+  "when_not_to_run": "Do not use this output as a standalone buy/sell signal. The exposure_decision is a posture (allow / restrict / cash-priority), not a directive.",
+  "required_skills": [
+   "market-breadth-analyzer",
+   "uptrend-analyzer",
+   "exposure-coach"
+  ],
+  "optional_skills": [
+   "market-top-detector",
+   "macro-regime-detector"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Analyze market breadth",
+    "skill": "market-breadth-analyzer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Analyze uptrend participation",
+    "skill": "uptrend-analyzer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Check market top risk (optional FMP key required)",
+    "skill": "market-top-detector",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 4,
+    "name": "Decide exposure posture",
+    "skill": "exposure-coach",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Given today's breadth, uptrend participation, and top risk, is new swing trade risk allowed, restricted, or cash-priority?"
+   }
+  ],
+  "manual_review": [
+   "Confirm output is not used as a buy/sell signal.",
+   "Confirm whether exposure should be reduced, unchanged, or increased.",
+   "If exposure_decision is restrictive, defer running swing-opportunity-daily."
+  ]
+ },
+ {
+  "id": "monthly-performance-review",
+  "name": "Monthly Performance Review",
+  "cadence": "monthly",
+  "minutes": 90,
+  "difficulty": "intermediate",
+  "api_profile": "no-api-basic",
+  "when_to_run": "First weekend of each month, reviewing the prior month's closed positions, open thesis health, and process improvements. Closes the Plan -> Trade -> Record -> Review -> Improve loop.",
+  "when_not_to_run": "Do not skip this review even in losing months — that is when it matters most. Do not run weekly; the monthly cadence is intentional to filter noise.",
+  "required_skills": [
+   "trader-memory-core",
+   "signal-postmortem"
+  ],
+  "optional_skills": [
+   "trade-performance-coach",
+   "backtest-expert",
+   "dual-axis-skill-reviewer"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Aggregate the month's trades and theses",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Pattern-level postmortem across the month",
+    "skill": "signal-postmortem",
+    "optional": false,
+    "decision_gate": true,
+    "question": "What recurring patterns appear across the month's outcomes? Classify by thesis quality, execution, market environment, and randomness."
+   },
+   {
+    "step": 3,
+    "name": "Coach monthly process, risk, and behavior patterns",
+    "skill": "trade-performance-coach",
+    "optional": true,
+    "decision_gate": true,
+    "question": "Which next-month operating rules should be accepted, modified, deferred, or journaled only?"
+   },
+   {
+    "step": 4,
+    "name": "Re-validate hypotheses via backtest",
+    "skill": "backtest-expert",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 5,
+    "name": "Review which skills helped or hurt",
+    "skill": "dual-axis-skill-reviewer",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 6,
+    "name": "Produce decision log and rule changes",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Based on this month's evidence, what specific rules will change next month? Record the coach accept/modify/defer/journal-only decision when coaching ran; final approval preserves that decision without activating rules. Trade-side rules vs repo-side improvements should stay separate."
+   }
+  ],
+  "manual_review": [
+   "Distinguish process improvements (rule changes) from outcome accidents (randomness).",
+   "Trade-side rule changes apply to the trader's behavior next month.",
+   "Skill-side improvements are repo-improvement candidates and may or may not be acted on.",
+   "Be willing to delete or downgrade rules that aren't working — not just add new ones.",
+   "The step-6 artifact does not activate rules; activation is the explicit `manage_approved_rules.py activate` follow-up in pre-trade-discipline-gate.",
+   "Before step 6, run `review_rule_adherence.py --month <month>` (pre-trade-discipline-gate) for the month that just ended, the month the approved rules were in force. For each rule with reconsider reasons, decide keep, extend, retire, or supersede, record it in the step-6 decision log, and apply it only with `manage_approved_rules.py`. The counts are self-reported gate acknowledgements, and a withheld rate is not by itself a reason to change a rule."
+  ]
+ },
+ {
+  "id": "multi-asset-opportunity-daily",
+  "name": "Multi-Asset Opportunity Daily",
+  "cadence": "daily",
+  "minutes": 45,
+  "difficulty": "intermediate",
+  "api_profile": "mixed",
+  "when_to_run": "Only after market-regime-daily has produced a non-restrictive exposure decision. Sweeps macro + themes + news to surface multi-asset ideas (equities, commodities-via-equity-proxies, options expressions) and synthesizes them into ranked hypothesis cards.",
+  "when_not_to_run": "Do not run when the latest market-regime-daily exposure_decision is cash-priority. Do not treat hypothesis cards as buy/sell signals — they carry manual_review_required and must pass human sign-off before any capital moves. Forex output is research-only; never feed it into a broker.",
+  "required_skills": [
+   "macro-regime-detector",
+   "theme-detector",
+   "trade-hypothesis-ideator",
+   "position-sizer",
+   "trader-memory-core"
+  ],
+  "optional_skills": [
+   "market-news-analyst",
+   "market-environment-analysis",
+   "sector-analyst",
+   "scenario-analyzer",
+   "stanley-druckenmiller-investment"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Refresh macro regime context",
+    "skill": "macro-regime-detector",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Detect hot themes + sector rotation",
+    "skill": "theme-detector",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Scan news + catalyst landscape",
+    "skill": "market-news-analyst",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 4,
+    "name": "Synthesize ranked hypothesis cards",
+    "skill": "trade-hypothesis-ideator",
+    "optional": false,
+    "decision_gate": true,
+    "question": "For each hypothesis, does layer 1 (macro) align with layer 2 (theme) and is what-is-priced-in still favorable? Reject any card where the gap to consensus is unclear or already closed."
+   },
+   {
+    "step": 5,
+    "name": "Apply risk-based sizing to hypothesis cards",
+    "skill": "position-sizer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 6,
+    "name": "Persist as IDEA / ENTRY_READY entries",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which hypotheses should be promoted from IDEA to ENTRY_READY, which stay as IDEA pending more confirmation, and which are rejected?"
+   }
+  ],
+  "manual_review": [
+   "Confirm the regime brief does not contradict the exposure_decision from market-regime-daily.",
+   "Confirm each hypothesis has a written thesis AND a kill criterion.",
+   "Confirm position sizing respects portfolio risk caps (per-position and per-sector).",
+   "For forex-related output, confirm research_only=true; never wire to a broker.",
+   "Confirm IDEA → ENTRY_READY transitions are explicit and reviewed."
+  ]
+ },
+ {
+  "id": "portfolio-holdings-review",
+  "name": "Offline Holdings Review",
+  "cadence": "weekly",
+  "minutes": 15,
+  "difficulty": "beginner",
+  "api_profile": "no-api-basic",
+  "when_to_run": "Review a local USD-equity CSV or saved Alpaca positions snapshot without credentials. Supply the actual file and an aware source timestamp to portfolio-manager/scripts/review_csv.py; read the limited allocation report.",
+  "when_not_to_run": "Not for full account risk, cash/equity/leverage, performance, dividend health, trade recommendations or broker/memory reconciliation. Use the reconciled core-portfolio-weekly workflow for full brokerage analysis.",
+  "required_skills": [
+   "portfolio-manager"
+  ],
+  "optional_skills": [],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Validate local holdings and review gross allocation",
+    "skill": "portfolio-manager",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   }
+  ],
+  "manual_review": [
+   "Run review_csv.py with --input PATH --as-of TIMESTAMP --output-dir reports/UNIQUE-RUN; choose --input-format alpaca-json only for saved Alpaca data.",
+   "Confirm the input identity, source date, prices and single-account scope manually; Navigator does not inspect files.",
+   "Read JSON and Markdown limitations. Gross holdings weights are not account exposure and do not authorize trading.",
+   "Do not call broker tools, place orders, write trader-memory records, or bypass the full workflow's reconciliation gate.",
+   "Keep personal inputs and reports local; bundled replay inputs are fictional."
+  ]
+ },
+ {
+  "id": "shapiro-contrarian",
+  "name": "Shapiro COT Contrarian",
+  "cadence": "weekly",
+  "minutes": 60,
+  "difficulty": "advanced",
+  "api_profile": "fmp-required",
+  "when_to_run": "Weekly, after the CFTC Commitment of Traders report publishes (Friday ~3:30pm ET, carrying Tuesday's positioning). Screens roughly 65 futures markets for crowded speculative extremes and, only where a news-failure and a weekly price-action reversal both confirm, produces a contract-sized contrarian fade plan.",
+  "when_not_to_run": "Do not run intraday or more than weekly — COT data updates once a week and the edge is positioning-driven, not intraday. Do not act on a crowding extreme alone; the gate must reach READY_FOR_PLAN (crowding, news failure, and price action all CONFIRMED) before any sizing. Not for equities — COT covers CFTC futures markets only.",
+  "required_skills": [
+   "cot-contrarian-detector",
+   "news-reaction-failure-analyzer",
+   "technical-analyst",
+   "contrarian-setup-gate",
+   "futures-position-sizer",
+   "trader-memory-core"
+  ],
+  "optional_skills": [],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Screen COT crowding",
+    "skill": "cot-contrarian-detector",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which futures markets are at a 3-year COT-index crowding extreme (CROWDED_LONG / CROWDED_SHORT) this week? Crowding alone is not a signal — carry only the extremes forward."
+   },
+   {
+    "step": 2,
+    "name": "Check for news-reaction failure",
+    "skill": "news-reaction-failure-analyzer",
+    "optional": false,
+    "decision_gate": true,
+    "question": "For each crowded market, did price fail to react to news favorable to the crowd's direction (CONFIRMED, against a curated primary/wire-source events file built via WebSearch)? Drop NOT_CONFIRMED / INSUFFICIENT_EVIDENCE markets."
+   },
+   {
+    "step": 3,
+    "name": "Confirm weekly price-action reversal",
+    "skill": "technical-analyst",
+    "optional": false,
+    "decision_gate": true,
+    "question": "On the weekly chart, is there a reversal against the crowd (key reversal, failed breakout, or failed extreme) — CONFIRMED — with a defined swing stop? Reject NOT_CONFIRMED / INSUFFICIENT_DATA."
+   },
+   {
+    "step": 4,
+    "name": "Synthesize the contrarian setup gate",
+    "skill": "contrarian-setup-gate",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Does the gate reach READY_FOR_PLAN (crowding, news failure, and price action all CONFIRMED, fail-closed)? Only READY_FOR_PLAN markets proceed to sizing; CROWDED / WATCHING_PRICE / REJECTED / INSUFFICIENT_EVIDENCE stop here."
+   },
+   {
+    "step": 5,
+    "name": "Size the futures position",
+    "skill": "futures-position-sizer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 6,
+    "name": "Register the contrarian thesis",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Register each fade whose sizer output is sizing_status SIZED — never a NO_TRADE result — in this order: (1) create the IDEA thesis first (manual ingest or register() — attach-futures-position only attaches to an EXISTING thesis, it never creates one); (2) attach the SIZED report with attach-futures-position, which persists contracts / direction / multiplier / USD currency / risk onto the thesis position; (3) link the upstream cot_crowding_report, news_failure_verdict, price_action_confirmation_report, and contrarian_setup_gate_report to the thesis with thesis_store.link_report() so the fade's full evidence chain is auditable; (4) only transition to ACTIVE with open-position once the order actually fills at the broker. Confirm per-trade risk matches the sizer output and total portfolio heat is within budget."
+   }
+  ],
+  "manual_review": [
+   "COT data is 3 days lagged (Tuesday snapshot, Friday release) — treat the crowding read as end-of-Tuesday, not live.",
+   "Crowding is a precondition, never a trade signal — require the news-failure AND price-action confirmations before sizing.",
+   "News-failure events must be curated from primary/wire sources with real URLs; do not fabricate. INSUFFICIENT_EVIDENCE never advances.",
+   "Confirm the gate setup_status is READY_FOR_PLAN before sizing; the sizer will refuse a non-READY gate, but verify the reason if it does.",
+   "Step 5 needs more than contrarian_setup_gate_report — the sizer's --entry, --account-size, and --risk-pct are always operator-supplied, even in gate-handoff mode; neither the gate nor the sizer derives them, so gather these before invoking futures-position-sizer.",
+   "Verify the sizer's contract count and per-contract risk before any order; confirm total portfolio heat is within budget.",
+   "Futures margin is broker/time-dependent and NOT computed — verify initial and maintenance margin with the broker before trading.",
+   "All orders are placed manually at the broker; no auto-execution. Monitoring (COT normalization, stop, thesis invalidation) is manual until contrarian-position-monitor ships.",
+   "The gate's entry_trigger / sizer's planned entry is not an actual fill. Keep the SIZED report itself (it carries the planned entry); a manual-ingest source also keeps entry_price in origin.raw_provenance.entry_price. Either way, never write it to entry.actual_price before a real fill happens.",
+   "Do not transition the thesis to ACTIVE (open-position) until the order actually fills at the broker. Step 6 only reaches IDEA/ENTRY_READY with the futures position attached — no order is ever placed automatically."
+  ]
+ },
+ {
+  "id": "stockbee-20pct-study-daily",
+  "name": "Stockbee 20% Study Daily",
+  "cadence": "daily",
+  "minutes": 30,
+  "difficulty": "advanced",
+  "api_profile": "mixed",
+  "when_to_run": "Run after the US market close, or during historical research backfills, to identify +20%/-20% movers, classify event context, update matured outcomes, and accumulate a model book of explosive market moves.",
+  "when_not_to_run": "Do not use as a buy/sell signal workflow or automatic execution system. Do not promote new rules from small samples, current-only universes, or events without survivorship-bias and data-quality notes.",
+  "required_skills": [
+   "stockbee-20pct-study"
+  ],
+  "optional_skills": [
+   "trader-memory-core",
+   "edge-candidate-agent",
+   "edge-hint-extractor",
+   "stockbee-episodic-pivot-analyzer",
+   "theme-detector",
+   "backtest-expert"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Scan daily +20% and -20% movers",
+    "skill": "stockbee-20pct-study",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Classify catalyst, chart context, theme cluster, and risk flags",
+    "skill": "stockbee-20pct-study",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Update matured forward outcomes for prior 20% study records",
+    "skill": "stockbee-20pct-study",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 4,
+    "name": "Summarize cohorts and export edge hints",
+    "skill": "stockbee-20pct-study",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which 20% mover patterns have enough sample size, stable outcome behavior, and execution realism to promote into edge research rather than journal-only observation?"
+   },
+   {
+    "step": 5,
+    "name": "Log accepted lessons",
+    "skill": "trader-memory-core",
+    "optional": true,
+    "decision_gate": true,
+    "question": "Which findings are accepted as operating-rule candidates, which are rejected, and which remain pending more examples?"
+   }
+  ],
+  "manual_review": [
+   "Inspect representative winner and failure charts before accepting any pattern.",
+   "Separate observation, research hypothesis, and executable trade plan.",
+   "Mark current-universe backfills as survivorship-biased unless delisted symbols are included.",
+   "Require explicit sample-size thresholds before promoting a cohort rule.",
+   "Feed accepted lessons into monthly-performance-review rather than changing rules ad hoc."
+  ]
+ },
+ {
+  "id": "stockbee-ep-daily",
+  "name": "Stockbee EP Daily",
+  "cadence": "daily",
+  "minutes": 40,
+  "difficulty": "advanced",
+  "api_profile": "mixed",
+  "when_to_run": "Run on earnings/news-heavy days after the market-regime workflow allows new risk, or ad hoc when a game-changing catalyst appears. Use this workflow to classify Day 1 Episodic Pivot candidates and decide whether they are actionable today, delayed-EP watchlist names, or PEAD handoff candidates.",
+  "when_not_to_run": "Do not run as a blind stock screener without catalyst inputs. Do not use it to bypass market-regime gates, chart validation, position sizing, or manual catalyst review.",
+  "required_skills": [
+   "drawdown-circuit-breaker",
+   "stockbee-episodic-pivot-analyzer",
+   "technical-analyst",
+   "position-sizer",
+   "trader-memory-core",
+   "pre-trade-discipline-gate"
+  ],
+  "optional_skills": [
+   "earnings-trade-analyzer",
+   "stockbee-momentum-burst-screener",
+   "pead-screener",
+   "theme-detector",
+   "breakout-trade-planner"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Check account circuit breaker",
+    "skill": "drawdown-circuit-breaker",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Is the account circuit breaker clear (TRADING_ALLOWED) for new EP trade risk today?"
+   },
+   {
+    "step": 2,
+    "name": "Optional earnings candidate scan",
+    "skill": "earnings-trade-analyzer",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Optional momentum confirmation scan",
+    "skill": "stockbee-momentum-burst-screener",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 4,
+    "name": "Analyze Day 1 Episodic Pivot candidates",
+    "skill": "stockbee-episodic-pivot-analyzer",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which candidates have a true game-changing catalyst plus price/volume confirmation? Separate ACTIONABLE_DAY1 from DELAYED_EP_WATCH and reject low-quality headline-only moves."
+   },
+   {
+    "step": 5,
+    "name": "Validate EP chart quality",
+    "skill": "technical-analyst",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Does the chart confirm a clean EP reaction with acceptable close quality, liquidity, and risk to the EP-day low?"
+   },
+   {
+    "step": 6,
+    "name": "Calculate EP position size",
+    "skill": "position-sizer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 7,
+    "name": "Build optional EP trade plan",
+    "skill": "breakout-trade-planner",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 8,
+    "name": "Register EP thesis or watchlist entry",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which candidates deserve an active thesis, which belong on delayed EP / PEAD watch, and which should be ignored despite a high initial score?"
+   },
+   {
+    "step": 9,
+    "name": "Run EP manual execution discipline gate",
+    "skill": "pre-trade-discipline-gate",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Before placing any manual broker order, do ACTIONABLE_DAY1 or ENTRY_READY EP candidates pass the written-plan, predefined-stop, position-size, recent-loss, market-regime, and circuit-breaker discipline checks? Treat delayed EP, PEAD handoff, ignored, or rejected candidates as no-action journal entries, not order approvals."
+   }
+  ],
+  "manual_review": [
+   "Confirm market-regime-daily allows new risk before acting.",
+   "Confirm circuit_breaker_decision is TRADING_ALLOWED before analyzing new EP trade risk.",
+   "Verify the catalyst manually; this workflow does not discover or validate news truth by itself.",
+   "Treat analyst-only and story-only EPs as lower quality unless price/volume confirmation is exceptional.",
+   "Use EP-day low as the default stop reference only if the distance is realistically sizeable.",
+   "Send overextended earnings/guidance EPs to PEAD monitoring instead of chasing Day 1.",
+   "Confirm pre_trade_discipline_decision is GO before placing any manual broker order; watchlist and PEAD handoff candidates should not be treated as order approvals.",
+   "All orders are placed manually at the broker; no auto-execution."
+  ]
+ },
+ {
+  "id": "stockbee-fluency-loop",
+  "name": "Stockbee Setup Fluency Loop",
+  "cadence": "daily",
+  "minutes": 20,
+  "difficulty": "intermediate",
+  "api_profile": "no-api-basic",
+  "when_to_run": "After stockbee-momentum-burst-screener produces candidate reports, and again after 3/5 trading-day windows have matured. Builds a model book of Stockbee Momentum Burst examples so the trader can improve setup recognition.",
+  "when_not_to_run": "Do not use as an execution workflow or signal service. Do not change trading rules from tiny samples; require enough matured examples and manual chart review before promoting or filtering a setup tag.",
+  "required_skills": [
+   "stockbee-setup-fluency-trainer"
+  ],
+  "optional_skills": [
+   "trader-memory-core",
+   "signal-postmortem",
+   "backtest-expert"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Ingest latest Stockbee momentum burst candidates",
+    "skill": "stockbee-setup-fluency-trainer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Update matured 3-day and 5-day outcomes",
+    "skill": "stockbee-setup-fluency-trainer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Summarize setup cohorts and rule candidates",
+    "skill": "stockbee-setup-fluency-trainer",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which setup tags have enough matured examples to promote, downgrade, or continue monitoring? Require representative chart review before changing trade rules."
+   },
+   {
+    "step": 4,
+    "name": "Log accepted lessons",
+    "skill": "trader-memory-core",
+    "optional": true,
+    "decision_gate": true,
+    "question": "Which findings are accepted as operating-rule changes, and which remain journal-only observations pending more examples?"
+   }
+  ],
+  "manual_review": [
+   "Inspect representative winner and failure charts before accepting a rule change.",
+   "Separate evidence from execution decisions; this workflow records setup behavior, not actual P&L.",
+   "Keep sample-size thresholds explicit, especially when market regime changes.",
+   "Feed accepted lessons into monthly-performance-review rather than adding ad-hoc rules daily."
+  ]
+ },
+ {
+  "id": "strategy-research-pipeline",
+  "name": "Strategy Research Pipeline",
+  "cadence": "ad-hoc",
+  "minutes": 60,
+  "difficulty": "advanced",
+  "api_profile": "no-api-basic",
+  "when_to_run": "During offline research with a dated local EOD OHLCV parquet file. Detect research tickets, extract hints, and repeat detection against the same file and as-of date. Evaluate a final ticket only after a separate backtest has produced traceable metrics for that exact strategy and data period.",
+  "when_not_to_run": "Do not use undated or unverified historical data, missing backtest metrics, or metrics from another ticket. This workflow does not execute a backtest, export to an external pipeline, authorize a strategy, or place trades.",
+  "required_skills": [
+   "edge-candidate-agent",
+   "edge-hint-extractor",
+   "backtest-expert"
+  ],
+  "optional_skills": [],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Detect initial candidates from local OHLCV",
+    "skill": "edge-candidate-agent",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Extract dated deterministic edge hints",
+    "skill": "edge-hint-extractor",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Redetect final tickets with the same OHLCV and as-of date",
+    "skill": "edge-candidate-agent",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Was the same local OHLCV file and --as-of date used as in step 1, with --hints pointing to step 2's hints.yaml and a separate output directory? Is there a final ticket worth testing? If not, stop here."
+   },
+   {
+    "step": 4,
+    "name": "Evaluate separately measured backtest results",
+    "skill": "backtest-expert",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Before invoking the evaluator, can the operator match all supplied metrics to this final ticket's strategy, universe, time period, and cost assumptions? Are all required metrics present, with slippage actually tested? If any answer is no or unknown, HOLD without a verdict. A Deploy/Refine/Abandon score is never approval to trade real funds."
+   }
+  ],
+  "manual_review": [
+   "Use the same local --ohlcv parquet and --as-of date for both candidate runs; pass that --as-of date to edge-hint-extractor too, and verify hints.yaml records it. Write to separate directories and pass step 2 hints.yaml with --hints on the second run. Do not pass --export-strategies-dir or --pipeline-root.",
+   "Preserve the final ticket ID, universe, data period, cost assumptions, and provenance of the separate backtest metrics together with the result.",
+   "Supply total-trades, win-rate, avg-win-pct, avg-loss-pct, max-drawdown-pct, years-tested, and num-parameters to backtest-expert; use --slippage-tested only when friction was actually modeled. Missing or unlinked metrics mean HOLD before evaluation.",
+   "Independently inspect look-ahead, survivorship, and out-of-sample evidence; the scoring CLI does not verify these. Unknown means HOLD.",
+   "Keep research tickets and evaluation local. No external pipeline export, live API write, broker order, or real-money decision follows automatically."
+  ]
+ },
+ {
+  "id": "swing-opportunity-daily",
+  "name": "Swing Opportunity Daily",
+  "cadence": "daily",
+  "minutes": 40,
+  "difficulty": "intermediate",
+  "api_profile": "fmp-required",
+  "when_to_run": "Only after market-regime-daily has produced a non-restrictive exposure decision. Identifies swing trade candidates and builds entry plans.",
+  "when_not_to_run": "Do not run when the latest market-regime-daily exposure_decision is cash-priority or restrictive. Do not use as a standalone screener without the regime gate.",
+  "required_skills": [
+   "vcp-screener",
+   "drawdown-circuit-breaker",
+   "technical-analyst",
+   "position-sizer",
+   "trader-memory-core",
+   "pre-trade-discipline-gate"
+  ],
+  "optional_skills": [
+   "stockbee-momentum-burst-screener",
+   "stockbee-exhaustion-hammer-screener",
+   "canslim-screener",
+   "breakout-trade-planner",
+   "theme-detector"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Check account circuit breaker",
+    "skill": "drawdown-circuit-breaker",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Is the account circuit breaker clear (TRADING_ALLOWED) for new trade risk today?"
+   },
+   {
+    "step": 2,
+    "name": "Run VCP screener",
+    "skill": "vcp-screener",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 3,
+    "name": "Run Stockbee momentum burst screener",
+    "skill": "stockbee-momentum-burst-screener",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 4,
+    "name": "Run Stockbee exhaustion hammer screener",
+    "skill": "stockbee-exhaustion-hammer-screener",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 5,
+    "name": "Run CANSLIM screener",
+    "skill": "canslim-screener",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 6,
+    "name": "Theme detection cross-check",
+    "skill": "theme-detector",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 7,
+    "name": "Validate setups on weekly chart",
+    "skill": "technical-analyst",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Which candidates have a clean weekly setup (Stage 2 uptrend, tight base, or Stockbee-style range expansion from a controlled base) and pass the manual chart review? For exhaustion hammers, confirm the pullback is not thesis-breaking and risk to the day low is acceptable. Reject candidates that don't pass."
+   },
+   {
+    "step": 8,
+    "name": "Calculate position size",
+    "skill": "position-sizer",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 9,
+    "name": "Build entry plan",
+    "skill": "breakout-trade-planner",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 10,
+    "name": "Register thesis in journal",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": true,
+    "question": "For each candidate that survived validation, register the thesis with entry / stop / target. Confirm risk per trade matches position-sizer output and total portfolio heat is within budget."
+   },
+   {
+    "step": 11,
+    "name": "Run manual execution discipline gate",
+    "skill": "pre-trade-discipline-gate",
+    "optional": false,
+    "decision_gate": true,
+    "question": "Before placing any manual broker order, does each actionable candidate pass the written-plan, predefined-stop, position-size, recent-loss, market-regime, and circuit-breaker discipline checks?"
+   }
+  ],
+  "manual_review": [
+   "Confirm market-regime-daily exposure_decision allows new risk before acting.",
+   "Confirm circuit_breaker_decision is TRADING_ALLOWED before screening or sizing new candidates.",
+   "Reject any candidate where weekly setup is unclear, even if screener passed.",
+   "Treat Stockbee momentum burst output as candidate generation only; require chart validation and risk-distance review.",
+   "Treat Stockbee exhaustion hammer output as candidate generation only; confirm the pullback is not caused by a thesis-breaking news event and verify risk to the day low.",
+   "Verify total portfolio heat is within budget before placing any order.",
+   "Confirm pre_trade_discipline_decision is GO before placing any manual broker order.",
+   "All orders are placed manually at the broker; no auto-execution."
+  ]
+ },
+ {
+  "id": "trade-memory-loop",
+  "name": "Trade Memory Loop",
+  "cadence": "ad-hoc",
+  "minutes": 30,
+  "difficulty": "beginner",
+  "api_profile": "no-api-basic",
+  "when_to_run": "Every time a position is closed (full or partial exit). Records the outcome, generates a postmortem, (optionally) coaches process / risk / execution / behavior patterns, and (optionally) re-validates the original hypothesis via backtest.",
+  "when_not_to_run": "Do not run before a position is closed — use trader-memory-core directly to update an open thesis instead. Do not skip this loop after a closed trade, even on winners.",
+  "required_skills": [
+   "trader-memory-core",
+   "signal-postmortem"
+  ],
+  "optional_skills": [
+   "trade-performance-coach",
+   "backtest-expert"
+  ],
+  "steps": [
+   {
+    "step": 1,
+    "name": "Record closed trade outcome",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 2,
+    "name": "Generate postmortem",
+    "skill": "signal-postmortem",
+    "optional": false,
+    "decision_gate": true,
+    "question": "What was the root cause of the outcome — thesis quality, execution, market environment, or randomness? Classify and document."
+   },
+   {
+    "step": 3,
+    "name": "Coach process, risk, and behavior patterns",
+    "skill": "trade-performance-coach",
+    "optional": true,
+    "decision_gate": true,
+    "question": "Which next-session operating rules should the trader accept, modify, defer, or journal only?"
+   },
+   {
+    "step": 4,
+    "name": "Re-validate hypothesis via backtest",
+    "skill": "backtest-expert",
+    "optional": true,
+    "decision_gate": false,
+    "question": ""
+   },
+   {
+    "step": 5,
+    "name": "Append lessons to journal",
+    "skill": "trader-memory-core",
+    "optional": false,
+    "decision_gate": false,
+    "question": ""
+   }
+  ],
+  "manual_review": [
+   "Be honest about whether the win was thesis-driven or lucky.",
+   "Be honest about whether the loss was thesis-flawed or executed poorly.",
+   "Don't rationalize randomness as either skill or failure."
+  ]
+ }
+]
