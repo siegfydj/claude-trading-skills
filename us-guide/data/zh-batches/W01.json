@@ -1,0 +1,146 @@
+{
+  "workflows": {
+    "core-portfolio-weekly": {
+      "name": "核心投資組合每週檢視",
+      "when_to_run": "每週一次，通常於週六或週日、下週開盤前檢視長期持股、股息部位與整體配置。",
+      "when_not_to_run": "不應每日執行；每日頻繁調整持股會破壞本流程的長期投資架構。",
+      "steps": {
+        "1": "取得持股快照（portfolio-manager）",
+        "2": "檢視配置及集中度；先完成持股對帳（portfolio-manager）",
+        "3": "檢查股息健康度（T1至T5異常）（kanchi-dividend-review-monitor）",
+        "4": "決定再平衡行動；確認標的及部位大小（portfolio-manager）",
+        "5": "記錄每週檢視結果（trader-memory-core）"
+      },
+      "manual_review": [
+        "配置或再平衡檢視前，必須取得已驗證的 reconciliation_report；人工解決差異後重新比對。",
+        "目前對帳為人工關卡；歷史重播 fixture 不會執行或強制此關卡。",
+        "確認持股快照反映實際券商狀態（Alpaca 或 CSV）。",
+        "確認再平衡行動由人工在券商下單，不自動執行。",
+        "若 dividend_review_findings 標記 T1 至 T5 問題，須暫緩加碼直到問題解決。"
+      ]
+    },
+    "earnings-weekly": {
+      "name": "每週財報後動能檢視",
+      "when_to_run": "財報季每週執行，須在 market-regime-daily 已產出非限制性曝險判定後。評估約五週 PEAD 觀察期間內的美股財報反應，篩選強勢個股週線型態，人工確認圖表、計算部位並登錄候選，再考慮人工下單。",
+      "when_not_to_run": "若最新 market-regime-daily 的 exposure_decision 為現金優先或限制性，或帳戶熔斷關卡未放行，不得執行。不可追逐財報第一天跳空，該用途屬 stockbee-ep-daily。本流程不是獨立篩選器；評分或階段絕非買進訊號，不會自動下單。",
+      "steps": {
+        "1": "檢查帳戶熔斷關卡；是否為 TRADING_ALLOWED？（drawdown-circuit-breaker）",
+        "2": "評估近期財報反應（earnings-trade-analyzer）",
+        "3": "依評級篩選 PEAD 週線型態；確認 Mode B 與門檻（pead-screener）",
+        "4": "人工確認週線；不明確即拒絕（technical-analyst）",
+        "5": "計算部位大小（position-sizer）",
+        "6": "登錄財報後漂移假設；IDEA 並非下單核准（trader-memory-core）",
+        "7": "人工下單前執行交易紀律關卡（pre-trade-discipline-gate）"
+      },
+      "manual_review": [
+        "確認 market-regime-daily 的 exposure_decision 允許新增風險後才行動。",
+        "評分或計算新候選部位前，確認 circuit_breaker_decision 為 TRADING_ALLOWED。",
+        "人工查證各財報結果及展望；本流程不自行發掘或驗證消息。",
+        "earnings-trade-analyzer 回溯約28至35天涵蓋 PEAD；僅一週難出現下跌K棒。明設 --max-api-calls，考慮 --min-market-cap。預設200次；日曆每日及市值篩選前每檔各1次，PEAD 每檔再1次；長窗可能以 ZERO_RESULT_REASON=profiles_budget_exhausted 結束。實際呼叫量及方案配額未量測，須自行查核。",
+        "以第2步 JSON 執行 pead-screener Mode B；Mode A 可能耗用配額於非美股，不屬本流程。",
+        "MONITORING、EXPIRED 僅保留觀察或移除；只有 BREAKOUT、SIGNAL_READY 可進入圖表檢視。",
+        "週線圖不明確即拒絕，即使財報評級與 PEAD 階段通過亦同。",
+        "僅在停損距離可合理配置部位時，使用下跌 K 棒低點作停損；下單前查核整體部位風險。",
+        "人工下單前，確認 pre_trade_discipline_decision 為 GO。",
+        "所有訂單均由人工在券商下單，不自動執行。"
+      ]
+    },
+    "kanchi-dividend-weekly": {
+      "name": "Kanchi 每週股息候選研究",
+      "when_to_run": "每週使用 Kanchi 五步法發掘並深入審查新的美國上市股息候選：先篩選殖利率與品質，深入研究強勢候選，進場前登錄完整文件化的交易假設。v1 僅涵蓋美國上市股息股票。",
+      "when_not_to_run": "不適用日本或其他非美國上市股息股，v1 不涵蓋也不暗示支援。此流程不宣稱 Kanchi 篩選策略獲利，僅為有紀律的候選發掘程序，不是買進訊號。不用於維護既有持股（由 core-portfolio-weekly 負責），僅發掘及審查新候選。絕不自動下單，每筆買進均由人工在券商下單。",
+      "steps": {
+        "1": "篩選高殖利率候選（value-dividend-screener）",
+        "2": "篩選股息成長回檔候選（dividend-growth-pullback-screener）",
+        "3": "執行 Kanchi 五步審查；僅可執行級別通過（kanchi-dividend-sop）",
+        "4": "檢查美國稅務與帳戶配置（kanchi-dividend-us-tax-accounting）",
+        "5": "檢查既有持股的強制檢視觸發條件（kanchi-dividend-review-monitor）",
+        "6": "登錄候選假設並連結研究備忘錄；成交前不得 ACTIVE（trader-memory-core）"
+      },
+      "manual_review": [
+        "HOLD-REVIEW、STEP1-RECHECK 或 FAIL 判定一律阻擋，不得進入部位計算或假設登錄。",
+        "第3步手寫單頁備忘錄（references/stock-note-template.md），不在 kanchi_candidates JSON。存檔、登錄 IDEA 後呼叫 thesis_store.link_report(state_dir,thesis_id,\"kanchi-dividend-sop\",<memo_path>,date)，否則 linked_reports 無備忘錄。",
+        "不自動下單或轉為 ACTIVE；每筆成交均人工在券商操作，再以 open-position 記錄。",
+        "第1至2步篩選器為選用；人工提供 ticker 清單同樣可進入第3步。",
+        "第4步稅務及帳戶配置僅供參考，非權威結論；行動前向稅務專業人士或券商、保管機構實際報表查證。",
+        "第4步須提供符合連結規格的 tax_holdings_input，不可直接將原始篩選列作為稅務持股輸入。",
+        "若第5步將既有持股標為 WARN 或 REVIEW，僅暫停該標的加碼，不觸發自動賣出。",
+        "第5步需符合較完整連結規格的 review_monitor_input；僅有 ticker 不足，應跳過選用步驟而非捏造證據。",
+        "篩選輸出存於各技能的 logs/，而非共用 reports/；串接時將產物 ID 視為邏輯參照，不是實際檔名。",
+        "dividend-growth-pullback-screener 指令範例須使用 screen_dividend_growth_rsi.py；儲存庫沒有 screen_dividend_growth.py。"
+      ]
+    },
+    "market-regime-daily": {
+      "name": "每日市場狀態判定",
+      "when_to_run": "每天考慮新增波段交易風險前執行，於開盤前或開盤後30分鐘內進行。",
+      "when_not_to_run": "不可將輸出作為獨立買賣訊號。exposure_decision 是曝險態度（允許、限制、現金優先），而非交易指令。",
+      "steps": {
+        "1": "分析市場廣度（market-breadth-analyzer）",
+        "2": "分析上升趨勢參與率（uptrend-analyzer）",
+        "3": "檢查市場頭部風險（選用，需 FMP 金鑰）（market-top-detector）",
+        "4": "判定曝險態度；允許、限制或現金優先？（exposure-coach）"
+      },
+      "manual_review": [
+        "確認不將輸出當作買賣訊號。",
+        "確認曝險應降低、維持或提高。",
+        "若 exposure_decision 為限制性，暫緩執行 swing-opportunity-daily。"
+      ]
+    },
+    "monthly-performance-review": {
+      "name": "每月交易績效檢討",
+      "when_to_run": "每月第一個週末，檢討上月已平倉部位、未平倉假設健康度及流程改善，完成計畫、交易、紀錄、檢討、改善的循環。",
+      "when_not_to_run": "即使虧損月份也不可跳過，這時更需要檢討。不要每週執行；月度頻率是刻意設計以過濾雜訊。",
+      "steps": {
+        "1": "彙整當月交易與交易假設（trader-memory-core）",
+        "2": "檢討月度重複模式；分類並記錄根因（signal-postmortem）",
+        "3": "檢視月度流程、風險與行為，決定下月規則（trade-performance-coach）",
+        "4": "透過回測重新驗證假設（backtest-expert）",
+        "5": "檢查哪些技能有幫助或造成負面影響（dual-axis-skill-reviewer）",
+        "6": "產出決策紀錄及規則變更；不直接啟用規則（trader-memory-core）"
+      },
+      "manual_review": [
+        "區分流程改善（規則變更）與偶發結果（隨機性）。",
+        "交易端規則變更適用於交易者下月行為。",
+        "技能端改善僅是儲存庫改善候選，未必實施。",
+        "應願意刪除或降級無效規則，而非只新增規則。",
+        "第6步產物不會啟用規則；須後續明確執行 pre-trade-discipline-gate 的 manage_approved_rules.py activate。",
+        "第6步前對剛結束且核定規則生效的月份執行 pre-trade-discipline-gate 的 review_rule_adherence.py --month <month>。逐條判定須重審規則的保留、延長、退役或取代，記入第6步，僅用 manage_approved_rules.py 套用。計數為自行回報的關卡確認，不能僅依未放行比率改規則。"
+      ]
+    },
+    "multi-asset-opportunity-daily": {
+      "name": "每日多資產機會研究",
+      "when_to_run": "僅在 market-regime-daily 產出非限制性曝險判定後執行。掃描總體、市場主題及新聞，發掘股票、以股票代理的商品及選擇權等多資產構想，整合為排序假設卡。",
+      "when_not_to_run": "當最新 market-regime-daily 的 exposure_decision 為現金優先時不得執行。不可將假設卡視為買賣訊號；其標記 manual_review_required，任何資金移動前須經人工核准。外匯輸出僅供研究，絕不可串接至券商。",
+      "steps": {
+        "1": "更新總體市場狀態背景（macro-regime-detector）",
+        "2": "偵測熱門主題及產業輪動（theme-detector）",
+        "3": "掃描新聞與催化因素（market-news-analyst）",
+        "4": "整合排序假設卡；確認總體與主題一致及定價差距（trade-hypothesis-ideator）",
+        "5": "依風險計算假設卡的部位大小（position-sizer）",
+        "6": "儲存 IDEA 或 ENTRY_READY；人工審核狀態變更（trader-memory-core）"
+      },
+      "manual_review": [
+        "確認總體簡報不與 market-regime-daily 的 exposure_decision 矛盾。",
+        "確認每張假設卡均有書面假設及淘汰條件。",
+        "確認部位大小符合投資組合個別部位及產業風險上限。",
+        "外匯相關輸出須確認 research_only=true，絕不可串接券商。",
+        "確認 IDEA 至 ENTRY_READY 的狀態變更明確且經檢視。"
+      ]
+    },
+    "portfolio-holdings-review": {
+      "name": "本地持股配置檢視",
+      "when_to_run": "免金鑰檢視本地美元股票 CSV 或已儲存的 Alpaca 持股快照。向 portfolio-manager/scripts/review_csv.py 提供實際檔案與帶時區的來源時間戳，讀取有限的配置報告。",
+      "when_not_to_run": "不適用完整帳戶風險、現金、權益、槓桿、績效、股息健康度、交易建議或券商與記憶對帳。完整券商分析請使用有對帳關卡的 core-portfolio-weekly。",
+      "steps": {
+        "1": "驗證本地持股並檢視總持股配置（portfolio-manager）"
+      },
+      "manual_review": [
+        "執行 review_csv.py，帶入 --input PATH --as-of TIMESTAMP --output-dir reports/UNIQUE-RUN；僅已儲存 Alpaca 資料使用 --input-format alpaca-json。",
+        "人工確認輸入身分、來源日期、價格及單一帳戶範圍；Navigator 不會檢查檔案。",
+        "閱讀 JSON 與 Markdown 的限制；總持股權重不等於帳戶曝險，亦不授權交易。",
+        "不可呼叫券商工具、下單、寫入 trader-memory 紀錄或繞過完整流程的對帳關卡。",
+        "個人輸入與報告須保留於本地；隨附的重播輸入為虛構資料。"
+      ]
+    }
+  }
+}

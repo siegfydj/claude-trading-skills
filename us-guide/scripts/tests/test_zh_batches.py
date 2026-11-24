@@ -79,3 +79,8 @@ def test_merge_writes_valid_fragment_only(tmp_path, monkeypatch):
     assert zh_batches.cmd_merge([str(good), str(bad)], False) == 1
     out = json.loads((data / "zh-TW.json").read_text(encoding="utf-8"))
     assert out["skills"]["a"]["title"] == "測試"
+
+
+def test_hequn_is_valid_traditional():
+    frag = {"workflows": {"w": {"when_not_to_run": "策略核准與批准都不是下單核准"}}}
+    assert zh_batches.validate(frag, _zh(), WF, False) == []
