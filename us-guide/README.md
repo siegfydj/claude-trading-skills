@@ -17,6 +17,7 @@
 | `data/workflows.json`、`data/skillsets.json` | 工作流程與安裝組合（自動產生） |
 | `data/zh-TW.json` | 繁體中文說明（可手改或由 AI 協作填寫；腳本只補空欄位，不覆蓋） |
 | `scripts/build_guide.py`、`scripts/template.html` | 產生器與頁面樣板 |
+| `scripts/zh_batches.py`、`data/zh-batches/` | 多人／多 AI 並行翻譯：各自交一個片段檔，腳本驗證（欄位、字數、疑似簡體字）後合併進 `zh-TW.json` |
 | `NOTES.md`、`SETUP.md` | 進度與重建清單 |
 
 ## 更新方式
@@ -27,6 +28,8 @@ python3 us-guide/scripts/build_guide.py
 ```
 
 同步上游後重跑一次即可；`zh-TW.json` 中已翻譯的內容會保留。
+
+翻譯流程：`zh_batches.py plan` 看批次 → 各自產出片段檔放 `data/zh-batches/` → `zh_batches.py merge <檔>` 驗證並合併 → 重跑 `build_guide.py`。測試：`python3 -m pytest us-guide/scripts/tests`。
 
 ## 注意
 
