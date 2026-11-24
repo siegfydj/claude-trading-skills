@@ -1,6 +1,6 @@
 # 美股 Skill 閱讀指南（us-guide）
 
-這個資料夾專門放「美股版」的 skill 閱讀指南與相關規劃，與上游檔案分開，同步上游時不會衝突。
+這個資料夾專門放「美股版」的 skill 閱讀指南（看板與產生器），與上游檔案分開，同步上游時不會衝突。規劃、分工與任務單放在作者的私有庫，不在這個公開 fork。
 
 ## 怎麼打開
 
@@ -17,9 +17,6 @@
 | `data/workflows.json`、`data/skillsets.json` | 工作流程與安裝組合（自動產生） |
 | `data/zh-TW.json` | 繁體中文說明（可手改或由 AI 協作填寫；腳本只補空欄位，不覆蓋） |
 | `scripts/build_guide.py`、`scripts/template.html` | 產生器與頁面樣板 |
-| `docs/WEB_EXECUTION_PLAN.md` | 「在網頁上執行全部 skill」的規劃 |
-| `docs/AI_COLLAB.md` | 多 AI 分工與交接規則 |
-| `tasks/` | 派給 Gemini／ChatGPT 的任務單 |
 | `NOTES.md`、`SETUP.md` | 進度與重建清單 |
 
 ## 更新方式

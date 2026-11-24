@@ -223,7 +223,7 @@ function openFlow(id){ const e=document.getElementById('w-'+id); if(e){ e.scroll
 (function(){
   const el=$('#tab-exec');
   const cnt={A:0,B:0,C:0,D:0}; trader.forEach(s=>cnt[s.tier]++);
-  el.append(h('h2',{},'「在網頁上執行 skill」可行性分級'), h('p',{class:'muted small'},'目前這個看板只負責閱讀。若要在網頁上真的執行，每一層需要的後端能力不同（細節見 docs/WEB_EXECUTION_PLAN.md）。以下只統計交易用 skill。'));
+  el.append(h('h2',{},'「在網頁上執行 skill」可行性分級'), h('p',{class:'muted small'},'目前這個看板只負責閱讀。若要在網頁上真的執行，每一層需要的後端能力不同（完整規劃在作者的私有庫）。以下只統計交易用 skill。'));
   const lg=h('div',{class:'legend'});
   const need={A:'後端執行 Python 腳本；少數可改寫成瀏覽器內計算。無金鑰風險。',B:'後端排程抓公開資料再執行；注意對方網站條款與穩定度。',C:'必須由後端保管金鑰，金鑰不可出現在瀏覽器；要處理額度、費用與速率限制。',D:'需要 LLM（付費 API）才能完成判讀，成本與品質控管最高。'};
   ['A','B','C','D'].forEach(t=>lg.append(h('div',{class:'card'}, h('div',{class:'count'},cnt[t]), tierBadge(t), h('p',{class:'small muted'},need[t]))));
