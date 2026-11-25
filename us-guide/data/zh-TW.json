@@ -299,7 +299,7 @@
    "summary": "篩選急漲衰竭型態，產生有條件的盤前放空計畫，並檢查五分鐘觸發條件。",
    "when_to_use": "建立放空觀察名單、評估借券、SSR 與盤前風險限制時。",
    "how_to_start": "設定 FMP_API_KEY；可選 Alpaca 金鑰取得即時借券及五分鐘資料。",
-   "cautions": "無 Alpaca 時需人工確認並標記 watch_only；不適用一分鐘以下盤中訊號或多方篩選。"
+   "cautions": "本技能只偵測、不會下單，計畫須人工到券商確認；無 Alpaca 時需人工確認並標記 watch_only；不適用一分鐘以下盤中訊號或多方篩選。"
   },
   "pead-screener": {
    "title": "PEAD 財報漂移篩選器",
@@ -509,7 +509,7 @@
    "summary": "從已結案交易彙整每週已實現績效、勝率、期望值及來源、出場原因等群組表現。",
    "when_to_use": "週末回顧交易表現，或準備月度回顧與事後檢討時。",
    "how_to_start": "提供 trader-memory-core 的 state/theses/ YAML；需 Python 3.9+ 與 PyYAML，免金鑰。",
-   "cautions": "僅彙整已結案交易的已實現績效。"
+   "cautions": "僅彙整已結案交易的已實現績效；R 倍數須由紀錄的停損算出正風險，跳空成交於停損以下或停損上移至進場價以上者不計入 R 平均，仍計入損益與勝負統計。"
   },
   "us-undervalued-growth-screener": {
    "title": "美股低估成長篩選器",
@@ -734,7 +734,7 @@
   },
   "stockbee-fluency-loop": {
    "name": "Stockbee 型態訓練循環",
-   "when_to_run": "stockbee-momentum-burst-screener 產出候選報告後執行，並於3日及5個交易日觀察窗到期後再執行。建立動能爆發案例庫，以改善交易者的型態辨識。",
+   "when_to_run": "stockbee-momentum-burst-screener 產出候選報告後執行，並於 3 個與 5 個交易日的觀察窗到期後再執行。建立動能爆發案例庫，以改善交易者的型態辨識。",
    "when_not_to_run": "不得用於交易執行或訊號服務。不可由極小樣本改變交易規則；提升或篩除型態標籤前，須有足夠到期案例及人工圖表檢視。",
    "steps": {
     "1": "匯入最新 Stockbee 動能爆發候選（stockbee-setup-fluency-trainer）",
