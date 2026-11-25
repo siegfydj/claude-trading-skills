@@ -1,522 +1,522 @@
 {
  "skills": {
   "backtest-expert": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "回測專家",
+   "summary": "以系統化回測、參數敏感度、交易摩擦與樣本外驗證評估策略穩健性。",
+   "when_to_use": "開發或驗證量化策略、排查回測偏誤，或評估滑價與不同市場環境的影響時。",
+   "how_to_start": "提供明確交易規則、歷史資料與績效指標；評估腳本需 Python 3.9+，免 API 金鑰。",
+   "cautions": "避免過度擬合、前視及倖存者偏誤；高分不能覆蓋樣本不足、負期望值或缺乏摩擦驗證等阻擋條件。"
   },
   "breadth-chart-analyst": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "市場廣度圖表分析",
+   "summary": "結合 S&P 500 廣度指數及美股上升趨勢比例，評估中期環境與短期時機。",
+   "when_to_use": "想了解市場參與程度、整體健康度，或分析相關廣度圖表時。",
+   "how_to_start": "取得公開 GitHub Pages CSV；可附圖表補充，免 API 金鑰。",
+   "cautions": "CSV 是主要依據，圖表僅供補充；原技能分析與報告使用英文。"
   },
   "breakout-trade-planner": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "突破交易規劃器",
+   "summary": "依 VCP 候選產生突破計畫，計算最壞情境風險、部位及投資組合風險，提供 Alpaca 訂單範本。",
+   "when_to_use": "已有 VCP 篩選結果，需要突破進場、停損、目標或部位規劃時。",
+   "how_to_start": "提供 schema_version 為 1.0 的 VCP JSON 與帳戶規模；本機計算免 API 金鑰。",
+   "cautions": "訂單範本不代表成交；須考量最壞情境風險及整體部位風險。"
   },
   "canslim-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "CANSLIM 篩選器",
+   "summary": "依 William O'Neil 的 CANSLIM 方法，篩選基本面與動能兼具的美股成長股。",
+   "when_to_use": "尋找獲利加速、接近 52 週高點或具成長動能的股票時。",
+   "how_to_start": "設定 FMP_API_KEY，提供篩選範圍；使用 Python 3.9+ 及指定套件。",
+   "cautions": "免費 FMP 額度約可分析 35 檔；較大範圍需要相應付費方案。"
   },
   "contrarian-setup-gate": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "逆勢交易確認閘門",
+   "summary": "整合 COT 擁擠、消息反應失敗及週線價格確認，以狀態機判定逆勢條件。",
+   "when_to_use": "完成 COT 篩選後，檢查後續證據是否足以進入部位規劃時。",
+   "how_to_start": "提供同一標的 COT JSON，可追加消息反應與價格確認報告；免 API 金鑰。",
+   "cautions": "過期、缺漏、格式錯誤或標的不符的資料不得通過；READY_FOR_PLAN 不代表下單訊號。"
   },
   "cot-contrarian-detector": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "COT 逆勢擁擠偵測",
+   "summary": "依 CFTC COT 報告辨識期貨市場大型投機者的極端擁擠部位。",
+   "when_to_use": "尋找逆勢期貨研究對象、查看投機者持倉偏向或擁擠市場時。",
+   "how_to_start": "設定 FMP_API_KEY；COT 端點需 Premium+ 方案，選擇市場或核心清單。",
+   "cautions": "COT 資料落後約 3–9 天；擁擠只是前提，仍需消息反應與價格確認。"
   },
   "crypto-regime-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "加密市場環境分析",
+   "summary": "以六項成分合成 0–100 分，量化加密市場風險偏好與健康程度。",
+   "when_to_use": "檢查加密市場風險偏好、BTC 市占、山寨幣環境或資金費率時。",
+   "how_to_start": "使用 CoinGecko 與 Binance 公開資料，或提供離線 JSON；免 API 金鑰。",
+   "cautions": "市占歷史需累積 31 筆日資料；資金費率可能因地區或服務限制而缺漏。"
   },
   "data-quality-checker": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "資料品質檢查器",
+   "summary": "在發布市場分析或文章前，檢查金融資料與文件內容的一致性。",
+   "when_to_use": "發布週報、自動市場摘要、翻譯文件或整合多來源金融資料前。",
+   "how_to_start": "提供 Markdown 文件，使用 Python 3.9+ 標準函式庫；免 API 金鑰。",
+   "cautions": "檢查範圍限於文件資料品質。"
   },
   "dividend-growth-pullback-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "股息成長拉回篩選器",
+   "summary": "篩選年股息成長率至少 12%、殖利率至少 1.5% 且 RSI 不高於 40 的股票。",
+   "when_to_use": "尋找股息高成長、短期拉回且著重長期總報酬的標的時。",
+   "how_to_start": "設定 FMP_API_KEY；可搭配 FINVIZ，或使用含股票篩選端點的 FMP 方案。",
+   "cautions": "不適合追求高當期股息收入者；FMP 免費方案不含股票篩選端點。"
   },
   "downtrend-duration-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "下跌期間分析器",
+   "summary": "統計歷史下跌期間，依產業及市值產生互動式 HTML 分布圖。",
+   "when_to_use": "研究修正與復原所需時間、比較產業或制定持有期間限制時。",
+   "how_to_start": "設定 FMP_API_KEY，提供篩選範圍及歷史日期；需 requests、pandas、numpy。",
+   "cautions": "僅支援指定 stable 端點，無舊版 v3 備援；空白或異常歷史資料須留意。"
   },
   "drawdown-circuit-breaker": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "帳戶回撤熔斷器",
+   "summary": "讀取交易紀錄，依每日虧損、連敗冷卻與週月回撤限制判定是否允許新增風險。",
+   "when_to_use": "篩選或計算新部位前、虧損後或每日檢查風險限制時。",
+   "how_to_start": "提供 trader-memory-core 的本機 thesis YAML 與美元帳戶規模；免 API 金鑰。",
+   "cautions": "判定的是新增交易風險是否允許，而非標的買賣訊號。"
   },
   "dual-axis-skill-reviewer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "雙軸技能審查器",
+   "summary": "結合可重現的程式檢查與 LLM 深度審查，評估技能結構、測試及執行安全。",
+   "when_to_use": "需要技能評分、改善建議或跨專案審查時。",
+   "how_to_start": "提供技能原始碼；使用 Python 3.9+，建議 uv；合併 LLM 結果需符合指定 JSON 結構。",
+   "cautions": "程式檢查與 LLM 審查是不同證據來源，不應混為一談。"
   },
   "earnings-calendar": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "財報行事曆",
+   "summary": "透過 FMP 取得美股即將公布的財報日期。",
+   "when_to_use": "查詢近期財報公告或依日期、市值篩選財報事件時。",
+   "how_to_start": "設定 FMP_API_KEY，指定日期範圍與市值條件。",
+   "cautions": "結果依賴 FMP 財報行事曆資料。"
   },
   "earnings-trade-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "財報交易分析器",
+   "summary": "以跳空幅度、財報前趨勢、成交量趨勢及 MA200、MA50 位置評分財報後股票。",
+   "when_to_use": "篩選近期財報跳空、評估財報反應或尋找 PEAD 候選時。",
+   "how_to_start": "設定 FMP_API_KEY，指定回顧天數與候選數。",
+   "cautions": "免費額度適用預設兩天、前 20 檔；擴大範圍可能需要付費方案。"
   },
   "economic-calendar-fetcher": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "經濟行事曆擷取器",
+   "summary": "透過 FMP 取得即將發布的經濟數據與重要事件。",
+   "when_to_use": "查詢 FOMC、CPI、就業、GDP 公布時間或規劃事件風險時。",
+   "how_to_start": "設定 FMP_API_KEY，指定日期範圍；需 Python 3.10+。",
+   "cautions": "資料取決於 FMP 行事曆及 API 額度。"
   },
   "fxmacrodata-calendar": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "FXMacroData 行事曆",
+   "summary": "取得官方來源的總體經濟公布行事曆，供事件風險規劃。",
+   "when_to_use": "CPI、NFP、GDP、PCE、PMI 或央行決策公布前。",
+   "how_to_start": "指定幣別與事件等級；公開 USD 資料免金鑰，驗證端點可設定 FXMACRODATA_API_KEY。",
+   "cautions": "公開免金鑰範圍限於 USD 行事曆資料。"
   },
   "edge-candidate-agent": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易優勢候選代理",
+   "summary": "將美股多方市場觀察轉為研究工單，排序並匯出符合策略研究管線介面的候選。",
+   "when_to_use": "從收盤資料或異常觀察發掘優勢假說，或準備管線第一階段輸入時。",
+   "how_to_start": "提供 EOD OHLCV 或研究工單；需 Python、PyYAML，驗證時需目標管線專案。",
+   "cautions": "不合風險、出場及條件結構的候選會被拒絕；完整執行前先 dry-run。"
   },
   "edge-concept-synthesizer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易優勢概念整合器",
+   "summary": "將原始工單與提示抽象為具論點、失效訊號與策略手冊的可重用概念。",
+   "when_to_use": "大量工單需要依機制整理，或希望在策略草擬前降低過度擬合時。",
+   "how_to_start": "提供 tickets YAML 目錄，可附 hints.yaml；需 Python 與 PyYAML。",
+   "cautions": "概念是研究中介產物，不是已驗證策略。"
   },
   "edge-hint-extractor": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易優勢提示擷取器",
+   "summary": "從每日市場觀察、異常與消息反應擷取結構化提示，可加入受證據約束的 LLM 發想。",
+   "when_to_use": "需要 hints.yaml 供概念整合或自動候選偵測時。",
+   "how_to_start": "準備 market_summary.json、anomalies.json 或消息反應資料；需 Python 與 PyYAML。",
+   "cautions": "LLM 發想須受當前異常與消息脈絡約束。"
   },
   "edge-pipeline-orchestrator": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易優勢管線協調器",
+   "summary": "協調候選偵測、概念整理、策略設計、審查、修訂與匯出。",
+   "when_to_use": "執行完整研究流程、接續未完成草稿或預覽匯出結果時。",
+   "how_to_start": "提供工單或 OHLCV 資料，安裝所有相依技能及 PyYAML；免 API 金鑰。",
+   "cautions": "單獨安裝協調器不足以執行；可先 dry-run，不直接匯出。"
   },
   "edge-signal-aggregator": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易優勢訊號整合器",
+   "summary": "彙整多項優勢研究技能的輸出，加權評分、去重並標示矛盾訊號。",
+   "when_to_use": "整合主題、產業、機構資金與候選研究結果，決定深入研究優先順序時。",
+   "how_to_start": "提供各上游技能的本機 JSON 或 YAML；免 API 金鑰。",
+   "cautions": "加權排序用於整合研究證據，不能忽略不同來源之間的矛盾。"
   },
   "edge-strategy-designer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易優勢策略設計器",
+   "summary": "將抽象優勢概念轉為核心、保守及研究探索等策略草稿。",
+   "when_to_use": "已有概念 YAML，需設計多種策略變體或匯出研究工單時。",
+   "how_to_start": "提供 edge_concepts.yaml；需 Python 3.9+ 與 PyYAML。",
+   "cautions": "輸出仍為策略草稿，須經後續審查。"
   },
   "edge-strategy-reviewer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易優勢策略審查器",
+   "summary": "審查草稿的優勢合理性、過度擬合風險、樣本充足度及執行可行性。",
+   "when_to_use": "策略設計完成後、匯出至候選代理前，或手動驗證草稿時。",
+   "how_to_start": "提供 strategy_drafts YAML；需 Python 3.10+ 與 PyYAML。",
+   "cautions": "草稿審查著重合理性及風險，不能取代實際策略驗證。"
   },
   "exposure-coach": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "曝險教練",
+   "summary": "整合廣度、趨勢、風險及資金流訊號，產出曝險上限與市場配置摘要。",
+   "when_to_use": "每週開始、新增股票部位前、訊號衝突或市場環境轉變時。",
+   "how_to_start": "提供上游市場分析 JSON；機構資金流資料需 FMP_API_KEY。",
+   "cautions": "依上游訊號整合市場姿態，不是個股交易訊號。"
   },
   "finviz-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "FINVIZ 篩選器",
+   "summary": "將自然語言股票條件轉為 FINVIZ 篩選網址並開啟瀏覽器。",
+   "when_to_use": "想依基本面、技術面、市值、產業或內部人交易條件篩選股票時。",
+   "how_to_start": "輸入自然語言條件；公開版免金鑰，可選 FINVIZ Elite，或用 --url-only。",
+   "cautions": "用於建立篩選條件，不是深入個股基本面分析。"
   },
   "ftd-detector": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "FTD 底部確認偵測器",
+   "summary": "依 O'Neil 方法追蹤 S&P 500 與 NASDAQ 的反彈嘗試、FTD 及後續健康度。",
+   "when_to_use": "市場修正後評估反彈是否持續，或查詢底部確認與恢復曝險的條件時。",
+   "how_to_start": "設定 FMP_API_KEY，使用 Python 3.9+ 與 requests 取得指數資料。",
+   "cautions": "端點權限依 FMP 方案而異；重試會增加 API 呼叫次數。"
   },
   "futures-position-sizer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "期貨部位計算器",
+   "summary": "依方向、進場、停損與合約乘數、跳動單位計算風險限制內的期貨口數。",
+   "when_to_use": "已知期貨進場與停損，或逆勢閘門達 READY_FOR_PLAN 時。",
+   "how_to_start": "提供標的、方向、進場、停損、帳戶規模及風險比例；免 API 金鑰。",
+   "cautions": "沒有明確停損不得計算；口數一律無條件捨去，表外合約須提供完整規格。"
   },
   "ibd-distribution-day-monitor": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "IBD 出貨日監控",
+   "summary": "辨識 QQQ、SPY 放量下跌的出貨日，追蹤有效期限、群聚及市場風險等級。",
+   "when_to_use": "美股收盤後、調整 TQQQ 曝險前，或作為 FTD 與市場狀態分析輸入時。",
+   "how_to_start": "設定 FMP_API_KEY，取得 QQQ、SPY OHLCV；可指定回顧期與日期。",
+   "cautions": "不執行交易或修改訂單，也不產生超出 IBD 規則的主觀預測。"
   },
   "institutional-flow-tracker": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "機構資金流追蹤器",
+   "summary": "以 13F 申報資料追蹤機構持股變化、累積與減碼。",
+   "when_to_use": "驗證投資論點、追蹤特定基金或觀察產業輪動與持股風險時。",
+   "how_to_start": "設定 FMP_API_KEY，指定基金或持股範圍；需 Python 3.9+ 與 requests。",
+   "cautions": "13F 最多延遲 45 天，僅為季末申報快照，不含空方等完整曝險，非即時訊號。"
   },
   "kanchi-dividend-review-monitor": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Kanchi 股息風險監控",
+   "summary": "依 T1–T5 強制複查條件，將股息持倉異常分類為 OK、WARN 或 REVIEW。",
+   "when_to_use": "每日、每週或每季監控減配、8-K 治理風險與股息安全時。",
+   "how_to_start": "提供符合結構的持倉 JSON，至少含 ticker、工具類型及最近兩次常態股息。",
+   "cautions": "只建立人工複查佇列，不自動賣出；上游資料不足時需提供最低必要欄位。"
   },
   "kanchi-dividend-sop": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Kanchi 股息投資流程",
+   "summary": "將 Kanchi 股息方法轉為美股篩選、深入研究、拉回規劃與持續監控流程。",
+   "when_to_use": "需要可重複的股息股篩選、品質檢查、估值及一頁研究備忘錄時。",
+   "how_to_start": "提供股票範圍及產業條件；進場訊號腳本需 FMP_API_KEY。",
+   "cautions": "研究備忘錄須明列失效條件，並銜接後續監控與稅務流程。"
   },
   "kanchi-dividend-us-tax-accounting": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Kanchi 美股股息稅務",
+   "summary": "整理美國股息稅務分類、持有期間及應稅帳戶與 IRA 配置流程。",
+   "when_to_use": "理解 1099-DIV、合格股息、REIT 或 BDC 配息與年度稅務整理時。",
+   "how_to_start": "提供 ticker、工具及帳戶類型、持有天數與配息資料，依 JSON 結構輸入。",
+   "cautions": "分類依輸入及持有期間判定，須區分一般股票與不同收益工具。"
   },
   "macro-regime-detector": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "總體環境轉換偵測",
+   "summary": "以跨資產比率、殖利率曲線、信用與產業輪動辨識一至兩年結構性環境。",
+   "when_to_use": "評估市場集中或擴散、總體環境轉換與長期配置脈絡時。",
+   "how_to_start": "安裝 yfinance、requests；可選 FMP_API_KEY 取得優先資料來源。",
+   "cautions": "免費 FMP 可能缺少部分 ETF，會改用 yfinance 等備援；著重長期結構而非短線。"
   },
   "manifoldbt-backtester": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "ManifoldBT 回測器",
+   "summary": "以 manifoldbt 引擎執行宣告式策略，將成交紀錄整理為回測評估所需指標。",
+   "when_to_use": "需要由真實 OHLCV 測量勝率、平均盈虧或最大回撤時。",
+   "how_to_start": "提供策略規格及含 timestamp、OHLCV 欄位的 CSV 或 Parquet；安裝 manifoldbt。",
+   "cautions": "此技能僅支援指定指標、單一進場條件及多方策略；評估結論由 backtest-expert 負責。"
   },
   "market-breadth-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "市場廣度分析器",
+   "summary": "利用 TraderMonty 公開 CSV，以六項成分量化市場廣度健康度，產出 0–100 分。",
+   "when_to_use": "評估上漲是否廣泛、參與率、漲跌家數或市場廣度轉弱時。",
+   "how_to_start": "取得公開 GitHub Pages CSV；需 Python 3.9+ 與 requests，免 API 金鑰。",
+   "cautions": "分數依公開 CSV 的涵蓋期間及更新狀況計算。"
   },
   "market-environment-analysis": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "全球市場環境分析",
+   "summary": "分析美歐亞股市、外匯、商品及經濟指標，整理風險偏好、產業與技術面。",
+   "when_to_use": "需要每日或每週市場簡報、跨市場關聯或整體風險環境評估時。",
+   "how_to_start": "提供分析需求，使用 WebSearch 取得市場資料；可補充圖表及經濟行事曆。",
+   "cautions": "即時市場資料依賴網路搜尋；經濟行事曆為選用輸入。"
   },
   "market-news-analyst": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "市場新聞分析器",
+   "summary": "蒐集近十天重要新聞，按價格影響、廣度及未來重要性排序並分析市場反應。",
+   "when_to_use": "查詢央行決策、地緣政治、巨型股財報或商品與股市新聞影響時。",
+   "how_to_start": "使用 WebSearch、WebFetch 蒐集可信新聞；免 API 金鑰。",
+   "cautions": "以近十天美股及商品為主；原技能分析與 Markdown 報告使用英文。"
   },
   "market-top-detector": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "市場頂部風險偵測器",
+   "summary": "結合出貨日、領先股惡化及防禦產業輪動，評估 0–100 分頂部風險。",
+   "when_to_use": "出貨日增加、領先股轉弱，或評估未來二至八週修正風險時。",
+   "how_to_start": "設定 FMP_API_KEY；使用 WebSearch 補充市場廣度與 Put/Call 比率。",
+   "cautions": "屬啟發式戰術風險評分；融資餘額等資料可能落後一至兩個月。"
   },
   "mt5-robot-tester": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "MT5 交易機器人測試器",
+   "summary": "以三輪可續跑的本機流程批次測試 MT5 EA，排序結果並保留參數及商品研究紀錄。",
+   "when_to_use": "評估多個 EA、比較交易商品、最佳化參數或接續中斷測試時。",
+   "how_to_start": "準備 Windows、MetaTrader 5、EA 檔案、經紀商 tick 資料與商品設定。",
+   "cautions": "預設使用真實 tick 模型，測試品質依賴經紀商資料及設定。"
   },
   "news-reaction-failure-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "消息反應失敗分析器",
+   "summary": "檢驗擁擠投機部位是否未對有利消息產生預期反應，並進行漂移顯著性檢驗。",
+   "when_to_use": "COT 已標示擁擠多方或空方，需進一步確認逆勢條件時。",
+   "how_to_start": "設定 FMP_API_KEY，準備事件 JSON 與 COT 報告；利用 WebSearch 整理事件。",
+   "cautions": "CONFIRMED 僅代表第二步確認；可用事件群聚不足、資料過期或缺漏不得推進。"
   },
   "options-strategy-advisor": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "選擇權策略顧問",
+   "summary": "分析選擇權策略、模擬損益與 Greeks，協助比較策略的風險結構。",
+   "when_to_use": "了解 covered call、iron condor、價差策略、損益上限或 Greeks 曝險時。",
+   "how_to_start": "提供標的價格、波動率及策略參數；可選 FMP 金鑰取得資料，需 numpy、scipy、requests。",
+   "cautions": "無 API 時須自行輸入股價及波動率；模擬結果依賴輸入參數。"
   },
   "pair-trade-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "配對交易篩選器",
+   "summary": "利用共整合及均值回歸等統計方法，尋找可能的配對交易研究對象。",
+   "when_to_use": "研究市場中性策略、產業避險、相對價值或股票配對時。",
+   "how_to_start": "設定具股票篩選及歷史價格權限的 FMP_API_KEY；準備範圍及回顧期，需 statsmodels。",
+   "cautions": "統計篩選結果是配對研究依據，而非直接交易指令。"
   },
   "parabolic-short-trade-planner": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "拋物線放空規劃器",
+   "summary": "篩選急漲衰竭型態，產生有條件的盤前放空計畫，並檢查五分鐘觸發條件。",
+   "when_to_use": "建立放空觀察名單、評估借券、SSR 與盤前風險限制時。",
+   "how_to_start": "設定 FMP_API_KEY；可選 Alpaca 金鑰取得即時借券及五分鐘資料。",
+   "cautions": "無 Alpaca 時需人工確認並標記 watch_only；不適用一分鐘以下盤中訊號或多方篩選。"
   },
   "pead-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "PEAD 財報漂移篩選器",
+   "summary": "篩選財報跳空上漲後的延續型態與週線動能。",
+   "when_to_use": "研究財報後漂移、下跌 K 棒突破型態，或深入分析財報交易候選時。",
+   "how_to_start": "準備 earnings-trade-analyzer JSON 或財報候選清單及週線 OHLCV；設定 FMP_API_KEY。",
+   "cautions": "聚焦財報後延續型態，並非所有財報跳空股票。"
   },
   "portfolio-manager": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "投資組合管理器",
+   "summary": "分析持倉配置、風險、個股部位與分散程度，整理再平衡分析。",
+   "when_to_use": "檢視目前持股、組合風險、資產分配或績效時。",
+   "how_to_start": "使用 Alpaca MCP 取得持倉，或提供本機持倉快照。",
+   "cautions": "資料準確性依賴 Alpaca 及第三方來源；分析僅供資訊參考，過往績效不保證未來結果。"
   },
   "position-sizer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "股票部位計算器",
+   "summary": "依帳戶規模、進場、停損及風險預算計算多方股票部位。",
+   "when_to_use": "需要計算股數、單筆風險、ATR 部位或檢查集中度限制時。",
+   "how_to_start": "提供進場價、停損價、帳戶規模及風險參數；免 API 金鑰。",
+   "cautions": "適用多方股票部位；計算依賴明確停損與風險輸入。"
   },
   "pre-trade-discipline-gate": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易前紀律閘門",
+   "summary": "透過離線檢查清單阻擋無計畫、過大部位、報復性交易或不符合風險限制的進場。",
+   "when_to_use": "人工下單前、近期虧損後，或候選已通過圖表與部位驗證時。",
+   "how_to_start": "提供候選檢查清單 JSON 或 YAML；可附曝險、熔斷判定與 thesis 紀錄。",
+   "cautions": "只做交易前檢查及記錄，不執行訂單。"
   },
   "residual-edge-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "殘差交易優勢分析器",
+   "summary": "用 HAC 迴歸、滾動穩定性、基準敏感度及環境診斷，拆解策略曝險與殘差優勢。",
+   "when_to_use": "需要判斷策略報酬是否主要來自既有基準曝險時。",
+   "how_to_start": "準備同日對齊的策略及基準報酬 CSV，並提供符合契約的 JSON 規格。",
+   "cautions": "必須使用實際期間報酬，不可用其他績效摘要替代。"
   },
   "scenario-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "情境分析器",
+   "summary": "從新聞建立十八個月多種情境，整理一至三階影響，並以另一代理提供第二意見。",
+   "when_to_use": "評估新聞中長期影響、產業連鎖效應或需要第二意見時。",
+   "how_to_start": "提供新聞標題；需 WebSearch、WebFetch 及 scenario-analyst、strategy-reviewer 代理。",
+   "cautions": "情境是條件式分析，不等同已發生的市場結果。"
   },
   "sector-analyst": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "產業輪動分析器",
+   "summary": "利用公開 CSV 分析產業輪動、景氣循環與週期性或防禦性配置脈絡。",
+   "when_to_use": "研究強弱產業、超買超賣、景氣階段或產業篩選時。",
+   "how_to_start": "取得公開 GitHub CSV，可附產業圖表；需 Python 3.9+，免金鑰。",
+   "cautions": "圖表僅補充；避免確認偏誤，原技能分析及 Markdown 報告使用英文。"
   },
   "signal-postmortem": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "訊號事後檢討",
+   "summary": "記錄交易或訊號到期結果，辨識誤判模式並回饋訊號權重與改善清單。",
+   "when_to_use": "交易結束、五日或二十日訊號到期，或檢視技能假陽性時。",
+   "how_to_start": "提供訊號紀錄 JSON；可手動輸入實際報酬，或選用 FMP 金鑰取得資料。",
+   "cautions": "需以實際結果檢討，不應將未到期訊號當作已結案。"
   },
   "skill-designer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "技能設計器",
+   "summary": "將結構化構想規格轉為新 Claude 技能設計提示，支援自動產生流程。",
+   "when_to_use": "從待辦構想建立新技能，或依品質評分規準審查生成結果時。",
+   "how_to_start": "提供構想 JSON，確認 references/ 下的參考檔案存在；免 API 金鑰。",
+   "cautions": "設計提示不是已完成或已驗證的技能。"
   },
   "skill-idea-miner": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "技能構想探勘器",
+   "summary": "從 Claude Code 工作階段日誌擷取可重用技能構想，更新候選待辦。",
+   "when_to_use": "每週自動流程、手動更新構想清單或 dry-run 預覽時。",
+   "how_to_start": "準備 Claude CLI、已登入環境、工作階段日誌及 Python 3.10+、PyYAML。",
+   "cautions": "dry-run 只預覽候選，不執行 LLM 評分。"
   },
   "skill-integration-tester": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "技能整合測試器",
+   "summary": "檢查 CLAUDE.md 定義的多技能流程、JSON 契約、檔名及交接完整性。",
+   "when_to_use": "修改工作流程、輸出格式、發布新技能或排查交接問題時。",
+   "how_to_start": "提供 CLAUDE.md 與技能輸出，使用 Python 3.9+ 標準函式庫。",
+   "cautions": "檢查著重技能間契約及交接相容性。"
   },
   "stanley-druckenmiller-investment": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Druckenmiller 策略整合",
+   "summary": "整合市場廣度、趨勢、頂部風險、總體環境等上游訊號，形成 0–100 信念評分。",
+   "when_to_use": "需要整體市場姿態、統一解讀相互衝突的市場訊號時。",
+   "how_to_start": "提供 reports/ 下五項必要上游 JSON，可加入其他技能報告；本技能免金鑰。",
+   "cautions": "必要報告須存在且在 72 小時內；上游技能可能各自需要金鑰。"
   },
   "stockbee-20pct-study": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Stockbee 20% 漲跌研究",
+   "summary": "建立每日漲跌 20% 事件研究，分類催化因素並追蹤後續結果，輸出研究提示。",
+   "when_to_use": "研究大幅漲跌股票、歷史延續或反轉，以及主題群聚時。",
+   "how_to_start": "使用 FMP 或離線 OHLCV JSON；可補充新聞、環境報告與本機研究資料庫。",
+   "cautions": "大幅漲跌事件僅供研究，不是買賣訊號。"
   },
   "stockbee-episodic-pivot-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Stockbee EP 分析器",
+   "summary": "依催化事件品質、跳空、量能、重估脈絡與風險評估首日 Episodic Pivot 候選。",
+   "when_to_use": "研究財報、財測、併購、FDA、合約或主題消息驅動的 EP 時。",
+   "how_to_start": "提供催化事件 JSON 或財報分析結果；可選 FMP 補充 OHLCV。",
+   "cautions": "不自行搜尋或發掘新聞；須先取得事件脈絡，區分首日與延後觀察候選。"
   },
   "stockbee-exhaustion-hammer-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Stockbee 衰竭錘形篩選",
+   "summary": "依品質、流動性、前期動能、拉回深度、下影線與量能篩選賣壓衰竭型態。",
+   "when_to_use": "研究接近收盤的錘形反轉、跌破後收復及強勢股拉回時。",
+   "how_to_start": "設定 FMP_API_KEY 或提供離線日 OHLCV；盤尾用途需接近收盤的暫定當日 K 棒。",
+   "cautions": "盤尾暫定 K 棒尚未完成；須依市場及風險距離條件篩選。"
   },
   "stockbee-momentum-burst-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Stockbee 動能爆發篩選",
+   "summary": "以 4% 突破、美元幅度突破、振幅與量能擴張篩選三至五日動能型態。",
+   "when_to_use": "研究短期波段突破、每日型態品質或強勢股候選時。",
+   "how_to_start": "設定 FMP_API_KEY，安裝指定交易日曆套件；或提供離線 OHLCV 與歷史 as-of 日期。",
+   "cautions": "歷史資料須指定已完成交易日；候選仍須通過型態及風險條件。"
   },
   "stockbee-setup-fluency-trainer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "Stockbee 型態熟練訓練",
+   "summary": "建立動能型態案例庫，追蹤三日及五日報酬、MFE、MAE、停損與群組統計。",
+   "when_to_use": "複習失敗候選、錯過交易或訓練辨識型態時。",
+   "how_to_start": "提供動能篩選 JSON 與 OHLCV；可選 FMP 更新結果，保存 model_book.jsonl。",
+   "cautions": "盲測回放需收盤後產生的 VCP 報告及離線歷史資料。"
   },
   "strategy-pivot-designer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "策略轉向設計器",
+   "summary": "辨識回測迭代停滯，提出不同策略架構以探索同一市場假說。",
+   "when_to_use": "參數調整停滯、過度擬合、交易成本侵蝕優勢或尾部風險過高時。",
+   "how_to_start": "提供回測迭代歷史 JSON 與原策略草稿 YAML；需 Python、PyYAML。",
+   "cautions": "轉向提案是新研究方向，非已驗證改善。"
   },
   "technical-analyst": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "技術分析師",
+   "summary": "依週線圖表分析趨勢、支撐壓力、可能反轉與情境；另支援逆勢確認模式。",
+   "when_to_use": "提供股票、指數、加密貨幣或外匯週線圖，需客觀技術分析時。",
+   "how_to_start": "提供週線圖表；一般圖表分析免 API 金鑰。",
+   "cautions": "逆勢確認僅提供判定；資料不足不得推進，不能單獨作為交易建議。"
   },
   "theme-detector": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "市場主題偵測器",
+   "summary": "跨產業辨識強弱市場主題、敘事及產業輪動。",
+   "when_to_use": "查詢熱門或降溫主題、產業輪動及主題投資研究對象時。",
+   "how_to_start": "安裝指定套件，使用 FINVIZ 公開或 Elite 模式；可搭配 FMP。",
+   "cautions": "有倖存者偏誤，公開 FINVIZ 可能延遲 15 分鐘；主題分類及 ETF 清單有涵蓋限制。"
   },
   "trade-hypothesis-ideator": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易假說發想器",
+   "summary": "將市場資料、交易紀錄與日誌整理為可否證、具優先順序的策略假說。",
+   "when_to_use": "發現可能優勢、希望把質化觀察轉成量化實驗時。",
+   "how_to_start": "提供含 trade_log、journal_snippets、market_data 或 observations 的 JSON；免金鑰。",
+   "cautions": "假說須能被否證並設有淘汰條件，不等同已證明的策略。"
   },
   "trade-performance-coach": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易績效教練",
+   "summary": "檢討已結案與部分出場交易的流程遵循、風險紀律及執行品質，整理下次操作規則。",
+   "when_to_use": "交易結束、部分出場或月度回顧，需檢查行為及執行品質時。",
+   "how_to_start": "提供 thesis 紀錄、事後檢討、原計畫、實際交易與風險規則；免付費 API。",
+   "cautions": "不得推斷人格或提供心理診斷；行為標記須連結證據，不提供個股交易建議。"
   },
   "trader-memory-core": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易論點記憶核心",
+   "summary": "追蹤投資論點從篩選構想到進場準備、持有、結案與事後檢討的生命週期。",
+   "when_to_use": "篩選後建立論點、附加部位計算、定期複查或結案時。",
+   "how_to_start": "提供篩選報告或交易行動；需 Python 3.10+、PyYAML、jsonschema，可選 FMP 計算 MAE/MFE。",
+   "cautions": "FMP 為選用，僅供事後 MAE/MFE 計算；狀態紀錄須符合資料結構。"
   },
   "trading-skills-navigator": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "交易技能導航器",
+   "summary": "依自然語言交易目標推薦適合的流程、技能組合、API 方案與設定路徑。",
+   "when_to_use": "不知道從何開始，或需要區分免付費 API、初學者與特定交易者路徑時。",
+   "how_to_start": "描述目標及限制；使用本機 skills-index.yaml 與 workflows YAML 或內附快照。",
+   "cautions": "導航器只讀本機中繼資料，不連網；上游技能可能需要各自的 API 金鑰。"
   },
   "uptrend-analyzer": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "上升趨勢廣度分析",
+   "summary": "以 Monty 上升趨勢比例看板資料分析市場及產業參與程度。",
+   "when_to_use": "評估上漲是否廣泛、各產業上升比例或市場廣度時。",
+   "how_to_start": "取得 GitHub 公開 CSV；需 Python 3.9+ 與 requests，免 API 金鑰。",
+   "cautions": "分析依公開 CSV 資料與更新狀況。"
   },
   "us-market-bubble-detector": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "美股泡沫風險偵測",
+   "summary": "依修訂版 Minsky/Kindleberger 架構，以量化指標評估市場泡沫風險。",
+   "when_to_use": "檢視市場泡沫疑慮、IPO 熱潮、媒體狂熱或新技術敘事時。",
+   "how_to_start": "提供實測指標值，或從原文列出的資料來源蒐集；免 API 金鑰。",
+   "cautions": "第一階段須以實測資料為準，不以主觀印象取代指標。"
   },
   "us-stock-analysis": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "美股綜合分析",
+   "summary": "分析美股財務、企業品質、估值、技術指標、圖形與同業比較，整理研究報告。",
+   "when_to_use": "研究單一美股、比較股票或需要基本面與技術面綜合評估時。",
+   "how_to_start": "提供 ticker 或問題，可附財務資料及圖表；需網路搜尋，免 API 金鑰。",
+   "cautions": "市場資料依網路搜尋及提供的資料取得。"
   },
   "value-dividend-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "價值股息篩選器",
+   "summary": "篩選本益比低於 20、股價淨值比低於 2、殖利率至少 3% 且三年成長的美股。",
+   "when_to_use": "尋找估值合理、具股息收入與基本面成長的股票時。",
+   "how_to_start": "設定 FMP_API_KEY；可用 FINVIZ 模式或具股票篩選端點權限的 FMP 方案。",
+   "cautions": "FMP 免費方案不含股票篩選端點；FINVIZ Elite 為建議而非必要。"
   },
   "vcp-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "VCP 篩選器",
+   "summary": "依 Mark Minervini 的波動收縮型態，篩選 S&P 500 的緊密整理及突破候選。",
+   "when_to_use": "研究 VCP、第二階段動能、明確風險的突破候選或歷史型態時。",
+   "how_to_start": "設定 FMP_API_KEY；預設前 100 檔，可指定全 S&P 500 或個股歷史研究。",
+   "cautions": "免費額度適用預設篩選；完整 S&P 500 掃描建議付費方案。"
   },
   "weekly-performance-digest": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "每週績效摘要",
+   "summary": "從已結案交易彙整每週已實現績效、勝率、期望值及來源、出場原因等群組表現。",
+   "when_to_use": "週末回顧交易表現，或準備月度回顧與事後檢討時。",
+   "how_to_start": "提供 trader-memory-core 的 state/theses/ YAML；需 Python 3.9+ 與 PyYAML，免金鑰。",
+   "cautions": "僅彙整已結案交易的已實現績效。"
   },
   "us-undervalued-growth-screener": {
-   "title": null,
-   "summary": null,
-   "when_to_use": null,
-   "how_to_start": null,
-   "cautions": null
+   "title": "美股低估成長篩選器",
+   "summary": "以多路徑篩選、前瞻同口徑估值、FCF、稀釋及嚴格稽核研究低估成長股。",
+   "when_to_use": "尋找美股中小型 GARP 股票，或在財報及重大事件後更新篩選時。",
+   "how_to_start": "設定 FMP_API_KEY 或準備相當市場資料；需可取得 SEC、公司 IR 及官方總體來源。",
+   "cautions": "須核對流動性、估值口徑、股權稀釋與週期因素，通過最終評估及發布前稽核；勿公開金鑰。"
   }
  },
  "workflows": {

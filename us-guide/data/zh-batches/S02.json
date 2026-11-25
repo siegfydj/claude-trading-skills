@@ -1,0 +1,74 @@
+{
+  "skills": {
+    "drawdown-circuit-breaker": {
+      "title": "帳戶回撤熔斷器",
+      "summary": "讀取交易紀錄，依每日虧損、連敗冷卻與週月回撤限制判定是否允許新增風險。",
+      "when_to_use": "篩選或計算新部位前、虧損後或每日檢查風險限制時。",
+      "how_to_start": "提供 trader-memory-core 的本機 thesis YAML 與美元帳戶規模；免 API 金鑰。",
+      "cautions": "判定的是新增交易風險是否允許，而非標的買賣訊號。"
+    },
+    "dual-axis-skill-reviewer": {
+      "title": "雙軸技能審查器",
+      "summary": "結合可重現的程式檢查與 LLM 深度審查，評估技能結構、測試及執行安全。",
+      "when_to_use": "需要技能評分、改善建議或跨專案審查時。",
+      "how_to_start": "提供技能原始碼；使用 Python 3.9+，建議 uv；合併 LLM 結果需符合指定 JSON 結構。",
+      "cautions": "程式檢查與 LLM 審查是不同證據來源，不應混為一談。"
+    },
+    "earnings-calendar": {
+      "title": "財報行事曆",
+      "summary": "透過 FMP 取得美股即將公布的財報日期。",
+      "when_to_use": "查詢近期財報公告或依日期、市值篩選財報事件時。",
+      "how_to_start": "設定 FMP_API_KEY，指定日期範圍與市值條件。",
+      "cautions": "結果依賴 FMP 財報行事曆資料。"
+    },
+    "earnings-trade-analyzer": {
+      "title": "財報交易分析器",
+      "summary": "以跳空幅度、財報前趨勢、成交量趨勢及 MA200、MA50 位置評分財報後股票。",
+      "when_to_use": "篩選近期財報跳空、評估財報反應或尋找 PEAD 候選時。",
+      "how_to_start": "設定 FMP_API_KEY，指定回顧天數與候選數。",
+      "cautions": "免費額度適用預設兩天、前 20 檔；擴大範圍可能需要付費方案。"
+    },
+    "economic-calendar-fetcher": {
+      "title": "經濟行事曆擷取器",
+      "summary": "透過 FMP 取得即將發布的經濟數據與重要事件。",
+      "when_to_use": "查詢 FOMC、CPI、就業、GDP 公布時間或規劃事件風險時。",
+      "how_to_start": "設定 FMP_API_KEY，指定日期範圍；需 Python 3.10+。",
+      "cautions": "資料取決於 FMP 行事曆及 API 額度。"
+    },
+    "edge-candidate-agent": {
+      "title": "交易優勢候選代理",
+      "summary": "將美股多方市場觀察轉為研究工單，排序並匯出符合策略研究管線介面的候選。",
+      "when_to_use": "從收盤資料或異常觀察發掘優勢假說，或準備管線第一階段輸入時。",
+      "how_to_start": "提供 EOD OHLCV 或研究工單；需 Python、PyYAML，驗證時需目標管線專案。",
+      "cautions": "不合風險、出場及條件結構的候選會被拒絕；完整執行前先 dry-run。"
+    },
+    "edge-concept-synthesizer": {
+      "title": "交易優勢概念整合器",
+      "summary": "將原始工單與提示抽象為具論點、失效訊號與策略手冊的可重用概念。",
+      "when_to_use": "大量工單需要依機制整理，或希望在策略草擬前降低過度擬合時。",
+      "how_to_start": "提供 tickets YAML 目錄，可附 hints.yaml；需 Python 與 PyYAML。",
+      "cautions": "概念是研究中介產物，不是已驗證策略。"
+    },
+    "edge-hint-extractor": {
+      "title": "交易優勢提示擷取器",
+      "summary": "從每日市場觀察、異常與消息反應擷取結構化提示，可加入受證據約束的 LLM 發想。",
+      "when_to_use": "需要 hints.yaml 供概念整合或自動候選偵測時。",
+      "how_to_start": "準備 market_summary.json、anomalies.json 或消息反應資料；需 Python 與 PyYAML。",
+      "cautions": "LLM 發想須受當前異常與消息脈絡約束。"
+    },
+    "edge-pipeline-orchestrator": {
+      "title": "交易優勢管線協調器",
+      "summary": "協調候選偵測、概念整理、策略設計、審查、修訂與匯出。",
+      "when_to_use": "執行完整研究流程、接續未完成草稿或預覽匯出結果時。",
+      "how_to_start": "提供工單或 OHLCV 資料，安裝所有相依技能及 PyYAML；免 API 金鑰。",
+      "cautions": "單獨安裝協調器不足以執行；可先 dry-run，不直接匯出。"
+    },
+    "edge-signal-aggregator": {
+      "title": "交易優勢訊號整合器",
+      "summary": "彙整多項優勢研究技能的輸出，加權評分、去重並標示矛盾訊號。",
+      "when_to_use": "整合主題、產業、機構資金與候選研究結果，決定深入研究優先順序時。",
+      "how_to_start": "提供各上游技能的本機 JSON 或 YAML；免 API 金鑰。",
+      "cautions": "加權排序用於整合研究證據，不能忽略不同來源之間的矛盾。"
+    }
+  }
+}

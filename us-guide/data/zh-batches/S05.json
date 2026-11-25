@@ -1,0 +1,67 @@
+{
+  "skills": {
+    "mt5-robot-tester": {
+      "title": "MT5 交易機器人測試器",
+      "summary": "以三輪可續跑的本機流程批次測試 MT5 EA，排序結果並保留參數及商品研究紀錄。",
+      "when_to_use": "評估多個 EA、比較交易商品、最佳化參數或接續中斷測試時。",
+      "how_to_start": "準備 Windows、MetaTrader 5、EA 檔案、經紀商 tick 資料與商品設定。",
+      "cautions": "預設使用真實 tick 模型，測試品質依賴經紀商資料及設定。"
+    },
+    "news-reaction-failure-analyzer": {
+      "title": "消息反應失敗分析器",
+      "summary": "檢驗擁擠投機部位是否未對有利消息產生預期反應，並進行漂移顯著性檢驗。",
+      "when_to_use": "COT 已標示擁擠多方或空方，需進一步確認逆勢條件時。",
+      "how_to_start": "設定 FMP_API_KEY，準備事件 JSON 與 COT 報告；利用 WebSearch 整理事件。",
+      "cautions": "CONFIRMED 僅代表第二步確認；可用事件群聚不足、資料過期或缺漏不得推進。"
+    },
+    "options-strategy-advisor": {
+      "title": "選擇權策略顧問",
+      "summary": "分析選擇權策略、模擬損益與 Greeks，協助比較策略的風險結構。",
+      "when_to_use": "了解 covered call、iron condor、價差策略、損益上限或 Greeks 曝險時。",
+      "how_to_start": "提供標的價格、波動率及策略參數；可選 FMP 金鑰取得資料，需 numpy、scipy、requests。",
+      "cautions": "無 API 時須自行輸入股價及波動率；模擬結果依賴輸入參數。"
+    },
+    "pair-trade-screener": {
+      "title": "配對交易篩選器",
+      "summary": "利用共整合及均值回歸等統計方法，尋找可能的配對交易研究對象。",
+      "when_to_use": "研究市場中性策略、產業避險、相對價值或股票配對時。",
+      "how_to_start": "設定具股票篩選及歷史價格權限的 FMP_API_KEY；準備範圍及回顧期，需 statsmodels。",
+      "cautions": "統計篩選結果是配對研究依據，而非直接交易指令。"
+    },
+    "parabolic-short-trade-planner": {
+      "title": "拋物線放空規劃器",
+      "summary": "篩選急漲衰竭型態，產生有條件的盤前放空計畫，並檢查五分鐘觸發條件。",
+      "when_to_use": "建立放空觀察名單、評估借券、SSR 與盤前風險限制時。",
+      "how_to_start": "設定 FMP_API_KEY；可選 Alpaca 金鑰取得即時借券及五分鐘資料。",
+      "cautions": "無 Alpaca 時需人工確認並標記 watch_only；不適用一分鐘以下盤中訊號或多方篩選。"
+    },
+    "pead-screener": {
+      "title": "PEAD 財報漂移篩選器",
+      "summary": "篩選財報跳空上漲後的延續型態與週線動能。",
+      "when_to_use": "研究財報後漂移、下跌 K 棒突破型態，或深入分析財報交易候選時。",
+      "how_to_start": "準備 earnings-trade-analyzer JSON 或財報候選清單及週線 OHLCV；設定 FMP_API_KEY。",
+      "cautions": "聚焦財報後延續型態，並非所有財報跳空股票。"
+    },
+    "portfolio-manager": {
+      "title": "投資組合管理器",
+      "summary": "分析持倉配置、風險、個股部位與分散程度，整理再平衡分析。",
+      "when_to_use": "檢視目前持股、組合風險、資產分配或績效時。",
+      "how_to_start": "使用 Alpaca MCP 取得持倉，或提供本機持倉快照。",
+      "cautions": "資料準確性依賴 Alpaca 及第三方來源；分析僅供資訊參考，過往績效不保證未來結果。"
+    },
+    "position-sizer": {
+      "title": "股票部位計算器",
+      "summary": "依帳戶規模、進場、停損及風險預算計算多方股票部位。",
+      "when_to_use": "需要計算股數、單筆風險、ATR 部位或檢查集中度限制時。",
+      "how_to_start": "提供進場價、停損價、帳戶規模及風險參數；免 API 金鑰。",
+      "cautions": "適用多方股票部位；計算依賴明確停損與風險輸入。"
+    },
+    "pre-trade-discipline-gate": {
+      "title": "交易前紀律閘門",
+      "summary": "透過離線檢查清單阻擋無計畫、過大部位、報復性交易或不符合風險限制的進場。",
+      "when_to_use": "人工下單前、近期虧損後，或候選已通過圖表與部位驗證時。",
+      "how_to_start": "提供候選檢查清單 JSON 或 YAML；可附曝險、熔斷判定與 thesis 紀錄。",
+      "cautions": "只做交易前檢查及記錄，不執行訂單。"
+    }
+  }
+}
