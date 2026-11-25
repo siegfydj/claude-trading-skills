@@ -1,0 +1,67 @@
+{
+  "skills": {
+    "edge-strategy-designer": {
+      "title": "交易優勢策略設計器",
+      "summary": "將抽象優勢概念轉為核心、保守及研究探索等策略草稿。",
+      "when_to_use": "已有概念 YAML，需設計多種策略變體或匯出研究工單時。",
+      "how_to_start": "提供 edge_concepts.yaml；需 Python 3.9+ 與 PyYAML。",
+      "cautions": "輸出仍為策略草稿，須經後續審查。"
+    },
+    "edge-strategy-reviewer": {
+      "title": "交易優勢策略審查器",
+      "summary": "審查草稿的優勢合理性、過度擬合風險、樣本充足度及執行可行性。",
+      "when_to_use": "策略設計完成後、匯出至候選代理前，或手動驗證草稿時。",
+      "how_to_start": "提供 strategy_drafts YAML；需 Python 3.10+ 與 PyYAML。",
+      "cautions": "草稿審查著重合理性及風險，不能取代實際策略驗證。"
+    },
+    "exposure-coach": {
+      "title": "曝險教練",
+      "summary": "整合廣度、趨勢、風險及資金流訊號，產出曝險上限與市場配置摘要。",
+      "when_to_use": "每週開始、新增股票部位前、訊號衝突或市場環境轉變時。",
+      "how_to_start": "提供上游市場分析 JSON；機構資金流資料需 FMP_API_KEY。",
+      "cautions": "依上游訊號整合市場姿態，不是個股交易訊號。"
+    },
+    "finviz-screener": {
+      "title": "FINVIZ 篩選器",
+      "summary": "將自然語言股票條件轉為 FINVIZ 篩選網址並開啟瀏覽器。",
+      "when_to_use": "想依基本面、技術面、市值、產業或內部人交易條件篩選股票時。",
+      "how_to_start": "輸入自然語言條件；公開版免金鑰，可選 FINVIZ Elite，或用 --url-only。",
+      "cautions": "用於建立篩選條件，不是深入個股基本面分析。"
+    },
+    "ftd-detector": {
+      "title": "FTD 底部確認偵測器",
+      "summary": "依 O'Neil 方法追蹤 S&P 500 與 NASDAQ 的反彈嘗試、FTD 及後續健康度。",
+      "when_to_use": "市場修正後評估反彈是否持續，或查詢底部確認與恢復曝險的條件時。",
+      "how_to_start": "設定 FMP_API_KEY，使用 Python 3.9+ 與 requests 取得指數資料。",
+      "cautions": "端點權限依 FMP 方案而異；重試會增加 API 呼叫次數。"
+    },
+    "futures-position-sizer": {
+      "title": "期貨部位計算器",
+      "summary": "依方向、進場、停損與合約乘數、跳動單位計算風險限制內的期貨口數。",
+      "when_to_use": "已知期貨進場與停損，或逆勢閘門達 READY_FOR_PLAN 時。",
+      "how_to_start": "提供標的、方向、進場、停損、帳戶規模及風險比例；免 API 金鑰。",
+      "cautions": "沒有明確停損不得計算；口數一律無條件捨去，表外合約須提供完整規格。"
+    },
+    "fxmacrodata-calendar": {
+      "title": "FXMacroData 行事曆",
+      "summary": "取得官方來源的總體經濟公布行事曆，供事件風險規劃。",
+      "when_to_use": "CPI、NFP、GDP、PCE、PMI 或央行決策公布前。",
+      "how_to_start": "指定幣別與事件等級；公開 USD 資料免金鑰，驗證端點可設定 FXMACRODATA_API_KEY。",
+      "cautions": "公開免金鑰範圍限於 USD 行事曆資料。"
+    },
+    "ibd-distribution-day-monitor": {
+      "title": "IBD 出貨日監控",
+      "summary": "辨識 QQQ、SPY 放量下跌的出貨日，追蹤有效期限、群聚及市場風險等級。",
+      "when_to_use": "美股收盤後、調整 TQQQ 曝險前，或作為 FTD 與市場狀態分析輸入時。",
+      "how_to_start": "設定 FMP_API_KEY，取得 QQQ、SPY OHLCV；可指定回顧期與日期。",
+      "cautions": "不執行交易或修改訂單，也不產生超出 IBD 規則的主觀預測。"
+    },
+    "institutional-flow-tracker": {
+      "title": "機構資金流追蹤器",
+      "summary": "以 13F 申報資料追蹤機構持股變化、累積與減碼。",
+      "when_to_use": "驗證投資論點、追蹤特定基金或觀察產業輪動與持股風險時。",
+      "how_to_start": "設定 FMP_API_KEY，指定基金或持股範圍；需 Python 3.9+ 與 requests。",
+      "cautions": "13F 最多延遲 45 天，僅為季末申報快照，不含空方等完整曝險，非即時訊號。"
+    }
+  }
+}

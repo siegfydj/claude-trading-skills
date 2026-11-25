@@ -1,0 +1,67 @@
+{
+  "skills": {
+    "stockbee-episodic-pivot-analyzer": {
+      "title": "Stockbee EP 分析器",
+      "summary": "依催化事件品質、跳空、量能、重估脈絡與風險評估首日 Episodic Pivot 候選。",
+      "when_to_use": "研究財報、財測、併購、FDA、合約或主題消息驅動的 EP 時。",
+      "how_to_start": "提供催化事件 JSON 或財報分析結果；可選 FMP 補充 OHLCV。",
+      "cautions": "不自行搜尋或發掘新聞；須先取得事件脈絡，區分首日與延後觀察候選。"
+    },
+    "stockbee-exhaustion-hammer-screener": {
+      "title": "Stockbee 衰竭錘形篩選",
+      "summary": "依品質、流動性、前期動能、拉回深度、下影線與量能篩選賣壓衰竭型態。",
+      "when_to_use": "研究接近收盤的錘形反轉、跌破後收復及強勢股拉回時。",
+      "how_to_start": "設定 FMP_API_KEY 或提供離線日 OHLCV；盤尾用途需接近收盤的暫定當日 K 棒。",
+      "cautions": "盤尾暫定 K 棒尚未完成；須依市場及風險距離條件篩選。"
+    },
+    "stockbee-momentum-burst-screener": {
+      "title": "Stockbee 動能爆發篩選",
+      "summary": "以 4% 突破、美元幅度突破、振幅與量能擴張篩選三至五日動能型態。",
+      "when_to_use": "研究短期波段突破、每日型態品質或強勢股候選時。",
+      "how_to_start": "設定 FMP_API_KEY，安裝指定交易日曆套件；或提供離線 OHLCV 與歷史 as-of 日期。",
+      "cautions": "歷史資料須指定已完成交易日；候選仍須通過型態及風險條件。"
+    },
+    "stockbee-setup-fluency-trainer": {
+      "title": "Stockbee 型態熟練訓練",
+      "summary": "建立動能型態案例庫，追蹤三日及五日報酬、MFE、MAE、停損與群組統計。",
+      "when_to_use": "複習失敗候選、錯過交易或訓練辨識型態時。",
+      "how_to_start": "提供動能篩選 JSON 與 OHLCV；可選 FMP 更新結果，保存 model_book.jsonl。",
+      "cautions": "盲測回放需收盤後產生的 VCP 報告及離線歷史資料。"
+    },
+    "strategy-pivot-designer": {
+      "title": "策略轉向設計器",
+      "summary": "辨識回測迭代停滯，提出不同策略架構以探索同一市場假說。",
+      "when_to_use": "參數調整停滯、過度擬合、交易成本侵蝕優勢或尾部風險過高時。",
+      "how_to_start": "提供回測迭代歷史 JSON 與原策略草稿 YAML；需 Python、PyYAML。",
+      "cautions": "轉向提案是新研究方向，非已驗證改善。"
+    },
+    "technical-analyst": {
+      "title": "技術分析師",
+      "summary": "依週線圖表分析趨勢、支撐壓力、可能反轉與情境；另支援逆勢確認模式。",
+      "when_to_use": "提供股票、指數、加密貨幣或外匯週線圖，需客觀技術分析時。",
+      "how_to_start": "提供週線圖表；一般圖表分析免 API 金鑰。",
+      "cautions": "逆勢確認僅提供判定；資料不足不得推進，不能單獨作為交易建議。"
+    },
+    "theme-detector": {
+      "title": "市場主題偵測器",
+      "summary": "跨產業辨識強弱市場主題、敘事及產業輪動。",
+      "when_to_use": "查詢熱門或降溫主題、產業輪動及主題投資研究對象時。",
+      "how_to_start": "安裝指定套件，使用 FINVIZ 公開或 Elite 模式；可搭配 FMP。",
+      "cautions": "有倖存者偏誤，公開 FINVIZ 可能延遲 15 分鐘；主題分類及 ETF 清單有涵蓋限制。"
+    },
+    "trade-hypothesis-ideator": {
+      "title": "交易假說發想器",
+      "summary": "將市場資料、交易紀錄與日誌整理為可否證、具優先順序的策略假說。",
+      "when_to_use": "發現可能優勢、希望把質化觀察轉成量化實驗時。",
+      "how_to_start": "提供含 trade_log、journal_snippets、market_data 或 observations 的 JSON；免金鑰。",
+      "cautions": "假說須能被否證並設有淘汰條件，不等同已證明的策略。"
+    },
+    "trade-performance-coach": {
+      "title": "交易績效教練",
+      "summary": "檢討已結案與部分出場交易的流程遵循、風險紀律及執行品質，整理下次操作規則。",
+      "when_to_use": "交易結束、部分出場或月度回顧，需檢查行為及執行品質時。",
+      "how_to_start": "提供 thesis 紀錄、事後檢討、原計畫、實際交易與風險規則；免付費 API。",
+      "cautions": "不得推斷人格或提供心理診斷；行為標記須連結證據，不提供個股交易建議。"
+    }
+  }
+}

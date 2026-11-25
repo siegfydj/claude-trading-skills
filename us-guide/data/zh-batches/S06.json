@@ -1,0 +1,67 @@
+{
+  "skills": {
+    "residual-edge-analyzer": {
+      "title": "殘差交易優勢分析器",
+      "summary": "用 HAC 迴歸、滾動穩定性、基準敏感度及環境診斷，拆解策略曝險與殘差優勢。",
+      "when_to_use": "需要判斷策略報酬是否主要來自既有基準曝險時。",
+      "how_to_start": "準備同日對齊的策略及基準報酬 CSV，並提供符合契約的 JSON 規格。",
+      "cautions": "必須使用實際期間報酬，不可用其他績效摘要替代。"
+    },
+    "scenario-analyzer": {
+      "title": "情境分析器",
+      "summary": "從新聞建立十八個月多種情境，整理一至三階影響，並以另一代理提供第二意見。",
+      "when_to_use": "評估新聞中長期影響、產業連鎖效應或需要第二意見時。",
+      "how_to_start": "提供新聞標題；需 WebSearch、WebFetch 及 scenario-analyst、strategy-reviewer 代理。",
+      "cautions": "情境是條件式分析，不等同已發生的市場結果。"
+    },
+    "sector-analyst": {
+      "title": "產業輪動分析器",
+      "summary": "利用公開 CSV 分析產業輪動、景氣循環與週期性或防禦性配置脈絡。",
+      "when_to_use": "研究強弱產業、超買超賣、景氣階段或產業篩選時。",
+      "how_to_start": "取得公開 GitHub CSV，可附產業圖表；需 Python 3.9+，免金鑰。",
+      "cautions": "圖表僅補充；避免確認偏誤，原技能分析及 Markdown 報告使用英文。"
+    },
+    "signal-postmortem": {
+      "title": "訊號事後檢討",
+      "summary": "記錄交易或訊號到期結果，辨識誤判模式並回饋訊號權重與改善清單。",
+      "when_to_use": "交易結束、五日或二十日訊號到期，或檢視技能假陽性時。",
+      "how_to_start": "提供訊號紀錄 JSON；可手動輸入實際報酬，或選用 FMP 金鑰取得資料。",
+      "cautions": "需以實際結果檢討，不應將未到期訊號當作已結案。"
+    },
+    "skill-designer": {
+      "title": "技能設計器",
+      "summary": "將結構化構想規格轉為新 Claude 技能設計提示，支援自動產生流程。",
+      "when_to_use": "從待辦構想建立新技能，或依品質評分規準審查生成結果時。",
+      "how_to_start": "提供構想 JSON，確認 references/ 下的參考檔案存在；免 API 金鑰。",
+      "cautions": "設計提示不是已完成或已驗證的技能。"
+    },
+    "skill-idea-miner": {
+      "title": "技能構想探勘器",
+      "summary": "從 Claude Code 工作階段日誌擷取可重用技能構想，更新候選待辦。",
+      "when_to_use": "每週自動流程、手動更新構想清單或 dry-run 預覽時。",
+      "how_to_start": "準備 Claude CLI、已登入環境、工作階段日誌及 Python 3.10+、PyYAML。",
+      "cautions": "dry-run 只預覽候選，不執行 LLM 評分。"
+    },
+    "skill-integration-tester": {
+      "title": "技能整合測試器",
+      "summary": "檢查 CLAUDE.md 定義的多技能流程、JSON 契約、檔名及交接完整性。",
+      "when_to_use": "修改工作流程、輸出格式、發布新技能或排查交接問題時。",
+      "how_to_start": "提供 CLAUDE.md 與技能輸出，使用 Python 3.9+ 標準函式庫。",
+      "cautions": "檢查著重技能間契約及交接相容性。"
+    },
+    "stanley-druckenmiller-investment": {
+      "title": "Druckenmiller 策略整合",
+      "summary": "整合市場廣度、趨勢、頂部風險、總體環境等上游訊號，形成 0–100 信念評分。",
+      "when_to_use": "需要整體市場姿態、統一解讀相互衝突的市場訊號時。",
+      "how_to_start": "提供 reports/ 下五項必要上游 JSON，可加入其他技能報告；本技能免金鑰。",
+      "cautions": "必要報告須存在且在 72 小時內；上游技能可能各自需要金鑰。"
+    },
+    "stockbee-20pct-study": {
+      "title": "Stockbee 20% 漲跌研究",
+      "summary": "建立每日漲跌 20% 事件研究，分類催化因素並追蹤後續結果，輸出研究提示。",
+      "when_to_use": "研究大幅漲跌股票、歷史延續或反轉，以及主題群聚時。",
+      "how_to_start": "使用 FMP 或離線 OHLCV JSON；可補充新聞、環境報告與本機研究資料庫。",
+      "cautions": "大幅漲跌事件僅供研究，不是買賣訊號。"
+    }
+  }
+}

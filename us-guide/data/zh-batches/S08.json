@@ -1,0 +1,67 @@
+{
+  "skills": {
+    "trader-memory-core": {
+      "title": "交易論點記憶核心",
+      "summary": "追蹤投資論點從篩選構想到進場準備、持有、結案與事後檢討的生命週期。",
+      "when_to_use": "篩選後建立論點、附加部位計算、定期複查或結案時。",
+      "how_to_start": "提供篩選報告或交易行動；需 Python 3.10+、PyYAML、jsonschema，可選 FMP 計算 MAE/MFE。",
+      "cautions": "FMP 為選用，僅供事後 MAE/MFE 計算；狀態紀錄須符合資料結構。"
+    },
+    "trading-skills-navigator": {
+      "title": "交易技能導航器",
+      "summary": "依自然語言交易目標推薦適合的流程、技能組合、API 方案與設定路徑。",
+      "when_to_use": "不知道從何開始，或需要區分免付費 API、初學者與特定交易者路徑時。",
+      "how_to_start": "描述目標及限制；使用本機 skills-index.yaml 與 workflows YAML 或內附快照。",
+      "cautions": "導航器只讀本機中繼資料，不連網；上游技能可能需要各自的 API 金鑰。"
+    },
+    "uptrend-analyzer": {
+      "title": "上升趨勢廣度分析",
+      "summary": "以 Monty 上升趨勢比例看板資料分析市場及產業參與程度。",
+      "when_to_use": "評估上漲是否廣泛、各產業上升比例或市場廣度時。",
+      "how_to_start": "取得 GitHub 公開 CSV；需 Python 3.9+ 與 requests，免 API 金鑰。",
+      "cautions": "分析依公開 CSV 資料與更新狀況。"
+    },
+    "us-market-bubble-detector": {
+      "title": "美股泡沫風險偵測",
+      "summary": "依修訂版 Minsky/Kindleberger 架構，以量化指標評估市場泡沫風險。",
+      "when_to_use": "檢視市場泡沫疑慮、IPO 熱潮、媒體狂熱或新技術敘事時。",
+      "how_to_start": "提供實測指標值，或從原文列出的資料來源蒐集；免 API 金鑰。",
+      "cautions": "第一階段須以實測資料為準，不以主觀印象取代指標。"
+    },
+    "us-stock-analysis": {
+      "title": "美股綜合分析",
+      "summary": "分析美股財務、企業品質、估值、技術指標、圖形與同業比較，整理研究報告。",
+      "when_to_use": "研究單一美股、比較股票或需要基本面與技術面綜合評估時。",
+      "how_to_start": "提供 ticker 或問題，可附財務資料及圖表；需網路搜尋，免 API 金鑰。",
+      "cautions": "市場資料依網路搜尋及提供的資料取得。"
+    },
+    "us-undervalued-growth-screener": {
+      "title": "美股低估成長篩選器",
+      "summary": "以多路徑篩選、前瞻同口徑估值、FCF、稀釋及嚴格稽核研究低估成長股。",
+      "when_to_use": "尋找美股中小型 GARP 股票，或在財報及重大事件後更新篩選時。",
+      "how_to_start": "設定 FMP_API_KEY 或準備相當市場資料；需可取得 SEC、公司 IR 及官方總體來源。",
+      "cautions": "須核對流動性、估值口徑、股權稀釋與週期因素，通過最終評估及發布前稽核；勿公開金鑰。"
+    },
+    "value-dividend-screener": {
+      "title": "價值股息篩選器",
+      "summary": "篩選本益比低於 20、股價淨值比低於 2、殖利率至少 3% 且三年成長的美股。",
+      "when_to_use": "尋找估值合理、具股息收入與基本面成長的股票時。",
+      "how_to_start": "設定 FMP_API_KEY；可用 FINVIZ 模式或具股票篩選端點權限的 FMP 方案。",
+      "cautions": "FMP 免費方案不含股票篩選端點；FINVIZ Elite 為建議而非必要。"
+    },
+    "vcp-screener": {
+      "title": "VCP 篩選器",
+      "summary": "依 Mark Minervini 的波動收縮型態，篩選 S&P 500 的緊密整理及突破候選。",
+      "when_to_use": "研究 VCP、第二階段動能、明確風險的突破候選或歷史型態時。",
+      "how_to_start": "設定 FMP_API_KEY；預設前 100 檔，可指定全 S&P 500 或個股歷史研究。",
+      "cautions": "免費額度適用預設篩選；完整 S&P 500 掃描建議付費方案。"
+    },
+    "weekly-performance-digest": {
+      "title": "每週績效摘要",
+      "summary": "從已結案交易彙整每週已實現績效、勝率、期望值及來源、出場原因等群組表現。",
+      "when_to_use": "週末回顧交易表現，或準備月度回顧與事後檢討時。",
+      "how_to_start": "提供 trader-memory-core 的 state/theses/ YAML；需 Python 3.9+ 與 PyYAML，免金鑰。",
+      "cautions": "僅彙整已結案交易的已實現績效。"
+    }
+  }
+}

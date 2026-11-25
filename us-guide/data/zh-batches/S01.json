@@ -1,0 +1,74 @@
+{
+  "skills": {
+    "backtest-expert": {
+      "title": "回測專家",
+      "summary": "以系統化回測、參數敏感度、交易摩擦與樣本外驗證評估策略穩健性。",
+      "when_to_use": "開發或驗證量化策略、排查回測偏誤，或評估滑價與不同市場環境的影響時。",
+      "how_to_start": "提供明確交易規則、歷史資料與績效指標；評估腳本需 Python 3.9+，免 API 金鑰。",
+      "cautions": "避免過度擬合、前視及倖存者偏誤；高分不能覆蓋樣本不足、負期望值或缺乏摩擦驗證等阻擋條件。"
+    },
+    "breadth-chart-analyst": {
+      "title": "市場廣度圖表分析",
+      "summary": "結合 S&P 500 廣度指數及美股上升趨勢比例，評估中期環境與短期時機。",
+      "when_to_use": "想了解市場參與程度、整體健康度，或分析相關廣度圖表時。",
+      "how_to_start": "取得公開 GitHub Pages CSV；可附圖表補充，免 API 金鑰。",
+      "cautions": "CSV 是主要依據，圖表僅供補充；原技能分析與報告使用英文。"
+    },
+    "breakout-trade-planner": {
+      "title": "突破交易規劃器",
+      "summary": "依 VCP 候選產生突破計畫，計算最壞情境風險、部位及投資組合風險，提供 Alpaca 訂單範本。",
+      "when_to_use": "已有 VCP 篩選結果，需要突破進場、停損、目標或部位規劃時。",
+      "how_to_start": "提供 schema_version 為 1.0 的 VCP JSON 與帳戶規模；本機計算免 API 金鑰。",
+      "cautions": "訂單範本不代表成交；須考量最壞情境風險及整體部位風險。"
+    },
+    "canslim-screener": {
+      "title": "CANSLIM 篩選器",
+      "summary": "依 William O'Neil 的 CANSLIM 方法，篩選基本面與動能兼具的美股成長股。",
+      "when_to_use": "尋找獲利加速、接近 52 週高點或具成長動能的股票時。",
+      "how_to_start": "設定 FMP_API_KEY，提供篩選範圍；使用 Python 3.9+ 及指定套件。",
+      "cautions": "免費 FMP 額度約可分析 35 檔；較大範圍需要相應付費方案。"
+    },
+    "contrarian-setup-gate": {
+      "title": "逆勢交易確認閘門",
+      "summary": "整合 COT 擁擠、消息反應失敗及週線價格確認，以狀態機判定逆勢條件。",
+      "when_to_use": "完成 COT 篩選後，檢查後續證據是否足以進入部位規劃時。",
+      "how_to_start": "提供同一標的 COT JSON，可追加消息反應與價格確認報告；免 API 金鑰。",
+      "cautions": "過期、缺漏、格式錯誤或標的不符的資料不得通過；READY_FOR_PLAN 不代表下單訊號。"
+    },
+    "cot-contrarian-detector": {
+      "title": "COT 逆勢擁擠偵測",
+      "summary": "依 CFTC COT 報告辨識期貨市場大型投機者的極端擁擠部位。",
+      "when_to_use": "尋找逆勢期貨研究對象、查看投機者持倉偏向或擁擠市場時。",
+      "how_to_start": "設定 FMP_API_KEY；COT 端點需 Premium+ 方案，選擇市場或核心清單。",
+      "cautions": "COT 資料落後約 3–9 天；擁擠只是前提，仍需消息反應與價格確認。"
+    },
+    "crypto-regime-analyzer": {
+      "title": "加密市場環境分析",
+      "summary": "以六項成分合成 0–100 分，量化加密市場風險偏好與健康程度。",
+      "when_to_use": "檢查加密市場風險偏好、BTC 市占、山寨幣環境或資金費率時。",
+      "how_to_start": "使用 CoinGecko 與 Binance 公開資料，或提供離線 JSON；免 API 金鑰。",
+      "cautions": "市占歷史需累積 31 筆日資料；資金費率可能因地區或服務限制而缺漏。"
+    },
+    "data-quality-checker": {
+      "title": "資料品質檢查器",
+      "summary": "在發布市場分析或文章前，檢查金融資料與文件內容的一致性。",
+      "when_to_use": "發布週報、自動市場摘要、翻譯文件或整合多來源金融資料前。",
+      "how_to_start": "提供 Markdown 文件，使用 Python 3.9+ 標準函式庫；免 API 金鑰。",
+      "cautions": "檢查範圍限於文件資料品質。"
+    },
+    "dividend-growth-pullback-screener": {
+      "title": "股息成長拉回篩選器",
+      "summary": "篩選年股息成長率至少 12%、殖利率至少 1.5% 且 RSI 不高於 40 的股票。",
+      "when_to_use": "尋找股息高成長、短期拉回且著重長期總報酬的標的時。",
+      "how_to_start": "設定 FMP_API_KEY；可搭配 FINVIZ，或使用含股票篩選端點的 FMP 方案。",
+      "cautions": "不適合追求高當期股息收入者；FMP 免費方案不含股票篩選端點。"
+    },
+    "downtrend-duration-analyzer": {
+      "title": "下跌期間分析器",
+      "summary": "統計歷史下跌期間，依產業及市值產生互動式 HTML 分布圖。",
+      "when_to_use": "研究修正與復原所需時間、比較產業或制定持有期間限制時。",
+      "how_to_start": "設定 FMP_API_KEY，提供篩選範圍及歷史日期；需 requests、pandas、numpy。",
+      "cautions": "僅支援指定 stable 端點，無舊版 v3 備援；空白或異常歷史資料須留意。"
+    }
+  }
+}
