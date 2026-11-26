@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>部位試算（離線版）— 美股 Skill 閱讀指南</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2330;--mute:#5d6676;--line:#d9dde4;--accent:#2457c5;--warn:#9a5b00;--warnbg:#fff4de;--okbg:#eef3ff}
+@media (prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2027;--ink:#e6e9ef;--mute:#9aa3b2;--line:#2f3541;--accent:#7aa2ff;--warn:#ffcf70;--warnbg:#3a2f16;--okbg:#1e2740}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:3px}
+input[type=text],select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=text]:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
+.hint{font-size:12px;color:var(--mute);margin-top:2px}
+.methods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.methods label{display:flex;align-items:center;gap:6px;margin:0;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink);cursor:pointer;font-size:14px}
+.methods input{margin:0}
+.methods label.on{border-color:var(--accent);background:var(--okbg)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+button{font:inherit;padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:6px 0 10px}
+.stat{background:var(--okbg);border-radius:8px;padding:10px 12px}
+.stat .k{font-size:12px;color:var(--mute)}
+.stat .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.note{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:14px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;font-variant-numeric:tabular-nums}
+th{color:var(--mute);font-weight:500}
+details{margin-top:8px}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;font-size:12px}
+.foot{font-size:13px;color:var(--mute)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<h1>部位試算（離線版）</h1>
+<p class="sub">把「願意賠多少」換算成股數。純計算，不連網、不需要金鑰；多單（做多）專用。</p>
+
+<div class="card">
+  <div class="methods" id="methods" role="radiogroup" aria-label="試算方式">
+    <label class="on"><input type="radio" name="method" value="ff" checked> 固定風險＋停損價</label>
+    <label><input type="radio" name="method" value="atr"> 固定風險＋ATR 停損</label>
+    <label><input type="radio" name="method" value="kelly"> Kelly 風險預算</label>
+  </div>
+
+  <div class="grid">
+    <div><label for="account_size">帳戶總值（美元）</label><input type="text" id="account_size" inputmode="decimal" placeholder="100000"></div>
+    <div id="f_entry"><label for="entry_price">進場價 <span id="entry_opt"></span></label><input type="text" id="entry_price" inputmode="decimal" placeholder="155.00"></div>
+    <div id="f_stop"><label for="stop_price">停損價 <span id="stop_opt"></span></label><input type="text" id="stop_price" inputmode="decimal" placeholder="148.50"><div class="hint">必須低於進場價</div></div>
+    <div id="f_risk"><label for="risk_pct">每筆願意承擔的風險（帳戶的 %）</label><input type="text" id="risk_pct" inputmode="decimal" placeholder="1.0"></div>
+    <div id="f_atr"><label for="atr">ATR（平均真實波幅，美元）</label><input type="text" id="atr" inputmode="decimal" placeholder="3.20"></div>
+    <div id="f_mult"><label for="atr_multiplier">ATR 倍數</label><input type="text" id="atr_multiplier" inputmode="decimal" placeholder="2.0"><div class="hint">停損價 ＝ 進場價 − ATR × 倍數；空白用 2.0</div></div>
+    <div id="f_win"><label for="win_rate_pct">歷史勝率（%，0～100 之間，不含 0 與 100）</label><input type="text" id="win_rate_pct" inputmode="decimal" placeholder="55"></div>
+    <div id="f_avgwin"><label for="avg_win">平均獲利</label><input type="text" id="avg_win" inputmode="decimal" placeholder="2.5"></div>
+    <div id="f_avgloss"><label for="avg_loss">平均虧損</label><input type="text" id="avg_loss" inputmode="decimal" placeholder="1.0"><div class="hint">平均獲利與平均虧損單位要相同（元或 R 倍數都可以）</div></div>
+  </div>
+
+  <details style="margin-top:12px">
+    <summary>部位上限與碎股（選填）</summary>
+    <div class="grid" style="margin-top:10px">
+      <div><label for="max_position_pct">單一部位上限（帳戶的 %）</label><input type="text" id="max_position_pct" inputmode="decimal" placeholder="10"></div>
+      <div><label for="max_sector_pct">單一產業上限（帳戶的 %）</label><input type="text" id="max_sector_pct" inputmode="decimal" placeholder="30"></div>
+      <div><label for="current_sector_exposure">該產業目前已佔（帳戶的 %）</label><input type="text" id="current_sector_exposure" inputmode="decimal" placeholder="0"></div>
+      <div><label for="fractional">碎股</label>
+        <select id="fractional"><option value="0">不用（整股，無條件捨去）</option><option value="1">可以（往下取到指定小數位）</option></select></div>
+      <div id="f_prec" hidden><label for="share_precision">碎股小數位數（0～8）</label><input type="text" id="share_precision" inputmode="numeric" placeholder="4"></div>
+    </div>
+  </details>
+
+  <div class="row">
+    <button id="btn_example" type="button">載入範例</button>
+    <button id="btn_clear" type="button">清除</button>
+  </div>
+</div>
+
+<div id="out" class="card" aria-live="polite"></div>
+
+<div class="card foot">
+  <p><strong>這是什麼：</strong>依你輸入的風險上限換算股數的數學試算，不是買賣或部位建議；輸入、停損與市場價格都由你負責。資訊整理，非投資建議。</p>
+  <p><strong>怎麼確認算對：</strong>計算核心 <code>position_sizer.js</code> 是上游 <code>skills/position-sizer/scripts/position_sizer.py</code> 的移植，股數與金額用精確小數運算（和 Python 的 Decimal 相同），並用測試和上游腳本逐組比對（邊界案例加數千組隨機輸入，結果與錯誤訊息都要完全相同）。上游改了計算規則，測試會失敗。</p>
+  <p><strong>限制：</strong>只做多單；不含手續費、滑價、跳空風險；未考慮整體帳戶的相關性與其他持股。</p>
+</div>
+</main>
+
+<script src="position_sizer.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var METHOD_FIELDS = {
+    ff: ['f_stop', 'f_risk'],
+    atr: ['f_atr', 'f_mult', 'f_risk'],
+    kelly: ['f_win', 'f_avgwin', 'f_avgloss', 'f_stop']
+  };
+  var ALL_METHOD_FIELDS = ['f_stop', 'f_risk', 'f_atr', 'f_mult', 'f_win', 'f_avgwin', 'f_avgloss'];
+  var EXAMPLES = {
+    ff: { account_size: '100000', entry_price: '155', stop_price: '148.5', risk_pct: '1', max_position_pct: '10', max_sector_pct: '30', current_sector_exposure: '22' },
+    atr: { account_size: '100000', entry_price: '155', atr: '3.2', atr_multiplier: '2', risk_pct: '1' },
+    kelly: { account_size: '100000', win_rate_pct: '55', avg_win: '2.5', avg_loss: '1' }
+  };
+  var ZH = {
+    'account_size must be positive': '帳戶總值必須大於 0',
+    'entry_price must be positive': '進場價必須大於 0',
+    'stop_price must be positive (and below entry_price) for long trades': '停損價必須大於 0，且多單的停損價要低於進場價',
+    'stop_price must be below entry_price for long trades': '多單的停損價必須低於進場價',
+    'risk_pct must be positive': '風險 % 必須大於 0',
+    'atr must be positive': 'ATR 必須大於 0',
+    'atr_multiplier must be finite and positive': 'ATR 倍數必須是大於 0 的數字',
+    'win_rate must be between 0 and 1 (exclusive)': '勝率必須介於 0% 與 100% 之間（不含 0 與 100）',
+    'avg_win must be positive': '平均獲利必須大於 0',
+    'avg_loss must be positive': '平均虧損必須大於 0',
+    'share_precision must be between 0 and 8': '碎股小數位數必須介於 0 到 8',
+    'ATR-derived stop price must be positive and below entry price': 'ATR 算出的停損價必須大於 0 且低於進場價（ATR × 倍數太大或太小）',
+    'Risk-pct mode requires --entry': '請輸入進場價',
+    'Risk-pct mode requires either --stop or --atr': '請輸入停損價或 ATR',
+    'Kelly mode requires --win-rate, --avg-win, and --avg-loss': 'Kelly 需要勝率、平均獲利與平均虧損三個數字',
+    'Must specify either --risk-pct or --win-rate mode': '請輸入風險 % 或勝率'
+  };
+  var FIELD_ZH = { account_size: '帳戶總值', entry_price: '進場價', stop_price: '停損價', risk_pct: '風險 %', atr: 'ATR', atr_multiplier: 'ATR 倍數', win_rate: '勝率', avg_win: '平均獲利', avg_loss: '平均虧損', max_position_pct: '單一部位上限', max_sector_pct: '單一產業上限', current_sector_exposure: '產業目前占比', share_precision: '碎股小數位數' };
+
+  function method() { return document.querySelector('input[name=method]:checked').value; }
+
+  function text(id) { return $(id).value.replace(/[,\s]/g, ''); }
+  function parseNum(id, label) {
+    var s = text(id);
+    if (s === '') return null;
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(s)) throw new Error('「' + label + '」不是有效數字：' + $(id).value);
+    return Number(s);
+  }
+  // 百分比字串 → 小數（用字串搬小數點，避免 55/100 之類的浮點誤差，結果和直接輸入 0.55 一樣）
+  function pctToRate(id, label) {
+    var s = text(id);
+    if (s === '') return null;
+    var m = /^([+-]?)(\d*)\.?(\d*)$/.exec(s);
+    if (!m || (m[2] + m[3]) === '') throw new Error('「' + label + '」不是有效數字：' + $(id).value);
+    var digits = m[2] + m[3];
+    var pos = m[2].length - 2;
+    var out = pos <= 0 ? '0.' + new Array(1 - pos).join('0') + digits : digits.slice(0, pos) + '.' + digits.slice(pos);
+    return Number(m[1] + out);
+  }
+  function fmt(x, d) {
+    if (x === null || x === undefined) return '—';
+    return Number(x).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  // 顯示用：去掉浮點雜訊、最多 6 位小數（上游 JSON 的 risk_per_share 只留到分，這裡顯示實際用來算股數的值）
+  function fmtExact(x) { return '' + Number(Number(x).toPrecision(12)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 }); }
+  function shareFmt(x, frac, prec) { return frac ? Number(x).toLocaleString('en-US', { maximumFractionDigits: prec }) : fmt(x, 0); }
+
+  function syncUI() {
+    var m = method();
+    document.querySelectorAll('#methods label').forEach(function (l) { l.classList.toggle('on', l.querySelector('input').checked); });
+    ALL_METHOD_FIELDS.forEach(function (id) { $(id).hidden = METHOD_FIELDS[m].indexOf(id) < 0; });
+    $('entry_opt').textContent = m === 'kelly' ? '（選填；填了才算股數）' : '';
+    $('stop_opt').textContent = m === 'kelly' ? '（選填；填了才算風險金額）' : '';
+    $('f_prec').hidden = $('fractional').value !== '1';
+  }
+
+  function collect() {
+    var m = method();
+    var p = {
+      account_size: parseNum('account_size', FIELD_ZH.account_size),
+      entry_price: parseNum('entry_price', FIELD_ZH.entry_price),
+      max_position_pct: parseNum('max_position_pct', FIELD_ZH.max_position_pct),
+      max_sector_pct: parseNum('max_sector_pct', FIELD_ZH.max_sector_pct),
+      current_sector_exposure: parseNum('current_sector_exposure', FIELD_ZH.current_sector_exposure),
+      fractional_shares: $('fractional').value === '1',
+      share_precision: parseNum('share_precision', FIELD_ZH.share_precision)
+    };
+    if (p.account_size === null) throw new Error('請輸入帳戶總值');
+    if (m === 'ff') {
+      p.stop_price = parseNum('stop_price', FIELD_ZH.stop_price);
+      p.risk_pct = parseNum('risk_pct', FIELD_ZH.risk_pct);
+    } else if (m === 'atr') {
+      p.atr = parseNum('atr', FIELD_ZH.atr);
+      p.atr_multiplier = parseNum('atr_multiplier', FIELD_ZH.atr_multiplier);
+      p.risk_pct = parseNum('risk_pct', FIELD_ZH.risk_pct);
+    } else {
+      p.win_rate = pctToRate('win_rate_pct', FIELD_ZH.win_rate);
+      p.avg_win = parseNum('avg_win', FIELD_ZH.avg_win);
+      p.avg_loss = parseNum('avg_loss', FIELD_ZH.avg_loss);
+      p.stop_price = parseNum('stop_price', FIELD_ZH.stop_price);
+    }
+    return p;
+  }
+
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function zh(msg) { if (ZH[msg]) return ZH[msg]; var m = /^(\w+) must be finite$/.exec(msg); return m ? '「' + (FIELD_ZH[m[1]] || m[1]) + '」必須是有限的數字' : msg; }
+  function stat(k, v) { return '<div class="stat"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>'; }
+
+  function render() {
+    var out = $('out');
+    var p, r;
+    try {
+      p = collect();
+      var combo = window.PositionSizer.checkCombination(p);
+      if (combo) throw new Error(zh(combo));
+      r = window.PositionSizer.calculatePosition(p);
+    } catch (e) {
+      var msg = /^[^\x00-\x7f]|^「|^請/.test(e.message) ? e.message : zh(e.message);
+      out.innerHTML = '<div class="note">⚠ ' + esc(msg) + '</div><div class="hint">填好必要欄位後，結果會自動出現在這裡。</div>';
+      return null;
+    }
+    var html = '';
+    var prec = p.fractional_shares ? (p.share_precision === null ? 4 : p.share_precision) : 0;
+    if (r.mode === 'budget') {
+      var k = r.calculations.kelly;
+      html += '<div class="big">' + stat('全 Kelly', fmt(k.kelly_pct, 2) + '%') + stat('半 Kelly', fmt(k.half_kelly_pct, 2) + '%') + stat('半 Kelly 風險預算', '$' + fmt(r.recommended_risk_budget, 2)) + '</div>';
+      html += '<div class="note">這是「每筆最多願意賠多少」的預算，不是股數。要換算成股數，請填進場價與停損價。Kelly 對勝率與盈虧比的估計誤差很敏感，估得高一點，預算就會大很多。</div>';
+      if (k.kelly_pct === 0) html += '<div class="note">這組勝率與盈虧比的期望值不是正的，Kelly 公式算出來是 0%。</div>';
+    } else {
+      var shares = shareFmt(r.final_recommended_shares, p.fractional_shares, prec);
+      html += '<div class="big">' + stat('股數（依輸入換算）', shares) + stat('部位市值', '$' + fmt(r.final_position_value, 2));
+      if (r.final_risk_dollars !== null) html += stat('停損時的虧損', '$' + fmt(r.final_risk_dollars, 2) + '（' + fmt(r.final_risk_pct, 2) + '% 帳戶）');
+      html += '</div>';
+      if (r.risk_note) html += '<div class="note">沒有填停損價，無法算停損時的虧損金額。</div>';
+      var bindLabel = { max_position_pct: '單一部位上限', max_sector_pct: '單一產業上限' };
+      if (r.binding_constraint) html += '<div class="note">股數被「' + bindLabel[r.binding_constraint] + '」限制，沒有用完風險預算。</div>';
+      if (r.final_recommended_shares === 0) html += '<div class="note">換算結果是 0 股：風險預算不夠買 1 股，或上限已經用完。</div>';
+      var floorWord = p.fractional_shares ? '往下取到小數第 ' + prec + ' 位' : '往下取整';
+      var steps = '';
+      var c = r.calculations;
+      if (c.fixed_fractional) {
+        steps += '<tr><td>每股風險</td><td>進場價 − 停損價 ＝ $' + fmtExact(p.entry_price - p.stop_price) + '</td></tr>';
+        steps += '<tr><td>風險預算</td><td>帳戶 × 風險 % ＝ $' + fmt(c.fixed_fractional.dollar_risk, 2) + '</td></tr>';
+        steps += '<tr><td>風險股數</td><td>風險預算 ÷ 每股風險，' + floorWord + ' ＝ ' + shareFmt(c.fixed_fractional.shares, p.fractional_shares, prec) + '</td></tr>';
+      }
+      if (c.atr_based) {
+        steps += '<tr><td>ATR 停損價</td><td>進場價 − ATR × ' + fmt(c.atr_based.atr_multiplier, 2) + '，四捨五入到分 ＝ $' + fmt(c.atr_based.stop_price, 2) + '</td></tr>';
+        steps += '<tr><td>每股風險</td><td>$' + fmtExact(c.atr_based.risk_per_share) + '</td></tr>';
+        steps += '<tr><td>風險預算</td><td>帳戶 × 風險 % ＝ $' + fmt(c.atr_based.dollar_risk, 2) + '</td></tr>';
+        steps += '<tr><td>風險股數</td><td>風險預算 ÷ 每股風險，' + floorWord + ' ＝ ' + shareFmt(c.atr_based.shares, p.fractional_shares, prec) + '</td></tr>';
+      }
+      if (c.kelly) {
+        steps += '<tr><td>Kelly</td><td>全 ' + fmt(c.kelly.kelly_pct, 2) + '%；半 Kelly ' + fmt(c.kelly.half_kelly_pct, 2) + '% 當作這筆的風險預算</td></tr>';
+      }
+      r.constraints_applied.forEach(function (x) {
+        steps += '<tr><td>' + bindLabel[x.type] + '</td><td>上限 ' + fmt(x.limit, 2) + '%' + (x.type === 'max_sector_pct' ? '（目前已佔 ' + fmt(x.current, 2) + '%）' : '') + ' → 最多 ' + shareFmt(x.max_shares, p.fractional_shares, prec) + ' 股' + (x.binding ? '　← 採用這個' : '') + '</td></tr>';
+      });
+      steps += '<tr><td>最後股數</td><td>取各項結果中最小的一個 ＝ ' + shares + '</td></tr>';
+      html += '<table><tbody>' + steps + '</tbody></table>';
+    }
+    html += '<div class="row"><button type="button" id="btn_copy">複製結果文字</button></div>';
+    html += '<details><summary>原始計算結果（JSON，格式與上游腳本相同）</summary><pre>' + esc(JSON.stringify(r, null, 2)) + '</pre></details>';
+    html += '<div class="hint">僅為數學試算，不是買賣或部位建議。資訊整理，非投資建議。</div>';
+    out.innerHTML = html;
+    var copy = $('btn_copy');
+    if (copy) copy.onclick = function () {
+      var lines = ['部位試算（' + new Date().toISOString().slice(0, 10) + '）', '帳戶總值：$' + fmt(p.account_size, 2)];
+      if (r.mode === 'budget') {
+        lines.push('全 Kelly：' + fmt(r.calculations.kelly.kelly_pct, 2) + '%', '半 Kelly 風險預算：$' + fmt(r.recommended_risk_budget, 2) + '（' + fmt(r.recommended_risk_budget_pct, 2) + '%）');
+      } else {
+        lines.push('進場價：$' + fmt(p.entry_price, 2));
+        if (r.parameters.stop_price !== undefined && r.parameters.stop_price !== null) lines.push('停損價：$' + fmt(r.parameters.stop_price, 2));
+        lines.push('股數：' + shareFmt(r.final_recommended_shares, p.fractional_shares, prec), '部位市值：$' + fmt(r.final_position_value, 2));
+        if (r.final_risk_dollars !== null) lines.push('停損時的虧損：$' + fmt(r.final_risk_dollars, 2) + '（' + fmt(r.final_risk_pct, 2) + '% 帳戶）');
+      }
+      lines.push('資訊整理，非投資建議');
+      var t = lines.join('\n');
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { copy.textContent = '已複製'; });
+      else { var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); copy.textContent = '已複製'; }
+    };
+    return r;
+  }
+
+  function fill(example) {
+    ['account_size', 'entry_price', 'stop_price', 'risk_pct', 'atr', 'atr_multiplier', 'win_rate_pct', 'avg_win', 'avg_loss', 'max_position_pct', 'max_sector_pct', 'current_sector_exposure', 'share_precision'].forEach(function (id) { $(id).value = example[id] || ''; });
+    render();
+  }
+
+  document.querySelectorAll('input[type=text],select').forEach(function (el) { el.addEventListener('input', function () { syncUI(); render(); }); el.addEventListener('change', function () { syncUI(); render(); }); });
+  document.querySelectorAll('input[name=method]').forEach(function (el) { el.addEventListener('change', function () { syncUI(); render(); }); });
+  $('btn_example').addEventListener('click', function () { fill(EXAMPLES[method()]); });
+  $('btn_clear').addEventListener('click', function () { fill({}); });
+
+  window.PositionSizerPage = { collect: collect, render: render, fill: fill, EXAMPLES: EXAMPLES };
+  syncUI();
+  render();
+})();
+</script>
+</body>
+</html>
