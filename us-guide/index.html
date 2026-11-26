@@ -236,7 +236,10 @@ function openFlow(id){ const e=document.getElementById('w-'+id); if(e){ e.scroll
       h('p',{class:'small muted'},'僅為數學試算，不是買賣或部位建議。')),
     h('div',{class:'card'}, h('h3',{},h('a',{href:'tools/backtest-expert.html'},'回測品質檢查（backtest-expert 瀏覽器版）')),
       h('p',{class:'small'},'輸入一份回測的交易筆數、勝率、平均賺賠、最大回撤、年數、參數個數與有沒有算滑價，依樣本數、期望值、風險、穩健度、執行真實度打 0～100 分並列出紅旗。不需要網路或金鑰；分數、判定與紅旗和上游 Python 腳本逐筆比對一致。'),
-      h('p',{class:'small muted'},'這只是檢查回測報告本身的品質，不是預測策略會不會賺錢。資訊整理，非投資建議。')));
+      h('p',{class:'small muted'},'這只是檢查回測報告本身的品質，不是預測策略會不會賺錢。資訊整理，非投資建議。')),
+    h('div',{class:'card'}, h('h3',{},h('a',{href:'tools/bubble-detector.html'},'泡沫風險計分（us-market-bubble-detector 瀏覽器版）')),
+      h('p',{class:'small'},'把六個量化指標（各 0～2）與三個質化加分（各 0～1）選好，自動加總成 0～15 分並對照上游分級表，列出風險階段、風險預算與 Minsky 階段推估。各指標該給幾分仍要依門檻判斷；不需要網路或金鑰；全部 5,832 種組合都與上游 Python 腳本逐筆比對一致。'),
+      h('p',{class:'small muted'},'只是分數加總與分級，不預測崩盤時點，也不是買賣建議。資訊整理，非投資建議。')));
 })();
 
 /* ---- keys ---- */
