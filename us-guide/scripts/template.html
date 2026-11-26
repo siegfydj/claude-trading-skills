@@ -230,6 +230,10 @@ function openFlow(id){ const e=document.getElementById('w-'+id); if(e){ e.scroll
   el.append(lg);
   el.append(h('table',{}, h('thead',{},h('tr',{},h('th',{},'層級'),h('th',{},'skill'))),
     h('tbody',{}, ['A','B','C','D'].map(t=>h('tr',{},h('td',{},tierBadge(t)),h('td',{class:'small'},trader.filter(s=>s.tier===t).map(s=>s.id).join('、')))))));
+  el.append(h('h2',{style:'margin-top:20px'},'已經可以離線使用的工具'),
+    h('div',{class:'card'}, h('h3',{},h('a',{href:'tools/position-sizer.html'},'部位試算（position-sizer 瀏覽器版）')),
+      h('p',{class:'small'},'輸入帳戶規模、風險比例、進場價與停損價（或 ATR），算出股數與部位市值；也可以用勝率與盈虧比算 Kelly 風險預算。不需要網路、金鑰或後端；計算結果與上游 Python 腳本逐筆比對一致。'),
+      h('p',{class:'small muted'},'僅為數學試算，不是買賣或部位建議。')));
 })();
 
 /* ---- keys ---- */
