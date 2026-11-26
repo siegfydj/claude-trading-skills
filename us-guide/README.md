@@ -19,6 +19,8 @@
 | `scripts/build_guide.py`、`scripts/template.html` | 產生器與頁面樣板 |
 | `scripts/zh_batches.py`、`data/zh-batches/` | 多人／多 AI 並行翻譯：各自交一個片段檔，腳本驗證（欄位、字數、疑似簡體字）後合併進 `zh-TW.json` |
 | `tools/position-sizer.html`、`tools/position_sizer.js` | 部位試算的離線網頁版（上游 `position-sizer` 的逐位元移植；直接用瀏覽器打開，不需網路、金鑰或後端） |
+| `tools/backtest-expert.html`、`tools/backtest_expert.js` | 回測品質檢查的離線網頁版（上游 `backtest-expert` 評分的移植；沿用 `position_sizer.js` 的精確算術工具） |
+| `scripts/tests/test_backtest_expert_js_parity.py` | 同上的比對測試：分數、判定、紅旗與報告文字都要與上游腳本完全相同 |
 | `scripts/tests/test_position_sizer_js_parity.py` | 比對測試：同一批輸入餵給上游 Python 腳本與 JS 版，結果必須完全相同（需要 Node；沒有 Node 時自動略過） |
 | `NOTES.md`、`SETUP.md` | 進度與重建清單 |
 

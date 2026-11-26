@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>回測品質檢查（離線版）— 美股 Skill 閱讀指南</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2330;--mute:#5d6676;--line:#d9dde4;--accent:#2457c5;--warn:#9a5b00;--warnbg:#fff4de;--okbg:#eef3ff}
+@media (prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2027;--ink:#e6e9ef;--mute:#9aa3b2;--line:#2f3541;--accent:#7aa2ff;--warn:#ffcf70;--warnbg:#3a2f16;--okbg:#1e2740}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:3px}
+input[type=text],select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=text]:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
+.hint{font-size:12px;color:var(--mute);margin-top:2px}
+.methods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.methods label{display:flex;align-items:center;gap:6px;margin:0;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink);cursor:pointer;font-size:14px}
+.methods input{margin:0}
+.methods label.on{border-color:var(--accent);background:var(--okbg)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+button{font:inherit;padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:6px 0 10px}
+.stat{background:var(--okbg);border-radius:8px;padding:10px 12px}
+.stat .k{font-size:12px;color:var(--mute)}
+.stat .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.note{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:14px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;font-variant-numeric:tabular-nums}
+th{color:var(--mute);font-weight:500}
+details{margin-top:8px}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;font-size:12px}
+.foot,.small{font-size:13px;color:var(--mute)}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden;min-width:120px}
+.bar>i{display:block;height:100%;background:var(--accent)}
+.flag{padding:6px 10px;border-left:4px solid var(--line);margin:6px 0;background:var(--bg);border-radius:4px}
+.flag.high{border-left-color:var(--warn)}
+.flag small{display:block;color:var(--mute)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<h1>回測品質檢查（離線版）</h1>
+<p class="sub">輸入一份回測的幾個統計數字，依 backtest-expert 的五個構面（樣本數、期望值、風險、穩健度、執行真實度）打 0～100 分並列出紅旗。純計算，不連網、不需要金鑰。</p>
+
+<div class="card">
+  <div class="grid">
+    <div><label for="total_trades">交易筆數</label><input type="text" id="total_trades" inputmode="numeric" placeholder="150"></div>
+    <div><label for="win_rate">勝率（%）</label><input type="text" id="win_rate" inputmode="decimal" placeholder="55"><div class="hint">0～100，例如 55 代表 55%</div></div>
+    <div><label for="avg_win_pct">平均獲利單筆（%）</label><input type="text" id="avg_win_pct" inputmode="decimal" placeholder="2.0"></div>
+    <div><label for="avg_loss_pct">平均虧損單筆（%，填正數）</label><input type="text" id="avg_loss_pct" inputmode="decimal" placeholder="1.0"></div>
+    <div><label for="max_drawdown_pct">最大回撤（%）</label><input type="text" id="max_drawdown_pct" inputmode="decimal" placeholder="15"><div class="hint">0～100，填正數</div></div>
+    <div><label for="years_tested">回測年數</label><input type="text" id="years_tested" inputmode="numeric" placeholder="8"></div>
+    <div><label for="num_parameters">可調參數個數</label><input type="text" id="num_parameters" inputmode="numeric" placeholder="4"></div>
+    <div><label for="slippage_tested">有沒有把滑價／手續費算進回測</label>
+      <select id="slippage_tested"><option value="1">有</option><option value="0">沒有</option></select></div>
+    <div><label for="max_acceptable_drawdown_pct">你能接受的最大回撤（%，選填）</label><input type="text" id="max_acceptable_drawdown_pct" inputmode="decimal" placeholder="空白＝50"><div class="hint">回撤 50% 以上一律淘汰；這欄可以設得更嚴</div></div>
+  </div>
+  <div class="row">
+    <button id="btn_example" type="button">載入範例</button>
+    <button id="btn_clear" type="button">清除</button>
+  </div>
+</div>
+
+<div id="out" class="card" aria-live="polite"></div>
+
+<div class="card foot">
+  <p><strong>這是什麼：</strong>檢查「回測報告本身可不可信」的粗篩，不是在預測策略會不會賺錢，也不是買賣建議。分數高只代表回測的統計品質及格，仍要看資料有沒有前視偏誤、樣本外表現與實際成交。資訊整理，非投資建議。</p>
+  <p><strong>怎麼確認算對：</strong>計算核心 <code>backtest_expert.js</code> 是上游 <code>skills/backtest-expert/scripts/evaluate_backtest.py</code> 的移植（期望值與獲利因子用精確小數運算，和上游相同），並用測試與上游腳本逐組比對（邊界案例加數千組隨機輸入，分數、判定、紅旗與報告文字都要完全相同）。上游改了評分規則，測試會失敗。</p>
+  <p><strong>限制：</strong>只吃 8 個摘要數字，看不到逐筆交易、資料品質與樣本外結果；整數欄位最大到 9,007,199,254,740,991。</p>
+</div>
+</main>
+
+<script src="position_sizer.js"></script>
+<script src="backtest_expert.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var FIELDS = ['total_trades', 'win_rate', 'avg_win_pct', 'avg_loss_pct', 'max_drawdown_pct', 'years_tested', 'num_parameters', 'max_acceptable_drawdown_pct'];
+  var LABEL = { total_trades: '交易筆數', win_rate: '勝率', avg_win_pct: '平均獲利', avg_loss_pct: '平均虧損', max_drawdown_pct: '最大回撤', years_tested: '回測年數', num_parameters: '參數個數', max_acceptable_drawdown_pct: '可接受的最大回撤' };
+  var INTS = { total_trades: 1, years_tested: 1, num_parameters: 1 };
+  var EXAMPLE = { total_trades: '150', win_rate: '55', avg_win_pct: '2', avg_loss_pct: '1', max_drawdown_pct: '15', years_tested: '8', num_parameters: '4', slippage_tested: '1', max_acceptable_drawdown_pct: '' };
+  var DECISION = {
+    NOT_EVALUABLE: ['無法評估', '樣本太少或數字超出可算範圍，分數沒有意義。'],
+    REJECT: ['淘汰', '期望值不是正的，或最大回撤達 50% 以上。'],
+    RISK_LIMIT_EXCEEDED: ['超過你設的風險上限', '最大回撤高於你能接受的上限。'],
+    VALIDATION_REQUIRED: ['要先補驗證', '沒測滑價、測試期太短或結果好得不合理，先補驗證再看分數。'],
+    DEPLOY: ['分數 70 以上', '回測的統計品質及格；仍須自行做樣本外與實盤驗證。'],
+    REFINE: ['分數 40～69', '有明顯弱點，建議先改進再用。'],
+    ABANDON: ['分數低於 40', '回測品質不足。']
+  };
+  var FLAG_ZH = {
+    small_sample: '交易筆數不到 30 筆，統計上不夠。',
+    no_slippage_test: '沒有把滑價／手續費算進回測，實際成交可能完全不同。',
+    excessive_drawdown: '最大回撤達 50% 以上，已超過上限。',
+    over_optimized: '參數有 7 個以上，過度配適（curve fitting）風險高。',
+    short_test_period: '回測不到 5 年，可能漏掉不同的市場環境。',
+    negative_expectancy: '期望值是負的，平均每筆是虧損。',
+    too_good: '勝率超過 90% 且回撤小於 5%，好得不尋常，請檢查有沒有前視偏誤或資料問題。'
+  };
+  var BLOCK_ZH = { profit_factor_overflow: '獲利因子超出可表示範圍', small_sample: '交易筆數不足 30', negative_expectancy: '期望值為負', zero_expectancy: '期望值剛好是 0', excessive_drawdown: '最大回撤 ≥ 50%', risk_limit_exceeded: '超過可接受的最大回撤', no_slippage_test: '沒測滑價', short_test_period: '回測不到 5 年', too_good: '結果好得不尋常' };
+  var DIM_ZH = { 'Sample Size': '樣本數', 'Expectancy': '期望值', 'Risk Management': '風險控管', 'Robustness': '穩健度', 'Execution Realism': '執行真實度' };
+  var ERR_ZH = [
+    [/^(\w+) must be an integer$/, function (m) { return '「' + (LABEL[m[1]] || m[1]) + '」必須是整數'; }],
+    [/^(\w+) must be a finite number$/, function (m) { return '「' + (LABEL[m[1]] || m[1]) + '」必須是有限的數字'; }],
+    [/^win_rate must be between 0 and 100$/, function () { return '勝率必須介於 0 到 100'; }],
+    [/^max_drawdown_pct must be between 0 and 100$/, function () { return '最大回撤必須介於 0 到 100'; }],
+    [/^max_acceptable_drawdown_pct must be between 0 and 100$/, function () { return '可接受的最大回撤必須介於 0 到 100'; }],
+    [/^(\w+) must be >= 0$/, function (m) { return '「' + (LABEL[m[1]] || m[1]) + '」不能是負數'; }],
+    [/unrepresentable gross/, function () { return '勝率與平均獲利／虧損的乘積小到無法表示，請檢查數字'; }]
+  ];
+  function zhError(msg) {
+    for (var i = 0; i < ERR_ZH.length; i += 1) { var m = ERR_ZH[i][0].exec(msg); if (m) return ERR_ZH[i][1](m); }
+    return msg;
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function readInputs() {
+    var p = {};
+    FIELDS.forEach(function (k) {
+      var raw = $(k).value.replace(/[,\s]/g, '');
+      if (raw === '') {
+        if (k === 'max_acceptable_drawdown_pct') return;
+        throw new Error('請輸入「' + LABEL[k] + '」');
+      }
+      if (INTS[k]) {
+        if (!/^[+-]?\d+$/.test(raw)) throw new Error('「' + LABEL[k] + '」必須是整數：' + $(k).value);
+        var n = Number(raw);
+        if (!Number.isSafeInteger(n)) throw new Error('「' + LABEL[k] + '」太大');
+        p[k] = n === 0 ? 0 : n;
+      } else {
+        if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(raw)) throw new Error('「' + LABEL[k] + '」不是有效數字：' + $(k).value);
+        var x = Number(raw);
+        p[k] = x === 0 ? 0 : x; // 不使用 -0
+      }
+    });
+    p.slippage_tested = $('slippage_tested').value === '1';
+    return p;
+  }
+
+  function now() {
+    var d = new Date();
+    var z = function (n) { return (n < 10 ? '0' : '') + n; };
+    return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()) + ' ' + z(d.getHours()) + ':' + z(d.getMinutes()) + ':' + z(d.getSeconds());
+  }
+
+  function render() {
+    var out = $('out');
+    var p;
+    try { p = readInputs(); } catch (e) { out.innerHTML = '<div class="note">' + esc(e.message) + '</div>'; return; }
+    var r;
+    try { r = BacktestExpert.evaluate(p); } catch (e) { out.innerHTML = '<div class="note">' + esc(zhError(e.message)) + '</div>'; return; }
+    var dec = DECISION[r.decision] || [r.decision, ''];
+    var html = '<div class="big">'
+      + '<div class="stat"><div class="k">品質分數</div><div class="v">' + r.quality_score + ' / 100</div></div>'
+      + '<div class="stat"><div class="k">判定</div><div class="v" style="font-size:18px">' + esc(dec[0]) + '</div></div>'
+      + '<div class="stat"><div class="k">獲利因子</div><div class="v">' + (r.profit_factor_status === 'FINITE' ? BacktestExpert.fmtFixed(r.profit_factor, 2) : r.profit_factor_status === 'NO_LOSSES' ? '無虧損' : '—') + '</div></div>'
+      + '<div class="stat"><div class="k">期望值（每筆）</div><div class="v">' + BacktestExpert.fmtFixed(r.expectancy, 3) + '%</div></div>'
+      + '</div>';
+    html += '<p>' + esc(dec[1]) + '（上游舊式判定：' + r.verdict + '）</p>';
+    if (r.blocking_reasons.length) {
+      html += '<p class="small"><strong>卡住的原因：</strong>' + r.blocking_reasons.map(function (b) { return esc(BLOCK_ZH[b] || b); }).join('、') + '</p>';
+    }
+    html += '<table><thead><tr><th>構面</th><th>分數</th><th></th></tr></thead><tbody>';
+    r.dimensions.forEach(function (d) {
+      html += '<tr><td>' + esc(DIM_ZH[d.name] || d.name) + '</td><td>' + d.score + ' / ' + d.max_score + '</td><td><div class="bar"><i style="width:' + (d.score / d.max_score * 100) + '%"></i></div></td></tr>';
+    });
+    html += '</tbody></table>';
+    html += '<h3 style="margin:14px 0 4px;font-size:15px">紅旗</h3>';
+    if (r.red_flags.length) {
+      r.red_flags.forEach(function (f) {
+        html += '<div class="flag ' + f.severity + '"><strong>' + esc(f.id) + '</strong>（' + (f.severity === 'high' ? '嚴重' : '注意') + '）' + esc(FLAG_ZH[f.id] || '') + '<small>' + esc(f.message) + '</small></div>';
+      });
+    } else {
+      html += '<p>沒有觸發任何紅旗。</p>';
+    }
+    html += '<div class="row"><button id="btn_copy" type="button">複製報告（英文，與上游相同格式）</button><span id="copied" class="hint"></span></div>';
+    html += '<details><summary>報告原文</summary><pre id="md"></pre></details>';
+    html += '<p class="foot">僅為數學試算，不是買賣或部位建議。資訊整理，非投資建議。</p>';
+    out.innerHTML = html;
+    var md = BacktestExpert.toMarkdown(r, now());
+    $('md').textContent = md;
+    $('btn_copy').addEventListener('click', function () {
+      var done = function (ok) { $('copied').textContent = ok ? '已複製' : '無法自動複製，請展開「報告原文」手動選取'; };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(md).then(function () { done(true); }, function () { done(false); });
+      else done(false);
+    });
+  }
+
+  function fill(vals) {
+    FIELDS.concat(['slippage_tested']).forEach(function (k) { $(k).value = vals[k] === undefined ? '' : vals[k]; });
+    render();
+  }
+  $('btn_example').addEventListener('click', function () { fill(EXAMPLE); });
+  $('btn_clear').addEventListener('click', function () { fill({ slippage_tested: '1' }); $('out').innerHTML = '<p class="hint">輸入數字後會自動計算。</p>'; });
+  FIELDS.concat(['slippage_tested']).forEach(function (k) { $(k).addEventListener('input', render); $(k).addEventListener('change', render); });
+  $('out').innerHTML = '<p class="hint">輸入數字後會自動計算；也可以按「載入範例」。</p>';
+  window.BacktestPage = { readInputs: readInputs, render: render, fill: fill };
+}());
+</script>
+</body>
+</html>
