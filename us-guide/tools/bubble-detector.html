@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>泡沫風險計分（離線版）— 美股 Skill 閱讀指南</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2330;--mute:#5d6676;--line:#d9dde4;--accent:#2457c5;--warn:#9a5b00;--warnbg:#fff4de;--okbg:#eef3ff}
+@media (prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2027;--ink:#e6e9ef;--mute:#9aa3b2;--line:#2f3541;--accent:#7aa2ff;--warn:#ffcf70;--warnbg:#3a2f16;--okbg:#1e2740}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+main{max-width:920px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:3px}
+input[type=text],select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=text]:focus,select:focus{outline:2px solid var(--accent);outline-offset:0}
+.hint{font-size:12px;color:var(--mute);margin-top:2px}
+.methods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.methods label{display:flex;align-items:center;gap:6px;margin:0;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink);cursor:pointer;font-size:14px}
+.methods input{margin:0}
+.methods label.on{border-color:var(--accent);background:var(--okbg)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+button{font:inherit;padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:6px 0 10px}
+.stat{background:var(--okbg);border-radius:8px;padding:10px 12px}
+.stat .k{font-size:12px;color:var(--mute)}
+.stat .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.note{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:14px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;font-variant-numeric:tabular-nums}
+th{color:var(--mute);font-weight:500}
+details{margin-top:8px}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;font-size:12px}
+.foot,.small{font-size:13px;color:var(--mute)}
+.bar{height:10px;background:var(--line);border-radius:5px;overflow:hidden;min-width:120px}
+.bar>i{display:block;height:100%;background:var(--accent)}
+.flag{padding:6px 10px;border-left:4px solid var(--line);margin:6px 0;background:var(--bg);border-radius:4px}
+.flag.high{border-left-color:var(--warn)}
+.flag small{display:block;color:var(--mute)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<h1>泡沫風險計分（離線版）</h1>
+<p class="sub">依 us-market-bubble-detector 的 Bubble-O-Meter v2.1：六個量化指標（各 0～2 分）加三個質化加分（各 0～1 分），總分 0～15，換算風險階段。這個頁面只負責加總與分級；每個指標該給幾分，要你（或 AI 搭配最新資料）依下方門檻判斷。不連網、不需要金鑰。</p>
+
+<div class="card">
+  <h3 style="margin:0 0 8px;font-size:15px">量化指標（0～2）</h3>
+  <div class="grid">
+    <div><label for="put_call_ratio">Put/Call 比</label><select id="put_call_ratio"><option value="0">0</option><option value="1">1</option><option value="2">2</option></select><div class="hint">2：< 0.70；1：0.70～0.85；0：> 0.85</div></div>
+    <div><label for="volatility_suppression">低波動＋創高</label><select id="volatility_suppression"><option value="0">0</option><option value="1">1</option><option value="2">2</option></select><div class="hint">2：VIX < 12 且指數距高點 5% 內；1：VIX 12～15 且接近高點；其餘 0</div></div>
+    <div><label for="leverage">槓桿（融資餘額）</label><select id="leverage"><option value="0">0</option><option value="1">1</option><option value="2">2</option></select><div class="hint">2：融資餘額年增 ≥ 20% 且創歷史高；1：年增 10～20%；其餘 0</div></div>
+    <div><label for="ipo_heat">IPO 過熱</label><select id="ipo_heat"><option value="0">0</option><option value="1">1</option><option value="2">2</option></select><div class="hint">2：IPO 數 > 5 年均值 2 倍且首日報酬 ≥ 20%；1：數量 > 1.5 倍；其餘 0</div></div>
+    <div><label for="breadth_anomaly">廣度背離</label><select id="breadth_anomaly"><option value="0">0</option><option value="1">1</option><option value="2">2</option></select><div class="hint">2：指數創高但站上 50 日線的比例 < 45%；1：45～60%；其餘 0</div></div>
+    <div><label for="price_acceleration">價格加速</label><select id="price_acceleration"><option value="0">0</option><option value="1">1</option><option value="2">2</option></select><div class="hint">2：三個月報酬 > 十年第 95 百分位；1：85～95 百分位；其餘 0</div></div>
+  </div>
+  <h3 style="margin:14px 0 8px;font-size:15px">質化加分（0～1，從嚴給）</h3>
+  <div class="grid">
+    <div><label for="social_penetration">社群滲透</label><select id="social_penetration"><option value="0">0</option><option value="1">1</option></select><div class="hint">1：有直接、具體、反覆的非投資人推薦才給</div></div>
+    <div><label for="media_search_trends">媒體／搜尋熱度</label><select id="media_search_trends"><option value="0">0</option><option value="1">1</option></select><div class="hint">1：搜尋量有實測 5 倍以上且主流媒體報導才給</div></div>
+    <div><label for="valuation_disconnect">估值脫鉤</label><select id="valuation_disconnect"><option value="0">0</option><option value="1">1</option></select><div class="hint">1：有文件佐證「不看基本面」的敘事才給</div></div>
+  </div>
+  <div class="row">
+    <button id="btn_example" type="button">載入範例</button>
+    <button id="btn_clear" type="button">全部歸零</button>
+  </div>
+</div>
+
+<div id="out" class="card" aria-live="polite"></div>
+
+<div class="card foot">
+  <p><strong>這是什麼：</strong>把你判斷好的分數加總並對照上游的分級表（總分 ≤4 正常、5～7 注意、8～9 風險升高、10～12 亢奮、13 以上危急），不是預測崩盤時點，也不是買賣建議。「風險預算」是上游文件的曝險建議區間，只供參考。資訊整理，非投資建議。</p>
+  <p><strong>怎麼確認算對：</strong>計算核心 <code>bubble_scorer.js</code> 移植自上游 <code>skills/us-market-bubble-detector/scripts/bubble_scorer.py</code>，測試把全部 5,832 種有效分數組合（平面與分組兩種輸入）加上各種無效輸入同時餵給上游腳本與 JS 版，結果、錯誤訊息與文字報告必須完全相同。</p>
+  <p><strong>限制：</strong>不會幫你抓 Put/Call、VIX、融資餘額等數據，也不判斷各指標該給幾分。</p>
+</div>
+</main>
+
+<script src="bubble_scorer.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var QK = ["put_call_ratio", "volatility_suppression", "leverage", "ipo_heat", "breadth_anomaly", "price_acceleration"];
+  var LK = ["social_penetration", "media_search_trends", "valuation_disconnect"];
+  var EXAMPLE = { put_call_ratio: 1, volatility_suppression: 2, leverage: 1, ipo_heat: 0, breadth_anomaly: 2, price_acceleration: 1, social_penetration: 0, media_search_trends: 1, valuation_disconnect: 0 };
+  var PHASE = { 'Normal': ['正常', '照常執行原本的投資策略'], 'Caution': ['注意', '開始部分停利並縮小部位'], 'Elevated Risk': ['風險升高', '降低風險預算並收緊移動停損'], 'Euphoria': ['亢奮', '加快分批停利並降低整體風險預算'], 'Critical': ['危急', '優先大幅停利、避險，暫停新進場'] };
+  var RISK = { 'Low': '低', 'Medium': '中', 'Medium-High': '中高', 'High': '高', 'Extreme': '極高' };
+  var MINSKY = { 'Displacement/Early Boom': '位移期／榮景初期', 'Boom': '榮景期', 'Late Boom/Elevated Risk': '榮景後期／風險升高', 'Late Boom/Early Euphoria': '榮景後期／亢奮初期', 'Euphoria': '亢奮期', 'Peak Euphoria/Profit Taking': '亢奮高峰／獲利了結期' };
+  var NAME = {put_call_ratio: "Put/Call 比", volatility_suppression: "低波動＋創高", leverage: "槓桿（融資餘額）", ipo_heat: "IPO 過熱", breadth_anomaly: "廣度背離", price_acceleration: "價格加速", social_penetration: "社群滲透", media_search_trends: "媒體／搜尋熱度", valuation_disconnect: "估值脫鉤"};
+  var STATUS = { high: '滿分', medium: '部分', low: '0' };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function read() {
+    var q = {}, l = {};
+    QK.forEach(function (k) { q[k] = Number($(k).value); });
+    LK.forEach(function (k) { l[k] = Number($(k).value); });
+    return { q: q, l: l };
+  }
+  function now() {
+    var d = new Date();
+    var z = function (n) { return (n < 10 ? '0' : '') + n; };
+    return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()) + ' ' + z(d.getHours()) + ':' + z(d.getMinutes()) + ':' + z(d.getSeconds());
+  }
+  function rows(list, plus) {
+    return list.map(function (d) {
+      var k = d.key;
+      return '<tr><td>' + esc(NAME[k]) + '</td><td>' + (plus ? '+' : '') + d.score + ' / ' + d.max_score + '</td><td>' + STATUS[d.status] + '</td><td><div class="bar"><i style="width:' + (d.score / d.max_score * 100) + '%"></i></div></td></tr>';
+    }).join('');
+  }
+  function render() {
+    var v = read();
+    var r;
+    try { r = BubbleScorer.calculateScore(v.q, v.l); } catch (e) { $('out').innerHTML = '<div class="note">' + esc(e.message) + '</div>'; return; }
+    var ph = PHASE[r.phase];
+    var keys = QK.concat(LK);
+    r.detailed_quantitative_indicators.forEach(function (d, i) { d.key = QK[i]; });
+    r.detailed_qualitative_adjustments.forEach(function (d, i) { d.key = LK[i]; });
+    var html = '<div class="big">'
+      + '<div class="stat"><div class="k">總分</div><div class="v">' + r.total_score + ' / ' + r.max_score + '</div></div>'
+      + '<div class="stat"><div class="k">占滿分</div><div class="v">' + r.percentage.toFixed(1) + '%</div></div>'
+      + '<div class="stat"><div class="k">風險階段</div><div class="v" style="font-size:18px">' + ph[0] + '（風險' + RISK[r.risk_level] + '）</div></div>'
+      + '<div class="stat"><div class="k">風險預算（曝險建議）</div><div class="v">' + esc(r.risk_budget) + '</div></div>'
+      + '</div>';
+    html += '<div class="bar" style="height:14px"><i style="width:' + r.percentage + '%"></i></div>';
+    html += '<p>量化 ' + r.quantitative_score + ' / 12，質化加分 +' + r.qualitative_adjustment + ' / 3。上游建議：' + ph[1] + '。Minsky 階段推估：' + MINSKY[r.minsky_phase] + '。</p>';
+    html += '<table><thead><tr><th>指標</th><th>分數</th><th>狀態</th><th></th></tr></thead><tbody>' + rows(r.detailed_quantitative_indicators, false) + rows(r.detailed_qualitative_adjustments, true) + '</tbody></table>';
+    html += '<div class="row"><button id="btn_copy" type="button">複製報告（英文，與上游相同格式）</button><span id="copied" class="hint"></span></div>';
+    html += '<details><summary>報告原文</summary><pre id="md"></pre></details>';
+    html += '<p class="foot">僅為分數加總與分級，不是買賣或部位建議。資訊整理，非投資建議。</p>';
+    $('out').innerHTML = html;
+    var text = BubbleScorer.formatOutput(r, now());
+    $('md').textContent = text;
+    $('btn_copy').addEventListener('click', function () {
+      var done = function (ok) { $('copied').textContent = ok ? '已複製' : '無法自動複製，請展開「報告原文」手動選取'; };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      else done(false);
+    });
+  }
+  function fill(vals) { QK.concat(LK).forEach(function (k) { $(k).value = String(vals[k] || 0); }); render(); }
+  $('btn_example').addEventListener('click', function () { fill(EXAMPLE); });
+  $('btn_clear').addEventListener('click', function () { fill({}); });
+  QK.concat(LK).forEach(function (k) { $(k).addEventListener('change', render); });
+  render();
+  window.BubblePage = { read: read, render: render, fill: fill };
+}());
+</script>
+</body>
+</html>
