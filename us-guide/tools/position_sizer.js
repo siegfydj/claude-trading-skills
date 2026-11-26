@@ -52,7 +52,7 @@
   function fromInt(i) { return Q(BigInt(i), ONE); }
 
   // Python Decimal 預設環境：每個運算結果四捨五成雙到 28 位有效數字
-  function round28(q) {
+  function roundPrec(q, prec) {
     if (q.n === ZERO) return q;
     const neg = q.n < ZERO;
     const n = neg ? -q.n : q.n;
@@ -61,7 +61,7 @@
     let e = n.toString().length - d.toString().length - 1;
     while (!ge(e)) e -= 1;
     while (ge(e + 1)) e += 1;
-    const s = 27 - e; // 保留的小數位數（可為負）
+    const s = prec - 1 - e; // 保留的小數位數（可為負）
     const num = s >= 0 ? n * pow10(s) : n;
     const den = s >= 0 ? d : d * pow10(-s);
     let f = num / den;
@@ -70,6 +70,7 @@
     const r = s >= 0 ? Q(f, pow10(s)) : Q(f * pow10(-s), ONE);
     return neg ? Q(-r.n, r.d) : r;
   }
+  const round28 = (q) => roundPrec(q, 28);
   const add = (a, b) => round28(Q(a.n * b.d + b.n * a.d, a.d * b.d));
   const sub = (a, b) => round28(Q(a.n * b.d - b.n * a.d, a.d * b.d));
   const mul = (a, b) => round28(Q(a.n * b.n, a.d * b.d));
@@ -84,20 +85,22 @@
 
   // 把「十進位有限小數」的有理數轉成最接近的雙精度（等同 Python float(Decimal)）
   function toFloat(q) {
-    for (let k = 0; k <= 400; k += 1) {
-      const p = pow10(k);
-      if (p % q.d === ZERO) {
-        const scaled = q.n * (p / q.d); // 值 = scaled / 10^k
-        const neg = scaled < ZERO;
-        let digits = (neg ? -scaled : scaled).toString();
-        if (k > 0) {
-          digits = digits.padStart(k + 1, '0');
-          digits = digits.slice(0, digits.length - k) + '.' + digits.slice(digits.length - k);
-        }
-        return Number((neg ? '-' : '') + digits);
-      }
+    // 分母必須是 2^a·5^b（十進位有限小數）；k = max(a, b) 即需要的小數位數
+    let d = q.d;
+    let a = 0;
+    let b = 0;
+    while (d % 2n === ZERO) { d /= 2n; a += 1; }
+    while (d % 5n === ZERO) { d /= 5n; b += 1; }
+    if (d !== ONE) throw new Error('value is not a finite decimal');
+    const k = Math.max(a, b);
+    const scaled = q.n * (pow10(k) / q.d); // 值 = scaled / 10^k
+    const neg = scaled < ZERO;
+    let digits = (neg ? -scaled : scaled).toString();
+    if (k > 0) {
+      digits = digits.padStart(k + 1, '0');
+      digits = digits.slice(0, digits.length - k) + '.' + digits.slice(digits.length - k);
     }
-    throw new Error('value is not a finite decimal');
+    return Number((neg ? '-' : '') + digits);
   }
 
   // 雙精度的精確值（尾數 × 2^指數）
@@ -390,5 +393,7 @@
     return null;
   }
 
-  return { calculatePosition, checkCombination, pyRound2, round28, fromFloat };
+  // 供同資料夾的其他移植（例如 backtest_expert.js）重用的精確算術工具
+  const _internals = { Q, fromFloat, fromInt, roundPrec, toFloat, exactFromDouble, pow10 };
+  return { calculatePosition, checkCombination, pyRound2, round28, fromFloat, _internals };
 });

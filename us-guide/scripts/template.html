@@ -233,7 +233,10 @@ function openFlow(id){ const e=document.getElementById('w-'+id); if(e){ e.scroll
   el.append(h('h2',{style:'margin-top:20px'},'已經可以離線使用的工具'),
     h('div',{class:'card'}, h('h3',{},h('a',{href:'tools/position-sizer.html'},'部位試算（position-sizer 瀏覽器版）')),
       h('p',{class:'small'},'輸入帳戶規模、風險比例、進場價與停損價（或 ATR），算出股數與部位市值；也可以用勝率與盈虧比算 Kelly 風險預算。不需要網路、金鑰或後端；計算結果與上游 Python 腳本逐筆比對一致。'),
-      h('p',{class:'small muted'},'僅為數學試算，不是買賣或部位建議。')));
+      h('p',{class:'small muted'},'僅為數學試算，不是買賣或部位建議。')),
+    h('div',{class:'card'}, h('h3',{},h('a',{href:'tools/backtest-expert.html'},'回測品質檢查（backtest-expert 瀏覽器版）')),
+      h('p',{class:'small'},'輸入一份回測的交易筆數、勝率、平均賺賠、最大回撤、年數、參數個數與有沒有算滑價，依樣本數、期望值、風險、穩健度、執行真實度打 0～100 分並列出紅旗。不需要網路或金鑰；分數、判定與紅旗和上游 Python 腳本逐筆比對一致。'),
+      h('p',{class:'small muted'},'這只是檢查回測報告本身的品質，不是預測策略會不會賺錢。資訊整理，非投資建議。')));
 })();
 
 /* ---- keys ---- */
